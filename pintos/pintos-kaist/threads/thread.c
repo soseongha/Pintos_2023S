@@ -210,6 +210,11 @@ thread_create (const char *name, int priority,
 
 	/* Add to run queue. */
 	thread_unblock (t);
+	
+	//when new thread priority is bigger than current, schedule
+	if(t->priority > running_thread()->priority){
+		schedule();
+	}
 
 	return tid;
 }
@@ -424,8 +429,28 @@ static struct thread *
 next_thread_to_run (void) {
 	if (list_empty (&ready_list))
 		return idle_thread;
-	else
-		return list_entry (list_pop_front (&ready_list), struct thread, elem);
+	else{
+
+		//return list_entry (list_pop_front (&ready_list), struct thread, elem);
+		int prio = -1;
+		struct thread *max_thread = NULL;
+		struct list_elem *e;
+
+		//pick maximum priority thread
+		for( e = list_begin(&sleep_list); e != list_end(&sleep_list); e =
+				list_next(e)){
+			
+			struct thread *th = list_entry(e, struct thread, elem);
+			if(th->priority > prio){
+
+				prio = th->priority;
+				max_thread = th;
+			}
+		}
+
+		list_remove(&max_thread->elem);
+		return max_thread;
+	}
 }
 
 /* Use iretq to launch the thread */
