@@ -104,29 +104,36 @@ timer_sleep (int64_t ticks) {
 	//busy-waiting
 	while (timer_elapsed (start) < ticks)
 		thread_yield ();*/
-
-	//load current thread
-	int64_t start = timer_ticks();
-
-	//interrupt disable setting
-	enum intr_level old_level = intr_disable ();
 	
-	struct thread *cur_th = thread_current();
+//	printf("[In timer_sleep]: %s\n", thread_current()->name);
 
-	//not idle thread!
-	if(cur_th == idle_thread) return;
+	if( ticks >= 0) {
 
-	//store tick number into thread info
-	cur_th->age = start + ticks;
+		//load current thread
+		int64_t start = timer_ticks();
 
-	//Insert thread sleep queue
-	list_push_back(&sleep_list, &cur_th->elem);
+		//interrupt disable setting
+		enum intr_level old_level = intr_disable ();
+	
+		struct thread *cur_th = thread_current();
 
-	//blocked it
-	thread_block();
+		//not idle thread!
+		if(cur_th == idle_thread) return;
 
-	//interrupt able setting
-	intr_set_level (old_level);
+		//store tick number into thread info
+		cur_th->age = start + ticks;
+
+		//Insert thread sleep queue
+		list_push_back(&sleep_list, &cur_th->elem);
+
+		//blocked it
+		thread_block();
+
+		//interrupt able setting
+		intr_set_level (old_level);
+	}
+
+//		printf("[Out timer_sleep]: %s\n", thread_current()->name);
 
 }
 
@@ -158,6 +165,7 @@ timer_print_stats (void) {
 static void
 timer_interrupt (struct intr_frame *args UNUSED) {
 
+//	printf("[In timer_interrupt]: %s\n", thread_current()->name);
 	ticks++;
 	thread_tick ();
 
@@ -165,19 +173,19 @@ timer_interrupt (struct intr_frame *args UNUSED) {
 	int64_t cur = timer_ticks();
 
 	//interrupt disable setting
-	enum intr_level old_level = intr_disable ();
+	//enum intr_level old_level = intr_disable ();
 
 	//pop thread which age is terminated in sleep_list
 	//unblocked it
 	struct list_elem *e;
 
-	for (e = list_begin (&sleep_list); e != list_end (&sleep_list); e = list_next
-			(e)){
+	for (e = list_begin (&sleep_list); e != list_end (&sleep_list); ){
 		
 		struct thread *th = list_entry (e, struct thread, elem);
 
-		if (cur > th->age){
+		if (cur >= th->age){
 			
+	//		printf("name: %s, ticks: cur: %d\n", th->name, cur);
 
 			//delink th with sleep_list
 			e = list_remove(&th->elem);
@@ -186,12 +194,16 @@ timer_interrupt (struct intr_frame *args UNUSED) {
 			thread_unblock(th);
 
 			if(e == list_end(&sleep_list)) break;
+		}else{
+
+			e = list_next(e);
 		}
 	}
 
 	//interrupt able setting
-	intr_set_level (old_level);
+	//intr_set_level (old_level);
 
+//	printf("[Out timer_interrupt]: %s\n", thread_current()->name);
 }
 
 /* Returns true if LOOPS iterations waits for more than one timer

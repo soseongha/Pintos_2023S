@@ -18,9 +18,31 @@ $
 
 # 명령 행 히스토리 (새것부터 오래된 것 순):
 :wq
-|2,0,1689010181,,"wq"
+|2,0,1689141610,,"wq"
+:q
+|2,0,1689136520,,"q"
+:cs find 1 run_actions
+|2,0,1689136110,,"cs find 1 run_actions"
 :cs find 1 timer_sleep
-|2,0,1689009636,,"cs find 1 timer_sleep"
+|2,0,1689134508,,"cs find 1 timer_sleep"
+:cs find 1 do_iret
+|2,0,1689054872,,"cs find 1 do_iret"
+:cs find 1 thread_launch
+|2,0,1689054819,,"cs find 1 thread_launch"
+:cs find 1 schedule
+|2,0,1689054791,,"cs find 1 schedule"
+:cs find 1 tss_update
+|2,0,1689054785,,"cs find 1 tss_update"
+:cs find 1 process_activate
+|2,0,1689054774,,"cs find 1 process_activate"
+:cs find 1 thread_block
+|2,0,1689054669,,"cs find 1 thread_block"
+:cs find 6 synch.c
+|2,0,1689053317,,"cs find 6 synch.c"
+:cs find 1 init_thread
+|2,0,1689051399,,"cs find 1 init_thread"
+:cs find 1 thread_create
+|2,0,1689051328,,"cs find 1 thread_create"
 :w
 |2,0,1689009629,,"w"
 :cs find 1 idle_thread
@@ -31,8 +53,6 @@ $
 |2,0,1689009524,,"cs find 3 idle_thread"
 :cs find 1 idle
 |2,0,1689009441,,"cs find 1 idle"
-:q
-|2,0,1689009228,,"q"
 :cs find 0 list
 |2,0,1689009103,,"cs find 0 list"
 :cs find 1 timer_interrupt
@@ -57,8 +77,6 @@ $
 |2,0,1689004967,,"cs find 0 sleep"
 :cs find 0 sleep_list
 |2,0,1689004959,,"cs find 0 sleep_list"
-:cs find 1 thread_block
-|2,0,1689004790,,"cs find 1 thread_block"
 :cs find 3 intr_disable
 |2,0,1689004276,,"cs find 3 intr_disable"
 :cs find intr_disable
@@ -99,24 +117,6 @@ $
 |2,0,1688991145,,"cs find thread_sleep"
 :!q
 |2,0,1688990848,,"!q"
-:cs find 1 thread_tick
-|2,0,1688990802,,"cs find 1 thread_tick"
-:cs find 3 timer_interrupt
-|2,0,1688990523,,"cs find 3 timer_interrupt"
-:cs find 3 tmer_interrupt
-|2,0,1688990492,,"cs find 3 tmer_interrupt"
-:tn ready_list
-|2,0,1688990268,,"tn ready_list"
-:cs find 1 list_init
-|2,0,1688988698,,"cs find 1 list_init"
-:cs find 1 thread_init
-|2,0,1688988684,,"cs find 1 thread_init"
-:cs find 3 disk_init
-|2,0,1688988166,,"cs find 3 disk_init"
-:cs find 3 reset_channel
-|2,0,1688988120,,"cs find 3 reset_channel"
-:cs find 3 timer_msleep
-|2,0,1688988089,,"cs find 3 timer_msleep"
 
 # 찾을 문자열 히스토리 (새것부터 오래된 것 순):
 ?//
@@ -138,18 +138,247 @@ $
 
 # 레지스터:
 "0	CHAR	0
-		//Insert thread sleep queue
-		list_push_back(&sleep_list, &cur_th->elem);
+		ticks++;
+		thread_tick ();
+|3,0,0,0,2,0,1689139657,"	ticks++;","	thread_tick ();"
+""1	CHAR	0
+		ticks++;
+		thread_tick ();
 	
-	
-|3,0,0,0,4,0,1689007285,"	//Insert thread sleep queue","	list_push_back(&sleep_list, &cur_th->elem);","",""
-"1	CHAR	0
-		//Insert thread sleep queue
-		list_push_back(&sleep_list, &cur_th->elem);
-	
-	
-|3,0,1,0,4,0,1689007287,"	//Insert thread sleep queue","	list_push_back(&sleep_list, &cur_th->elem);","",""
+|3,1,1,0,3,0,1689139659,"	ticks++;","	thread_tick ();",""
 "2	CHAR	0
+		ticks++;
+		thread_tick ();
+	
+	
+|3,0,2,0,4,0,1689139505,"	ticks++;","	thread_tick ();","",""
+"3	CHAR	0
+	#include "devices/timer.h"
+	#include <debug.h>
+	#include <inttypes.h>
+	#include <round.h>
+	#include <stdio.h>
+	#include "threads/interrupt.h"
+	#include "threads/io.h"
+	#include "threads/synch.h"
+	#include "threads/thread.h"
+	
+	/* See [8254] for hardware details of the 8254 timer chip. */
+	
+	#if TIMER_FREQ < 19
+	#error 8254 timer requires TIMER_FREQ >= 19
+	#endif
+	#if TIMER_FREQ > 1000
+	#error TIMER_FREQ <= 1000 recommended
+	#endif
+	
+	/* Number of timer ticks since OS booted. */
+	static int64_t ticks;
+	
+	/* Number of loops per timer tick.
+	   Initialized by timer_calibrate(). */
+	static unsigned loops_per_tick;
+	
+	static intr_handler_func timer_interrupt;
+	static bool too_many_loops (unsigned loops);
+	static void busy_wait (int64_t loops);
+	static void real_time_sleep (int64_t num, int32_t denom);
+	
+	/*Added newly in PA1*/
+	extern struct list sleep_list;
+	extern struct thread *idle_thread;
+	
+	/* Sets up the 8254 Programmable Interval Timer (PIT) to
+	   interrupt PIT_FREQ times per second, and registers the
+	   corresponding interrupt. */
+	void
+	timer_init (void) {
+		/* 8254 input frequency divided by TIMER_FREQ, rounded to
+		   nearest. */
+		uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;
+	
+		outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */
+		outb (0x40, count & 0xff);
+		outb (0x40, count >> 8);
+	
+		intr_register_ext (0x20, timer_interrupt, "8254 Timer");
+	}
+|3,0,3,0,50,0,1689137364,"#include \"devices/timer.h\"","#include <debug.h>","#include <inttypes.h>","#include <round.h>","#include <stdio.h>","#include \"threads/interrupt.h\"","#include \"threads/io.h\"","#include \"threads/synch.h\"","#include \"threads/thread.h\"","","/* See [8254] for hardware details of the 8254 timer chip. */","","#if TIMER_FREQ < 19","#error 8254 timer requires TIMER_FREQ >= 19","#endif","#if TIMER_FREQ > 1000",>39
+|<"#error TIMER_FREQ <= 1000 recommended","#endif","","/* Number of timer ticks since OS booted. */","static int64_t ticks;","","/* Number of loops per timer tick.","   Initialized by timer_calibrate(). */","static unsigned loops_per_tick;","","static intr_handler_func timer_interrupt;","static bool too_many_loops (unsigned loops);","static void busy_wait (int64_t loops);","static void real_time_sleep (int64_t num, int32_t denom);","","/*Added newly in PA1*/",>32
+|<"extern struct list sleep_list;","extern struct thread *idle_thread;","","/* Sets up the 8254 Programmable Interval Timer (PIT) to","   interrupt PIT_FREQ times per second, and registers the","   corresponding interrupt. */","void","timer_init (void) {","	/* 8254 input frequency divided by TIMER_FREQ, rounded to","	   nearest. */","	uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;","","	outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */",>29
+|<"	outb (0x40, count & 0xff);","	outb (0x40, count >> 8);","","	intr_register_ext (0x20, timer_interrupt, \"8254 Timer\");","}"
+"4	CHAR	0
+	#include "devices/timer.h"
+	#include <debug.h>
+	#include <inttypes.h>
+	#include <round.h>
+	#include <stdio.h>
+	#include "threads/interrupt.h"
+	#include "threads/io.h"
+	#include "threads/synch.h"
+	#include "threads/thread.h"
+	
+	/* See [8254] for hardware details of the 8254 timer chip. */
+	
+	#if TIMER_FREQ < 19
+	#error 8254 timer requires TIMER_FREQ >= 19
+	#endif
+	#if TIMER_FREQ > 1000
+	#error TIMER_FREQ <= 1000 recommended
+	#endif
+	
+	/* Number of timer ticks since OS booted. */
+	static int64_t ticks;
+	
+	/* Number of loops per timer tick.
+	   Initialized by timer_calibrate(). */
+	static unsigned loops_per_tick;
+	
+	static intr_handler_func timer_interrupt;
+	static bool too_many_loops (unsigned loops);
+	static void busy_wait (int64_t loops);
+	static void real_time_sleep (int64_t num, int32_t denom);
+	
+	/*Added newly in PA1*/
+	extern struct list sleep_list;
+	extern struct thread *idle_thread;
+	
+	/* Sets up the 8254 Programmable Interval Timer (PIT) to
+	   interrupt PIT_FREQ times per second, and registers the
+	   corresponding interrupt. */
+	void
+	timer_init (void) {
+		/* 8254 input frequency divided by TIMER_FREQ, rounded to
+		   nearest. */
+		uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;
+	
+		outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */
+		outb (0x40, count & 0xff);
+		outb (0x40, count >> 8);
+	
+		intr_register_ext (0x20, timer_interrupt, "8254 Timer");
+	}
+|3,0,4,0,50,0,1689137308,"#include \"devices/timer.h\"","#include <debug.h>","#include <inttypes.h>","#include <round.h>","#include <stdio.h>","#include \"threads/interrupt.h\"","#include \"threads/io.h\"","#include \"threads/synch.h\"","#include \"threads/thread.h\"","","/* See [8254] for hardware details of the 8254 timer chip. */","","#if TIMER_FREQ < 19","#error 8254 timer requires TIMER_FREQ >= 19","#endif","#if TIMER_FREQ > 1000",>39
+|<"#error TIMER_FREQ <= 1000 recommended","#endif","","/* Number of timer ticks since OS booted. */","static int64_t ticks;","","/* Number of loops per timer tick.","   Initialized by timer_calibrate(). */","static unsigned loops_per_tick;","","static intr_handler_func timer_interrupt;","static bool too_many_loops (unsigned loops);","static void busy_wait (int64_t loops);","static void real_time_sleep (int64_t num, int32_t denom);","","/*Added newly in PA1*/",>32
+|<"extern struct list sleep_list;","extern struct thread *idle_thread;","","/* Sets up the 8254 Programmable Interval Timer (PIT) to","   interrupt PIT_FREQ times per second, and registers the","   corresponding interrupt. */","void","timer_init (void) {","	/* 8254 input frequency divided by TIMER_FREQ, rounded to","	   nearest. */","	uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;","","	outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */",>29
+|<"	outb (0x40, count & 0xff);","	outb (0x40, count >> 8);","","	intr_register_ext (0x20, timer_interrupt, \"8254 Timer\");","}"
+"5	CHAR	0
+	#include "devices/timer.h"
+	#include <debug.h>
+	#include <inttypes.h>
+	#include <round.h>
+	#include <stdio.h>
+	#include "threads/interrupt.h"
+	#include "threads/io.h"
+	#include "threads/synch.h"
+	#include "threads/thread.h"
+	
+	/* See [8254] for hardware details of the 8254 timer chip. */
+	
+	#if TIMER_FREQ < 19
+	#error 8254 timer requires TIMER_FREQ >= 19
+	#endif
+	#if TIMER_FREQ > 1000
+	#error TIMER_FREQ <= 1000 recommended
+	#endif
+	
+	/* Number of timer ticks since OS booted. */
+	static int64_t ticks;
+	
+	/* Number of loops per timer tick.
+	   Initialized by timer_calibrate(). */
+	static unsigned loops_per_tick;
+	
+	static intr_handler_func timer_interrupt;
+	static bool too_many_loops (unsigned loops);
+	static void busy_wait (int64_t loops);
+	static void real_time_sleep (int64_t num, int32_t denom);
+	
+	/*Added newly in PA1*/
+	extern struct list sleep_list;
+	extern struct thread *idle_thread;
+	
+	/* Sets up the 8254 Programmable Interval Timer (PIT) to
+	   interrupt PIT_FREQ times per second, and registers the
+	   corresponding interrupt. */
+	void
+	timer_init (void) {
+		/* 8254 input frequency divided by TIMER_FREQ, rounded to
+		   nearest. */
+		uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;
+	
+		outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */
+		outb (0x40, count & 0xff);
+		outb (0x40, count >> 8);
+	
+		intr_register_ext (0x20, timer_interrupt, "8254 Timer");
+	}
+|3,0,5,0,50,0,1689137272,"#include \"devices/timer.h\"","#include <debug.h>","#include <inttypes.h>","#include <round.h>","#include <stdio.h>","#include \"threads/interrupt.h\"","#include \"threads/io.h\"","#include \"threads/synch.h\"","#include \"threads/thread.h\"","","/* See [8254] for hardware details of the 8254 timer chip. */","","#if TIMER_FREQ < 19","#error 8254 timer requires TIMER_FREQ >= 19","#endif","#if TIMER_FREQ > 1000",>39
+|<"#error TIMER_FREQ <= 1000 recommended","#endif","","/* Number of timer ticks since OS booted. */","static int64_t ticks;","","/* Number of loops per timer tick.","   Initialized by timer_calibrate(). */","static unsigned loops_per_tick;","","static intr_handler_func timer_interrupt;","static bool too_many_loops (unsigned loops);","static void busy_wait (int64_t loops);","static void real_time_sleep (int64_t num, int32_t denom);","","/*Added newly in PA1*/",>32
+|<"extern struct list sleep_list;","extern struct thread *idle_thread;","","/* Sets up the 8254 Programmable Interval Timer (PIT) to","   interrupt PIT_FREQ times per second, and registers the","   corresponding interrupt. */","void","timer_init (void) {","	/* 8254 input frequency divided by TIMER_FREQ, rounded to","	   nearest. */","	uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;","","	outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */",>29
+|<"	outb (0x40, count & 0xff);","	outb (0x40, count >> 8);","","	intr_register_ext (0x20, timer_interrupt, \"8254 Timer\");","}"
+"6	CHAR	0
+	#include "devices/timer.h"
+	#include <debug.h>
+	#include <inttypes.h>
+	#include <round.h>
+	#include <stdio.h>
+	#include "threads/interrupt.h"
+	#include "threads/io.h"
+	#include "threads/synch.h"
+	#include "threads/thread.h"
+	
+	/* See [8254] for hardware details of the 8254 timer chip. */
+	
+	#if TIMER_FREQ < 19
+	#error 8254 timer requires TIMER_FREQ >= 19
+	#endif
+	#if TIMER_FREQ > 1000
+	#error TIMER_FREQ <= 1000 recommended
+	#endif
+	
+	/* Number of timer ticks since OS booted. */
+	static int64_t ticks;
+	
+	/* Number of loops per timer tick.
+	   Initialized by timer_calibrate(). */
+	static unsigned loops_per_tick;
+	
+	static intr_handler_func timer_interrupt;
+	static bool too_many_loops (unsigned loops);
+	static void busy_wait (int64_t loops);
+	static void real_time_sleep (int64_t num, int32_t denom);
+	
+	/*Added newly in PA1*/
+	extern struct list sleep_list;
+	extern struct thread *idle_thread;
+	
+	/* Sets up the 8254 Programmable Interval Timer (PIT) to
+	   interrupt PIT_FREQ times per second, and registers the
+	   corresponding interrupt. */
+	void
+	timer_init (void) {
+		/* 8254 input frequency divided by TIMER_FREQ, rounded to
+		   nearest. */
+		uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;
+	
+		outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */
+		outb (0x40, count & 0xff);
+		outb (0x40, count >> 8);
+	
+		intr_register_ext (0x20, timer_interrupt, "8254 Timer");
+	}
+|3,0,6,0,50,0,1689137231,"#include \"devices/timer.h\"","#include <debug.h>","#include <inttypes.h>","#include <round.h>","#include <stdio.h>","#include \"threads/interrupt.h\"","#include \"threads/io.h\"","#include \"threads/synch.h\"","#include \"threads/thread.h\"","","/* See [8254] for hardware details of the 8254 timer chip. */","","#if TIMER_FREQ < 19","#error 8254 timer requires TIMER_FREQ >= 19","#endif","#if TIMER_FREQ > 1000",>39
+|<"#error TIMER_FREQ <= 1000 recommended","#endif","","/* Number of timer ticks since OS booted. */","static int64_t ticks;","","/* Number of loops per timer tick.","   Initialized by timer_calibrate(). */","static unsigned loops_per_tick;","","static intr_handler_func timer_interrupt;","static bool too_many_loops (unsigned loops);","static void busy_wait (int64_t loops);","static void real_time_sleep (int64_t num, int32_t denom);","","/*Added newly in PA1*/",>32
+|<"extern struct list sleep_list;","extern struct thread *idle_thread;","","/* Sets up the 8254 Programmable Interval Timer (PIT) to","   interrupt PIT_FREQ times per second, and registers the","   corresponding interrupt. */","void","timer_init (void) {","	/* 8254 input frequency divided by TIMER_FREQ, rounded to","	   nearest. */","	uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;","","	outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */",>29
+|<"	outb (0x40, count & 0xff);","	outb (0x40, count >> 8);","","	intr_register_ext (0x20, timer_interrupt, \"8254 Timer\");","}"
+"7	CHAR	0
+		//Insert thread sleep queue
+		list_push_back(&sleep_list, &cur_th->elem);
+	
+	
+|3,0,7,0,4,0,1689007287,"	//Insert thread sleep queue","	list_push_back(&sleep_list, &cur_th->elem);","",""
+"8	CHAR	0
 	/*   affect timings, so that if this function was inlined
 	   differently in different places the results would be difficult
 	   to predict. */
@@ -185,10 +414,10 @@ $
 		}
 	}
 	
-|3,0,2,0,35,0,1689005295,"/*   affect timings, so that if this function was inlined","   differently in different places the results would be difficult","   to predict. */","static void NO_INLINE","busy_wait (int64_t loops) {","	while (loops-- > 0)","		barrier ();","}","","/* Sleep for approximately NUM/DENOM seconds. */","static void","real_time_sleep (int64_t num, int32_t denom) {","	/* Convert NUM/DENOM seconds into timer ticks, rounding down.","",>21
+|3,0,8,0,35,0,1689005295,"/*   affect timings, so that if this function was inlined","   differently in different places the results would be difficult","   to predict. */","static void NO_INLINE","busy_wait (int64_t loops) {","	while (loops-- > 0)","		barrier ();","}","","/* Sleep for approximately NUM/DENOM seconds. */","static void","real_time_sleep (int64_t num, int32_t denom) {","	/* Convert NUM/DENOM seconds into timer ticks, rounding down.","",>21
 |<"	   (NUM / DENOM) s","	   ---------------------- = NUM * TIMER_FREQ / DENOM ticks.","	   1 s / TIMER_FREQ ticks","	   */","	int64_t ticks = num * TIMER_FREQ / denom;","","	ASSERT (intr_get_level () == INTR_ON);","	if (ticks > 0) {","		/* We're waiting for at least one full timer tick.  Use","		   timer_sleep() because it will yield the CPU to other","		   processes. */","		timer_sleep (ticks);","	} else {","		/* Otherwise, use a busy-wait loop for more accurate",>63
 |<"		   sub-tick timing.  We scale the numerator and denominator","		   down by 1000 to avoid the possibility of overflow. */","		ASSERT (denom % 1000 == 0);","		busy_wait (loops_per_tick * num / 1000 * TIMER_FREQ / (denom / 1000));","	}","}",""
-"3	CHAR	0
+"9	CHAR	0
 	
 				thread_unblock(e);}
 	
@@ -239,573 +468,368 @@ $
 		int64_t ticks = num * TIMER_FREQ / denom;
 	
 		ASSERT (intr_get_level () == INTR_ON);
-|3,0,3,0,50,0,1689004689,"","			thread_unblock(e);}","","","","}","","/* Returns true if LOOPS iterations waits for more than one timer","   tick, otherwise false. */","static bool","too_many_loops (unsigned loops) {","	/* Wait for a timer tick. */","	int64_t start = ticks;","	while (ticks == start)","		barrier ();","","	/* Run LOOPS loops. */","	start = ticks;","	busy_wait (loops);","","	/* If the tick count changed, we iterated too long. */","	barrier ();",>25
+|3,0,9,0,50,0,1689004689,"","			thread_unblock(e);}","","","","}","","/* Returns true if LOOPS iterations waits for more than one timer","   tick, otherwise false. */","static bool","too_many_loops (unsigned loops) {","	/* Wait for a timer tick. */","	int64_t start = ticks;","	while (ticks == start)","		barrier ();","","	/* Run LOOPS loops. */","	start = ticks;","	busy_wait (loops);","","	/* If the tick count changed, we iterated too long. */","	barrier ();",>25
 |<"	return start != ticks;","}","","/* Iterates through a simple loop LOOPS times, for implementing","   brief delays.","","   Marked NO_INLINE because code alignment can significantly","   affect timings, so that if this function was inlined","   differently in different places the results would be difficult","   to predict. */","static void NO_INLINE","busy_wait (int64_t loops) {","	while (loops-- > 0)","		barrier ();","}","","/* Sleep for approximately NUM/DENOM seconds. */",>13
 |<"static void","real_time_sleep (int64_t num, int32_t denom) {","	/* Convert NUM/DENOM seconds into timer ticks, rounding down.","","	   (NUM / DENOM) s","	   ---------------------- = NUM * TIMER_FREQ / DENOM ticks.","	   1 s / TIMER_FREQ ticks","	   */","	int64_t ticks = num * TIMER_FREQ / denom;","","	ASSERT (intr_get_level () == INTR_ON);"
-"4	CHAR	0
-	#include "devices/timer.h"
-	#include <debug.h>
-	#include <inttypes.h>
-	#include <round.h>
-	#include <stdio.h>
-	#include "threads/interrupt.h"
-	#include "threads/io.h"
-	#include "threads/synch.h"
-	#include "threads/thread.h"
-	
-	/* See [8254] for hardware details of the 8254 timer chip. */
-	
-	#if TIMER_FREQ < 19
-	#error 8254 timer requires TIMER_FREQ >= 19
-	#endif
-	#if TIMER_FREQ > 1000
-	#error TIMER_FREQ <= 1000 recommended
-	#endif
-	
-	/* Number of timer ticks since OS booted. */
-	static int64_t ticks;
-	
-	/* Number of loops per timer tick.
-	   Initialized by timer_calibrate(). */
-	static unsigned loops_per_tick;
-	
-	static intr_handler_func timer_interrupt;
-	static bool too_many_loops (unsigned loops);
-	static void busy_wait (int64_t loops);
-	static void real_time_sleep (int64_t num, int32_t denom);
-	
-	/* Sets up the 8254 Programmable Interval Timer (PIT) to
-	   interrupt PIT_FREQ times per second, and registers the
-	   corresponding interrupt. */
-	void
-	timer_init (void) {
-		/* 8254 input frequency divided by TIMER_FREQ, rounded to
-		   nearest. */
-		uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;
-	
-		outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */
-		outb (0x40, count & 0xff);
-		outb (0x40, count >> 8);
-	
-		intr_register_ext (0x20, timer_interrupt, "8254 Timer");
-	}
-	
-	/* Calibrates loops_per_tick, used to implement brief delays. */
-	void
-	timer_calibrate (void) {
-|3,0,4,0,50,0,1689003388,"#include \"devices/timer.h\"","#include <debug.h>","#include <inttypes.h>","#include <round.h>","#include <stdio.h>","#include \"threads/interrupt.h\"","#include \"threads/io.h\"","#include \"threads/synch.h\"","#include \"threads/thread.h\"","","/* See [8254] for hardware details of the 8254 timer chip. */","","#if TIMER_FREQ < 19","#error 8254 timer requires TIMER_FREQ >= 19","#endif","#if TIMER_FREQ > 1000",>39
-|<"#error TIMER_FREQ <= 1000 recommended","#endif","","/* Number of timer ticks since OS booted. */","static int64_t ticks;","","/* Number of loops per timer tick.","   Initialized by timer_calibrate(). */","static unsigned loops_per_tick;","","static intr_handler_func timer_interrupt;","static bool too_many_loops (unsigned loops);","static void busy_wait (int64_t loops);","static void real_time_sleep (int64_t num, int32_t denom);","",>58
-|<"/* Sets up the 8254 Programmable Interval Timer (PIT) to","   interrupt PIT_FREQ times per second, and registers the","   corresponding interrupt. */","void","timer_init (void) {","	/* 8254 input frequency divided by TIMER_FREQ, rounded to","	   nearest. */","	uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;","","	outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */","	outb (0x40, count & 0xff);","	outb (0x40, count >> 8);","",>61
-|<"	intr_register_ext (0x20, timer_interrupt, \"8254 Timer\");","}","","/* Calibrates loops_per_tick, used to implement brief delays. */","void","timer_calibrate (void) {"
-"5	CHAR	0
-	#include "devices/timer.h"
-	#include <debug.h>
-	#include <inttypes.h>
-	#include <round.h>
-	#include <stdio.h>
-	#include "threads/interrupt.h"
-	#include "threads/io.h"
-	#include "threads/synch.h"
-	#include "threads/thread.h"
-	
-	/* See [8254] for hardware details of the 8254 timer chip. */
-	
-	#if TIMER_FREQ < 19
-	#error 8254 timer requires TIMER_FREQ >= 19
-	#endif
-	#if TIMER_FREQ > 1000
-	#error TIMER_FREQ <= 1000 recommended
-	#endif
-	
-	/* Number of timer ticks since OS booted. */
-	static int64_t ticks;
-	
-	/* Number of loops per timer tick.
-	   Initialized by timer_calibrate(). */
-	static unsigned loops_per_tick;
-	
-	static intr_handler_func timer_interrupt;
-	static bool too_many_loops (unsigned loops);
-	static void busy_wait (int64_t loops);
-	static void real_time_sleep (int64_t num, int32_t denom);
-	
-	/* Sets up the 8254 Programmable Interval Timer (PIT) to
-	   interrupt PIT_FREQ times per second, and registers the
-	   corresponding interrupt. */
-	void
-	timer_init (void) {
-		/* 8254 input frequency divided by TIMER_FREQ, rounded to
-		   nearest. */
-		uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;
-	
-		outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */
-		outb (0x40, count & 0xff);
-		outb (0x40, count >> 8);
-	
-		intr_register_ext (0x20, timer_interrupt, "8254 Timer");
-	}
-	
-	/* Calibrates loops_per_tick, used to implement brief delays. */
-	void
-	timer_calibrate (void) {
-|3,0,5,0,50,0,1689003282,"#include \"devices/timer.h\"","#include <debug.h>","#include <inttypes.h>","#include <round.h>","#include <stdio.h>","#include \"threads/interrupt.h\"","#include \"threads/io.h\"","#include \"threads/synch.h\"","#include \"threads/thread.h\"","","/* See [8254] for hardware details of the 8254 timer chip. */","","#if TIMER_FREQ < 19","#error 8254 timer requires TIMER_FREQ >= 19","#endif","#if TIMER_FREQ > 1000",>39
-|<"#error TIMER_FREQ <= 1000 recommended","#endif","","/* Number of timer ticks since OS booted. */","static int64_t ticks;","","/* Number of loops per timer tick.","   Initialized by timer_calibrate(). */","static unsigned loops_per_tick;","","static intr_handler_func timer_interrupt;","static bool too_many_loops (unsigned loops);","static void busy_wait (int64_t loops);","static void real_time_sleep (int64_t num, int32_t denom);","",>58
-|<"/* Sets up the 8254 Programmable Interval Timer (PIT) to","   interrupt PIT_FREQ times per second, and registers the","   corresponding interrupt. */","void","timer_init (void) {","	/* 8254 input frequency divided by TIMER_FREQ, rounded to","	   nearest. */","	uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;","","	outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */","	outb (0x40, count & 0xff);","	outb (0x40, count >> 8);","",>61
-|<"	intr_register_ext (0x20, timer_interrupt, \"8254 Timer\");","}","","/* Calibrates loops_per_tick, used to implement brief delays. */","void","timer_calibrate (void) {"
-"6	CHAR	0
-	#include <stdbool.h>
-	#include <stddef.h>
-	#include <string.h>
-	#include "threads/init.h"
-	#include "threads/pte.h"
-	#include "threads/palloc.h"
-	#include "threads/thread.h"
-	#include "threads/mmu.h"
-	#include "intrinsic.h"
-	
-	static uint64_t *
-	pgdir_walk (uint64_t *pdp, const uint64_t va, int create) {
-		int idx = PDX (va);
-		if (pdp) {
-			uint64_t *pte = (uint64_t *) pdp[idx];
-			if (!((uint64_t) pte & PTE_P)) {
-				if (create) {
-					uint64_t *new_page = palloc_get_page (PAL_ZERO);
-					if (new_page)
-						pdp[idx] = vtop (new_page) | PTE_U | PTE_W | PTE_P;
-					else
-						return NULL;
-				} else
-					return NULL;
-			}
-			return (uint64_t *) ptov (PTE_ADDR (pdp[idx]) + 8 * PTX (va));
-		}
-		return NULL;
-	}
-	
-	static uint64_t *
-	pdpe_walk (uint64_t *pdpe, const uint64_t va, int create) {
-		uint64_t *pte = NULL;
-		int idx = PDPE (va);
-		int allocated = 0;
-		if (pdpe) {
-			uint64_t *pde = (uint64_t *) pdpe[idx];
-			if (!((uint64_t) pde & PTE_P)) {
-				if (create) {
-					uint64_t *new_page = palloc_get_page (PAL_ZERO);
-					if (new_page) {
-						pdpe[idx] = vtop (new_page) | PTE_U | PTE_W | PTE_P;
-						allocated = 1;
-					} else
-						return NULL;
-				} else
-					return NULL;
-			}
-			pte = pgdir_walk (ptov (PTE_ADDR (pdpe[idx])), va, create);
-		}
-|3,0,6,0,50,0,1688982911,"#include <stdbool.h>","#include <stddef.h>","#include <string.h>","#include \"threads/init.h\"","#include \"threads/pte.h\"","#include \"threads/palloc.h\"","#include \"threads/thread.h\"","#include \"threads/mmu.h\"","#include \"intrinsic.h\"","","static uint64_t *","pgdir_walk (uint64_t *pdp, const uint64_t va, int create) {","	int idx = PDX (va);","	if (pdp) {","		uint64_t *pte = (uint64_t *) pdp[idx];",>36
-|<"		if (!((uint64_t) pte & PTE_P)) {","			if (create) {","				uint64_t *new_page = palloc_get_page (PAL_ZERO);","				if (new_page)","					pdp[idx] = vtop (new_page) | PTE_U | PTE_W | PTE_P;","				else","					return NULL;","			} else","				return NULL;","		}","		return (uint64_t *) ptov (PTE_ADDR (pdp[idx]) + 8 * PTX (va));","	}","	return NULL;","}","","static uint64_t *","pdpe_walk (uint64_t *pdpe, const uint64_t va, int create) {","	uint64_t *pte = NULL;","	int idx = PDPE (va);",>21
-|<"	int allocated = 0;","	if (pdpe) {","		uint64_t *pde = (uint64_t *) pdpe[idx];","		if (!((uint64_t) pde & PTE_P)) {","			if (create) {","				uint64_t *new_page = palloc_get_page (PAL_ZERO);","				if (new_page) {","					pdpe[idx] = vtop (new_page) | PTE_U | PTE_W | PTE_P;","					allocated = 1;","				} else","					return NULL;","			} else","				return NULL;","		}","		pte = pgdir_walk (ptov (PTE_ADDR (pdpe[idx])), va, create);","	}"
-"7	CHAR	0
-	if filereadable("~/cscope.out")
-	cs add ~/cscope.out
-	else
-	cs add /usr/src/linux/cscope.out
-	endf
-|3,0,7,0,5,0,1688547229,"if filereadable(\"~/cscope.out\")","cs add ~/cscope.out","else","cs add /usr/src/linux/cscope.out","endf"
-"8	CHAR	0
-	
-	if filereadable("./cscope.out")
-		cscope add cscope.out
-	endif
-|3,0,8,0,4,0,1688545645,"","if filereadable(\"./cscope.out\")","	cscope add cscope.out","endif"
-"9	CHAR	0
-	Set nocompatible              " be iMproved, required
-	filetype off                  " required
-	
-	" set the runtime path to include Vundle and initialize
-	set rtp+=~/.vim/bundle/Vundle.vim
-	call vundle#begin()
-	" alternatively, pass a path where Vundle should install plugins
-	"call vundle#begin('~/some/path/here')
-	
-	" let Vundle manage Vundle, required
-	Plugin 'VundleVim/Vundle.vim'
-	
-	" The following are examples of different formats supported.
-	" Keep Plugin commands between vundle#begin/end.
-	" plugin on GitHub repo
-	Plugin 'tpope/vim-fugitive'
-	" plugin from http://vim-scripts.org/vim/scripts.html
-	" Plugin 'L9'
-	" Git plugin not hosted on GitHub
-	Plugin 'git://git.wincent.com/command-t.git'
-	" git repos on your local machine (i.e. when working on your own plugin)
-	Plugin 'file:///home/gmarik/path/to/plugin'
-	" The sparkup vim script is in a subdirectory of this repo called vim.
-	" Pass the path to set the runtimepath properly.
-	Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-	" Install L9 and avoid a Naming conflict if you've already installed a
-	" different version somewhere else.
-	" Plugin 'ascenator/L9', {'name': 'newL9'}
-	
-	" All of your Plugins must be added before the following line
-	call vundle#end()            " required
-	filetype plugin indent on    " required
-	" To ignore plugin indent changes, instead use:
-	"filetype plugin on
-	"
-	" Brief help
-	" :PluginList       - lists configured plugins
-	" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-	" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-	" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-	"
-	" see :h vundle for more details or wiki for FAQ
-	" Put your non-Plugin stuff after this line
-|3,0,9,0,43,0,1688544852,"Set nocompatible              \" be iMproved, required","filetype off                  \" required","","\" set the runtime path to include Vundle and initialize","set rtp+=~/.vim/bundle/Vundle.vim","call vundle#begin()","\" alternatively, pass a path where Vundle should install plugins","\"call vundle#begin('~/some/path/here')","","\" let Vundle manage Vundle, required","Plugin 'VundleVim/Vundle.vim'","",>63
-|<"\" The following are examples of different formats supported.","\" Keep Plugin commands between vundle#begin/end.","\" plugin on GitHub repo","Plugin 'tpope/vim-fugitive'","\" plugin from http://vim-scripts.org/vim/scripts.html","\" Plugin 'L9'","\" Git plugin not hosted on GitHub","Plugin 'git://git.wincent.com/command-t.git'","\" git repos on your local machine (i.e. when working on your own plugin)","Plugin 'file:///home/gmarik/path/to/plugin'",>73
-|<"\" The sparkup vim script is in a subdirectory of this repo called vim.","\" Pass the path to set the runtimepath properly.","Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}","\" Install L9 and avoid a Naming conflict if you've already installed a","\" different version somewhere else.","\" Plugin 'ascenator/L9', {'name': 'newL9'}","","\" All of your Plugins must be added before the following line","call vundle#end()            \" required","filetype plugin indent on    \" required",>50
-|<"\" To ignore plugin indent changes, instead use:","\"filetype plugin on","\"","\" Brief help","\" :PluginList       - lists configured plugins","\" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate","\" :PluginSearch foo - searches for foo; append `!` to refresh local cache","\" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal","\"","\" see :h vundle for more details or wiki for FAQ",>46
-|<"\" Put your non-Plugin stuff after this line"
-""-	CHAR	0
+"-	CHAR	0
 	s
-|3,1,36,0,1,0,1689009611,"s"
+|3,0,36,0,1,0,1689009611,"s"
 
 # 파일 마크:
-'0  210  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,48,210,1,1689010181,"~/pintos/pintos-kaist/devices/timer.c"
-'1  188  39  ~/pintos/pintos-kaist/devices/timer.c
-|4,49,188,39,1689009840,"~/pintos/pintos-kaist/devices/timer.c"
-'2  202  39  ~/pintos/pintos-kaist/devices/timer.c
-|4,50,202,39,1689009840,"~/pintos/pintos-kaist/devices/timer.c"
-'3  1  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,51,1,0,1689009666,"~/pintos/pintos-kaist/devices/timer.c"
-'4  1  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,52,1,0,1689009666,"~/pintos/pintos-kaist/devices/timer.c"
-'5  1  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,53,1,0,1689009666,"~/pintos/pintos-kaist/devices/timer.c"
-'6  1  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,54,1,0,1689009666,"~/pintos/pintos-kaist/devices/timer.c"
-'7  176  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,55,176,1,1689009273,"~/pintos/pintos-kaist/devices/timer.c"
-'8  175  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,56,175,1,1689009273,"~/pintos/pintos-kaist/devices/timer.c"
-'9  176  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,57,176,1,1689009273,"~/pintos/pintos-kaist/devices/timer.c"
+'0  217  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,48,217,0,1689141610,"~/pintos/pintos-kaist/devices/timer.c"
+'1  199  19  ~/pintos/pintos-kaist/devices/timer.c
+|4,49,199,19,1689141474,"~/pintos/pintos-kaist/devices/timer.c"
+'2  199  19  ~/pintos/pintos-kaist/devices/timer.c
+|4,50,199,19,1689141474,"~/pintos/pintos-kaist/devices/timer.c"
+'3  202  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,51,202,0,1689141264,"~/pintos/pintos-kaist/devices/timer.c"
+'4  200  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,52,200,0,1689141264,"~/pintos/pintos-kaist/devices/timer.c"
+'5  202  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,53,202,0,1689141264,"~/pintos/pintos-kaist/devices/timer.c"
+'6  200  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,54,200,0,1689141264,"~/pintos/pintos-kaist/devices/timer.c"
+'7  189  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,55,189,0,1689141058,"~/pintos/pintos-kaist/devices/timer.c"
+'8  189  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,56,189,0,1689141058,"~/pintos/pintos-kaist/devices/timer.c"
+'9  190  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,57,190,0,1689141058,"~/pintos/pintos-kaist/devices/timer.c"
 
 # 점프목록 (새것이 먼저):
--'  210  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,210,1,1689010181,"~/pintos/pintos-kaist/devices/timer.c"
+-'  217  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,217,0,1689141610,"~/pintos/pintos-kaist/devices/timer.c"
 -'  1  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,1,0,1689010114,"~/pintos/pintos-kaist/devices/timer.c"
--'  188  39  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,188,39,1689009840,"~/pintos/pintos-kaist/devices/timer.c"
--'  202  39  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,202,39,1689009840,"~/pintos/pintos-kaist/devices/timer.c"
+|4,39,1,0,1689141588,"~/pintos/pintos-kaist/devices/timer.c"
+-'  199  19  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,199,19,1689141474,"~/pintos/pintos-kaist/devices/timer.c"
+-'  199  19  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,199,19,1689141474,"~/pintos/pintos-kaist/devices/timer.c"
 -'  1  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,1,0,1689009743,"~/pintos/pintos-kaist/devices/timer.c"
+|4,39,1,0,1689141396,"~/pintos/pintos-kaist/devices/timer.c"
+-'  202  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,202,0,1689141264,"~/pintos/pintos-kaist/devices/timer.c"
+-'  200  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,200,0,1689141264,"~/pintos/pintos-kaist/devices/timer.c"
+-'  202  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,202,0,1689141264,"~/pintos/pintos-kaist/devices/timer.c"
+-'  200  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,200,0,1689141264,"~/pintos/pintos-kaist/devices/timer.c"
 -'  1  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,1,0,1689009666,"~/pintos/pintos-kaist/devices/timer.c"
--'  35  12  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,35,12,1689009636,"~/pintos/pintos-kaist/threads/thread.c"
--'  35  12  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,35,12,1689009636,"~/pintos/pintos-kaist/threads/thread.c"
--'  35  12  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,35,12,1689009636,"~/pintos/pintos-kaist/threads/thread.c"
--'  35  12  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,35,12,1689009636,"~/pintos/pintos-kaist/threads/thread.c"
--'  34  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,34,0,1689009603,"~/pintos/pintos-kaist/devices/timer.c"
--'  34  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,34,0,1689009603,"~/pintos/pintos-kaist/devices/timer.c"
--'  34  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,34,0,1689009603,"~/pintos/pintos-kaist/devices/timer.c"
--'  38  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,38,0,1689009554,"~/pintos/pintos-kaist/threads/thread.c"
--'  38  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,38,0,1689009554,"~/pintos/pintos-kaist/threads/thread.c"
--'  38  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,38,0,1689009554,"~/pintos/pintos-kaist/threads/thread.c"
--'  38  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,38,0,1689009554,"~/pintos/pintos-kaist/threads/thread.c"
--'  407  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,407,0,1689009503,"~/pintos/pintos-kaist/threads/thread.c"
--'  407  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,407,0,1689009503,"~/pintos/pintos-kaist/threads/thread.c"
--'  407  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,407,0,1689009503,"~/pintos/pintos-kaist/threads/thread.c"
--'  407  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,407,0,1689009503,"~/pintos/pintos-kaist/threads/thread.c"
--'  93  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,93,0,1689009441,"~/pintos/pintos-kaist/threads/thread.c"
--'  93  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,93,0,1689009441,"~/pintos/pintos-kaist/threads/thread.c"
--'  93  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,93,0,1689009441,"~/pintos/pintos-kaist/threads/thread.c"
--'  93  0  ~/pintos/pintos-kaist/threads/thread.c
-|4,39,93,0,1689009441,"~/pintos/pintos-kaist/threads/thread.c"
--'  98  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,98,0,1689009407,"~/pintos/pintos-kaist/devices/timer.c"
--'  98  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,98,0,1689009407,"~/pintos/pintos-kaist/devices/timer.c"
--'  98  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,98,0,1689009407,"~/pintos/pintos-kaist/devices/timer.c"
--'  176  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,176,1,1689009273,"~/pintos/pintos-kaist/devices/timer.c"
--'  175  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,175,1,1689009273,"~/pintos/pintos-kaist/devices/timer.c"
--'  187  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,187,1,1689009273,"~/pintos/pintos-kaist/devices/timer.c"
--'  186  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,186,1,1689009273,"~/pintos/pintos-kaist/devices/timer.c"
--'  187  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,187,1,1689009273,"~/pintos/pintos-kaist/devices/timer.c"
--'  186  1  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,186,1,1689009273,"~/pintos/pintos-kaist/devices/timer.c"
+|4,39,1,0,1689141151,"~/pintos/pintos-kaist/devices/timer.c"
+-'  189  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,189,0,1689141058,"~/pintos/pintos-kaist/devices/timer.c"
+-'  190  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,190,0,1689141058,"~/pintos/pintos-kaist/devices/timer.c"
+-'  189  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,189,0,1689141058,"~/pintos/pintos-kaist/devices/timer.c"
+-'  190  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,190,0,1689141058,"~/pintos/pintos-kaist/devices/timer.c"
+-'  190  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,190,0,1689141058,"~/pintos/pintos-kaist/devices/timer.c"
 -'  1  0  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,1,0,1689009230,"~/pintos/pintos-kaist/devices/timer.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  2  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,2,0,1689009228,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  1  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,1,0,1689009119,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  189  2  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,189,2,1689009110,"~/pintos/pintos-kaist/devices/timer.c"
--'  190  2  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,190,2,1689009110,"~/pintos/pintos-kaist/devices/timer.c"
+|4,39,1,0,1689140731,"~/pintos/pintos-kaist/devices/timer.c"
+-'  186  11  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,186,11,1689140100,"~/pintos/pintos-kaist/devices/timer.c"
+-'  187  11  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,187,11,1689140100,"~/pintos/pintos-kaist/devices/timer.c"
+-'  186  11  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,186,11,1689140100,"~/pintos/pintos-kaist/devices/timer.c"
+-'  187  11  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,187,11,1689140100,"~/pintos/pintos-kaist/devices/timer.c"
+-'  187  11  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,187,11,1689140100,"~/pintos/pintos-kaist/devices/timer.c"
+-'  187  11  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,187,11,1689140100,"~/pintos/pintos-kaist/devices/timer.c"
+-'  1  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,1,0,1689139642,"~/pintos/pintos-kaist/devices/timer.c"
+-'  205  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,205,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  206  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,206,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  204  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,204,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  203  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,203,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  205  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,205,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  206  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,206,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  204  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,204,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  203  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,203,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  204  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,204,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  202  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,202,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  203  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,203,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  204  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,204,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  202  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,202,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  203  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,203,0,1689139522,"~/pintos/pintos-kaist/devices/timer.c"
+-'  1  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,1,0,1689139492,"~/pintos/pintos-kaist/devices/timer.c"
+-'  225  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,225,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  224  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,224,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  226  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,226,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  223  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,223,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  222  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,222,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  221  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,221,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  225  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,225,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  224  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,224,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  226  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,226,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  223  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,223,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  223  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,223,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  222  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,222,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  224  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,224,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  221  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,221,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  223  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,223,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  222  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,222,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  224  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,224,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  222  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,222,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  221  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,221,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  223  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,223,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  222  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,222,0,1689139246,"~/pintos/pintos-kaist/devices/timer.c"
+-'  1  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,1,0,1689139154,"~/pintos/pintos-kaist/devices/timer.c"
+-'  207  60  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,207,60,1689138611,"~/pintos/pintos-kaist/devices/timer.c"
+-'  207  60  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,207,60,1689138611,"~/pintos/pintos-kaist/devices/timer.c"
+-'  205  60  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,205,60,1689138611,"~/pintos/pintos-kaist/devices/timer.c"
+-'  205  60  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,205,60,1689138611,"~/pintos/pintos-kaist/devices/timer.c"
+-'  203  60  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,203,60,1689138611,"~/pintos/pintos-kaist/devices/timer.c"
+-'  204  60  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,204,60,1689138611,"~/pintos/pintos-kaist/devices/timer.c"
+-'  203  60  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,203,60,1689138611,"~/pintos/pintos-kaist/devices/timer.c"
+-'  203  60  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,203,60,1689138611,"~/pintos/pintos-kaist/devices/timer.c"
+-'  1  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,1,0,1689138529,"~/pintos/pintos-kaist/devices/timer.c"
 -'  203  2  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,203,2,1689009110,"~/pintos/pintos-kaist/devices/timer.c"
--'  204  2  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,204,2,1689009110,"~/pintos/pintos-kaist/devices/timer.c"
--'  203  2  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,203,2,1689009110,"~/pintos/pintos-kaist/devices/timer.c"
--'  204  2  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,204,2,1689009110,"~/pintos/pintos-kaist/devices/timer.c"
--'  204  2  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,204,2,1689009110,"~/pintos/pintos-kaist/devices/timer.c"
--'  204  2  ~/pintos/pintos-kaist/devices/timer.c
-|4,39,204,2,1689009110,"~/pintos/pintos-kaist/devices/timer.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
--'  46  0  ~/pintos/pintos-kaist/lib/kernel/list.c
-|4,39,46,0,1689008886,"~/pintos/pintos-kaist/lib/kernel/list.c"
+|4,39,203,2,1689138087,"~/pintos/pintos-kaist/devices/timer.c"
+-'  1  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,1,0,1689138061,"~/pintos/pintos-kaist/devices/timer.c"
+-'  134  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,134,0,1689137934,"~/pintos/pintos-kaist/devices/timer.c"
+-'  134  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,134,0,1689137934,"~/pintos/pintos-kaist/devices/timer.c"
+-'  134  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,134,0,1689137934,"~/pintos/pintos-kaist/devices/timer.c"
+-'  134  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,134,0,1689137934,"~/pintos/pintos-kaist/devices/timer.c"
+-'  134  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,134,0,1689137934,"~/pintos/pintos-kaist/devices/timer.c"
+-'  134  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,134,0,1689137934,"~/pintos/pintos-kaist/devices/timer.c"
+-'  134  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,134,0,1689137934,"~/pintos/pintos-kaist/devices/timer.c"
+-'  134  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,134,0,1689137934,"~/pintos/pintos-kaist/devices/timer.c"
+-'  134  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,134,0,1689137934,"~/pintos/pintos-kaist/devices/timer.c"
+-'  134  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,134,0,1689137934,"~/pintos/pintos-kaist/devices/timer.c"
+-'  1  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,1,0,1689137858,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  109  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,109,0,1689137805,"~/pintos/pintos-kaist/devices/timer.c"
+-'  1  0  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,1,0,1689137761,"~/pintos/pintos-kaist/devices/timer.c"
+-'  136  28  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,136,28,1689137604,"~/pintos/pintos-kaist/devices/timer.c"
+-'  132  28  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,132,28,1689137604,"~/pintos/pintos-kaist/devices/timer.c"
+-'  135  28  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,135,28,1689137604,"~/pintos/pintos-kaist/devices/timer.c"
+-'  136  28  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,136,28,1689137604,"~/pintos/pintos-kaist/devices/timer.c"
+-'  132  28  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,132,28,1689137604,"~/pintos/pintos-kaist/devices/timer.c"
+-'  135  28  ~/pintos/pintos-kaist/devices/timer.c
+|4,39,135,28,1689137604,"~/pintos/pintos-kaist/devices/timer.c"
 
 # 파일내의 마크 히스토리 (새것부터 오래된 순):
 
 > ~/pintos/pintos-kaist/devices/timer.c
-	*	1689010180	0
-	"	210	1
-	^	210	2
-	.	191	0
-	+	1	29
+	*	1689141609	0
+	"	217	0
+	^	217	0
+	.	188	2
+	+	1	27
 	+	1	0
-	+	1	8
-	+	253	0
+	+	1	22
+	+	1	26
+	+	1	1
 	+	1	7
-	+	253	0
-	+	253	18
-	+	253	14
-	+	253	6
-	+	253	0
-	+	253	41
+	+	1	0
+	+	1	51
+	+	1	20
+	+	1	2
+	+	1	12
+	+	1	55
 	+	1	15
-	+	1	14
+	+	1	16
+	+	1	13
+	+	1	15
+	+	1	38
 	+	1	0
-	+	1	8
-	+	1	7
+	+	1	18
 	+	1	0
-	+	253	0
-	+	1	3
+	+	1	34
+	+	1	0
+	+	1	44
+	+	1	33
+	+	1	0
+	+	1	20
+	+	1	0
+	+	1	30
+	+	1	33
+	+	1	19
+	+	1	0
+	+	1	33
+	+	1	28
+	+	1	71
+	+	1	0
+	+	1	30
+	+	1	6
+	+	1	0
+	+	1	5
+	+	1	13
+	+	1	0
+	+	1	40
 	+	1	0
 	+	2	0
-	+	184	0
-	+	112	1
-	+	111	27
-	+	112	0
-	+	128	25
-	+	165	29
-	+	167	27
-	+	192	24
-	+	113	0
-	+	112	1
-	+	114	0
-	+	113	0
-	+	128	26
-	+	128	24
+	+	1	0
 	+	168	0
+	+	167	0
 	+	169	0
-	+	192	26
-	+	192	24
-	+	114	15
-	+	253	1
-	+	254	0
-	+	9	27
-	+	10	0
-	+	32	22
-	+	33	26
-	+	21	1
-	+	33	7
-	+	254	0
-	+	174	51
-	+	188	20
-	+	176	2
-	+	177	12
-	+	179	12
-	+	177	55
-	+	179	15
-	+	183	16
-	+	182	13
-	+	183	15
-	+	106	38
-	+	107	0
-	+	121	18
-	+	122	0
-	+	126	34
-	+	127	0
-	+	129	44
-	+	162	33
-	+	163	0
-	+	190	20
-	+	191	0
-	+	192	0
-	+	129	0
-	+	122	0
-	+	180	30
-	+	178	33
-	+	186	19
+	+	168	33
+	+	206	34
+	+	108	29
+	+	136	24
+	+	110	21
+	+	111	0
+	+	110	17
+	+	135	0
+	+	112	1
+	+	113	1
+	+	115	1
+	+	116	1
 	+	118	0
-	+	117	33
-	+	193	28
-	+	180	71
-	+	181	0
-	+	180	30
-	+	183	6
-	+	181	0
-	+	180	5
-	+	187	13
-	+	188	0
-	+	35	0
-	+	188	40
-	+	107	0
-	+	121	0
-	+	123	0
-	+	125	0
-	+	127	0
-	+	130	0
-	+	163	0
-	+	179	0
-	+	181	0
-	+	191	0
+	+	120	1
+	+	121	1
+	+	123	1
+	+	124	1
+	+	126	1
+	+	127	1
+	+	129	1
+	+	130	1
+	+	132	1
+	+	133	1
+	+	134	1
+	+	136	1
+	+	134	1
+	+	108	2
+	+	136	2
+	+	168	2
+	+	206	2
+	+	108	55
+	+	136	1
+	+	168	32
+	+	206	60
+	+	108	1
+	+	136	1
+	+	168	1
+	+	206	1
+	+	173	0
+	+	205	0
+	+	206	0
+	+	169	0
+	+	186	11
+	+	188	55
+	+	189	0
+	+	176	2
+	+	204	2
+	+	182	64
+	+	200	0
+	+	197	8
+	+	199	19
+	+	188	2
+
+> ~/pintos/pintos-kaist/tests/threads/alarm-simultaneous.c
+	*	1689136518	0
+	"	61	50
+
+> ~/pintos/pintos-kaist/tests/threads/alarm-priority.c
+	*	1689136402	0
+	"	56	0
+
+> ~/pintos/pintos-kaist/tests/threads/alarm-negative.c
+	*	1689136300	0
+	"	12	0
+
+> ~/pintos/pintos-kaist/threads/build/tests/threads/alarm-negative.d
+	*	1689136246	0
+	"	1	0
+
+> ~/pintos/pintos-kaist/threads/init.c
+	*	1689136142	0
+	"	248	0
 
 > ~/pintos/pintos-kaist/threads/thread.c
-	*	1689009629	0
-	"	35	12
+	*	1689136032	0
+	"	149	0
 	^	35	13
 	.	35	0
 	+	31	22
@@ -818,6 +842,14 @@ $
 	+	38	0
 	+	32	0
 	+	35	0
+
+> ~/pintos/pintos-kaist/userprog/tss.c
+	*	1689054788	0
+	"	74	0
+
+> ~/pintos/pintos-kaist/userprog/process.c
+	*	1689054779	0
+	"	252	0
 
 > ~/pintos/pintos-kaist/lib/kernel/list.c
 	*	1689009224	0
@@ -861,10 +893,6 @@ $
 > ~/pintos/pintos-kaist/filesys/inode.c
 	*	1688991397	0
 	"	54	0
-
-> ~/pintos/pintos-kaist/threads/init.c
-	*	1688988677	0
-	"	50	0
 
 > ~/pintos/pintos-kaist/include/threads/synch.h
 	*	1688988636	0

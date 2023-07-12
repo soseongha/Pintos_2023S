@@ -603,3 +603,198 @@ vi pintos/pintos-kaist/devices/timer.c
 cd pintos/pintos-kaist/threads/
 cd build/
 pintos -- -q run alarm-multiple
+vi pintos/pintos-kaist/devices/timer.c
+cd pintos/pintos-kaist/threads/
+cd build/
+cd ..
+make clean
+make
+cd build/
+pintos -- -q run alarm-multiple
+cd
+vi pintos/pintos-kaist/devices/timer.c
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+pintos -- -q run alarm-multiple
+cd
+cd pintos/pintos-kaist/threads/
+cd
+vi pintos/pintos-kaist/devices/timer.c
+vi pintos/pintos-kaist/lib/kernel/list.c
+vi pintos/pintos-kaist/devices/timer.c
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/devices/timer.c
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+pintos -- -q run alarm-multiple
+ccd
+cd
+vi pintos/pintos-kaist/devices/timer.c
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+pintos -- -q run alarm-multiple
+cd
+vi pintos/pintos-kaist/devices/timer.c
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+ls
+pintos -- -q run alarm-multiple
+ls
+cd
+git branch
+git status
+git add .
+git status
+git add pintos/pintos-kaist/
+git status
+git add pintos/pintos-kaist/.
+git status
+git add -A
+git status
+git commit -m "alarm clock solved"
+git push origin main
+git push origin master
+git status
+cd pintos/pintos-kaist/
+ls
+git add .
+git status
+git commit -m "alarm clock solved 2"
+git push origin master
+cd
+git push origin master
+git status
+git remote -v
+cd pintos/pintos-kaist/
+git remote -v
+git remote set-url origin https://github.com/soseongha/2023S_Pintos.git 
+git remote -v
+git status
+git push origin master
+ls
+cd
+git remote set-url origin https://github.com/soseongha/Pintos_2023S.git
+git remote -v
+git status
+cd pintos/pintos-kaist/
+git remote -v
+git remote set-url origin https://github.com/soseongha/Pintos_2023S.git
+git remote -v
+ls
+ls -al
+git remote remove
+rm .git
+rm -d .git
+rm -rd .git
+ls
+ls -al
+git remote add test https://github.com/soseongha/Pintos_2023S.git
+git remote -v
+git remote remove origin
+git remote remove test
+ls -al
+git remote
+git remote -v
+rm -rdf .git
+ls -al
+cd
+ls
+ls -al
+remote -v
+git remote -v
+git status
+rm -rdf .git
+ls -al
+git init
+ls -al
+git remote -v
+git status
+git add .
+git status
+git commit -m "alarm-clock sloved"
+git remote add origin https://github.com/soseongha/Pintos_2023S.git
+git remote -v
+git push origin main
+git push -u origin main
+git branch -M main
+git status
+git push -u origin main
+git push -u origin main --force
+ls -al
+exit
+
+vi pintos/pintos-kaist/devices/timer.c
+ls pintos/pintos-kaist/userprog/
+ls
+vi pintos/pintos-kaist/devices/timer.c
+ls
+git status
+cd pintos/pintos-kaist/threads/build/
+make check
+cd
+ls
+cd pintos/pintos-kaist/
+ls
+cd tests/
+ls
+cd threads/
+ls
+cd
+cd pintos/pintos-kaist/threads/build/
+make tests/thread/alarm-multiple.result
+cd ..
+make tests/thread/alarm-multiple.result
+cd
+cd pintos/pintos-kaist/
+make tests/thread/alarm-multiple.result
+ls
+make tests/thread/alarm-multiple
+make tests/thread/alarm-multiple.ck
+cd threads/build/
+ls
+cd ..
+make clean
+make
+cd build/
+ls
+ls tests/
+ls tests/threads/
+make tests/threads/alarm-multiple.result
+ls tests/threads/
+cat tests/threads/alarm-multiple.output
+cat tests/threads/alarm-multiple.result
+cat tests/threads/alarm-negative.result
+make tests/threads/alarm-negative.result
+cat tests/threads/alarm-negative.output
+ls
+pintos -- run alarm-negative > logfile
+cd pintos/pintos-kaist/threads/build/
+pintos -- -q run alarm-negative
+cd pintos/pintos-kaist/threads/build/
+gdb kernel.o
+cd ..
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+ls pintos/pintos-kaist/threads/
+vi pintos/pintos-kaist/threads/init.c 
+ls pintos/pintos-kaist/threads/build/tests/threads/
+vi pintos/pintos-kaist/threads/build/tests/threads/alarm-negative.
+vi pintos/pintos-kaist/tests/threads/alarm-negative.c
+vi pintos/pintos-kaist/tests/threads/alarm-priority.c
+vi pintos/pintos-kaist/tests/threads/alarm-simultaneous.c
+pintos -- run alarm-priority > logfile
+ls
+rm logfile 
+cd pintos/pintos-kaist/threads/build/
+pintos -- run alarm-priority > logfile
