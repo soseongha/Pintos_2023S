@@ -12,8 +12,17 @@ Acceptable output:
 Differences in `diff -u' format:
   (priority-change) begin
   (priority-change) Creating a high-priority thread 2.
-- (priority-change) Thread 2 now lowering priority.
++ thread_unblock start
++ do_schedule start
+  (priority-change) Thread 2 now lowering priority.
++ do_schedule start
++ do_schedule end
++ thread_unblock end
   (priority-change) Thread 2 should have just lowered its priority.
-- (priority-change) Thread 2 exiting.
++ do_schedule start
++ do_schedule end
+  (priority-change) Thread 2 exiting.
++ do_schedule start
++ do_schedule end
   (priority-change) Thread 2 should have just exited.
   (priority-change) end

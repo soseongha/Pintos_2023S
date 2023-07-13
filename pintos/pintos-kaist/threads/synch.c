@@ -109,9 +109,31 @@ sema_up (struct semaphore *sema) {
 	ASSERT (sema != NULL);
 
 	old_level = intr_disable ();
-	if (!list_empty (&sema->waiters))
-		thread_unblock (list_entry (list_pop_front (&sema->waiters),
-					struct thread, elem));
+	if (!list_empty (&sema->waiters)){
+		
+		//pick maximum priority thread
+		int prio = -1;
+		struct thread *max_thread = NULL;
+		struct  list_elem *e;
+
+		for(e = list_rbegin(&sema->waiters); e != list_rend(&sema->waiters); e =
+				list_prev(e)){
+			
+			struct thread *th = list_entry(e, struct thread, elem);
+			if(th->priority > prio){
+				
+				prio = th->priority;
+				max_thread = th;
+			}
+		}
+
+		//unblock it
+		list_remove(&max_thread->elem);
+		thread_unblock(max_thread);
+		//thread_unblock (list_entry (list_pop_front (&sema->waiters),
+		//			struct thread, elem));
+	}
+
 	sema->value++;
 	intr_set_level (old_level);
 }
@@ -307,7 +329,7 @@ cond_signal (struct condition *cond, struct lock *lock UNUSED) {
 					struct semaphore_elem, elem)->semaphore);
 }
 
-/* Wakes up all threads, if any, waiting on COND (protected by
+/* Wakes up all threads, if any, waiting on COND (p:rotected by
    LOCK).  LOCK must be held before calling this function.
 
    An interrupt handler cannot acquire a lock, so it does not

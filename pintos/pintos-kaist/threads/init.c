@@ -69,7 +69,8 @@ int
 main (void) {
 	uint64_t mem_end;
 	char **argv;
-
+	
+	printf("<0>\n");
 	/* Clear BSS and get machine's RAM size. */
 	bss_init ();
 
@@ -101,8 +102,10 @@ main (void) {
 	exception_init ();
 	syscall_init ();
 #endif
+	printf("<1>\n");
 	/* Start thread scheduler and enable interrupts. */
 	thread_start ();
+	printf("<2>\n");
 	serial_init_queue ();
 	timer_calibrate ();
 

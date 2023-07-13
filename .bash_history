@@ -798,3 +798,140 @@ ls
 rm logfile 
 cd pintos/pintos-kaist/threads/build/
 pintos -- run alarm-priority > logfile
+cd pintos/pintos-kaist/devices/
+vi timer.c 
+cd ..
+ls
+cd threads/
+make clean
+make
+cd build/
+ls
+make tests/threads/alarm-negative.result
+cd ..
+ls
+cd
+vi pintos/pintos-kaist/devices/timer.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/alarm-negative.result
+cd
+vi pintos/pintos-kaist/devices/timer.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+ls
+make tests/threads/alarm-negative.result
+make tests/threads/alarm-priority.result
+cd
+vi pintos/pintos-kaist/devices/timer.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/alarm-priority.result
+cd
+vi pintos/pintos-kaist/devices/timer.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/alarm-priority.result
+ls
+cd tests/threads/
+ls
+cat alarm-priority.output
+cd ../..
+ls
+make tests/threads/alarm-simultaneous.result
+cd 
+vi pintos/pintos-kaist/devices/timer.c 
+cd 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+l
+cd build/
+ls
+make tests/threads/alarm-simultaneous.result
+cat tests/threads/alarm-simultaneous.output
+cd
+vi pintos/pintos-kaist/devices/timer.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+ls
+make tests/threads/alarm-simultaneous.result
+cat tests/threads/alarm-simultaneous.output
+cd
+vi pintos/pintos-kaist/devices/timer.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+ls
+make tests/threads/alarm-simultaneous.result
+cat tests/threads/alarm-simultaneous.output
+cd
+vi pintos/pintos-kaist/devices/timer.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+ls
+make tests/threads/alarm-simultaneous.result
+cd
+vi pintos/pintos-kaist/devices/timer.c 
+cd pintos/pintos-kaist/th
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+ls
+make tests/threads/alarm-simultaneous.result
+cd
+vi pintos/pintos-kaist/devices/timer.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd b
+cd build/
+make tests/threads/alarm-simultaneous.result
+make check
+cd
+vi pintos/pintos-kaist/devices/timer.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make check
+cd
+git add .
+git status
+git commit -m "alarm-timer debugged"
+git push origin main
+cd pintos/pintos-kaist/threads/
+cd build/
+ls
+make tests/threads/priority-change
+make tests/threads/priority-change.result
+cd ..
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+cd ..
+ls
+vi thread.c
+vi init.c
+cd
+vi pintos/pintos-kaist/threads/init.c
+git add .
+git status
+git commit -m "priority scheduling create and set"
+git push origin main
+exit

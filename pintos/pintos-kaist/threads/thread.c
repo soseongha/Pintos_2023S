@@ -128,7 +128,7 @@ thread_start (void) {
 	/* Create the idle thread. */
 	struct semaphore idle_started;
 	sema_init (&idle_started, 0);
-	thread_create ("idle", PRI_MIN, idle, &idle_started);
+	thread_create ("idle", PRI_DEFAULT, idle, &idle_started);
 
 	/* Start preemptive thread scheduling. */
 	intr_enable ();
@@ -192,6 +192,11 @@ thread_create (const char *name, int priority,
 	t = palloc_get_page (PAL_ZERO);
 	if (t == NULL)
 		return TID_ERROR;
+	
+	//priority valid check
+	if(priority < PRI_MIN || priority > PRI_MAX){
+		priority = PRI_DEFAULT;
+	}
 
 	/* Initialize thread. */
 	init_thread (t, name, priority);
@@ -211,11 +216,6 @@ thread_create (const char *name, int priority,
 	/* Add to run queue. */
 	thread_unblock (t);
 	
-	//when new thread priority is bigger than current, schedule
-	if(t->priority > running_thread()->priority){
-		schedule();
-	}
-
 	return tid;
 }
 
@@ -246,11 +246,39 @@ thread_unblock (struct thread *t) {
 	enum intr_level old_level;
 
 	ASSERT (is_thread (t));
+	
+	printf("thread_unblock start\n");
 
 	old_level = intr_disable ();
 	ASSERT (t->status == THREAD_BLOCKED);
 	list_push_back (&ready_list, &t->elem);
 	t->status = THREAD_READY;
+	
+	//when new thread priority is bigger than current, schedule
+	int prio = -1;
+	struct thread *max_thread = NULL;
+	struct list_elem *e;
+
+	if( !list_empty(&ready_list)){
+	
+		//pick maximum priority thread
+		for( e = list_rbegin(&ready_list); e != list_rend(&ready_list); e =
+				list_prev(e)){
+			
+			struct thread *th = list_entry(e, struct thread, elem);
+			if(th->priority > prio){
+	
+				prio = th->priority;
+				max_thread = th;
+			}
+		}
+	
+
+		if(prio > running_thread()->priority){
+			thread_yield();
+		}	
+	}
+	printf("thread_unblock end\n");
 	intr_set_level (old_level);
 }
 
@@ -320,7 +348,41 @@ thread_yield (void) {
 /* Sets the current thread's priority to NEW_PRIORITY. */
 void
 thread_set_priority (int new_priority) {
+	
+	enum intr_level old_level;
+	old_level = intr_disable();
+
 	thread_current ()->priority = new_priority;
+	
+	int prio = -1;
+	struct thread *max_thread = NULL;
+	struct list_elem *e;
+
+	if( !list_empty(&ready_list)){
+	
+		//pick maximum priority thread
+		for( e = list_rbegin(&ready_list); e != list_rend(&ready_list); e =
+				list_prev(e)){
+			
+			struct thread *th = list_entry(e, struct thread, elem);
+			if(th->priority > prio){
+	
+				prio = th->priority;
+				max_thread = th;
+			}
+		}
+	}
+
+	//compare maximum and current priority
+	if(prio > new_priority){
+
+		intr_set_level(old_level);
+		thread_yield();
+	}else{
+
+		intr_set_level(old_level);
+	}
+
 }
 
 /* Returns the current thread's priority. */
@@ -427,18 +489,20 @@ init_thread (struct thread *t, const char *name, int priority) {
    idle_thread. */
 static struct thread *
 next_thread_to_run (void) {
+
+	//printf("next_thread_th_run start\n");
 	if (list_empty (&ready_list))
 		return idle_thread;
 	else{
-
+		
 		//return list_entry (list_pop_front (&ready_list), struct thread, elem);
 		int prio = -1;
 		struct thread *max_thread = NULL;
 		struct list_elem *e;
-
+		
 		//pick maximum priority thread
-		for( e = list_begin(&sleep_list); e != list_end(&sleep_list); e =
-				list_next(e)){
+		for( e = list_rbegin(&ready_list); e != list_rend(&ready_list); e =
+				list_prev(e)){
 			
 			struct thread *th = list_entry(e, struct thread, elem);
 			if(th->priority > prio){
@@ -451,6 +515,7 @@ next_thread_to_run (void) {
 		list_remove(&max_thread->elem);
 		return max_thread;
 	}
+	//printf("next_thread_to_run end\n");
 }
 
 /* Use iretq to launch the thread */
@@ -556,6 +621,8 @@ thread_launch (struct thread *th) {
  * It's not safe to call printf() in the schedule(). */
 static void
 do_schedule(int status) {
+
+	printf("do_schedule start\n");
 	ASSERT (intr_get_level () == INTR_OFF);
 	ASSERT (thread_current()->status == THREAD_RUNNING);
 	while (!list_empty (&destruction_req)) {
@@ -565,10 +632,13 @@ do_schedule(int status) {
 	}
 	thread_current ()->status = status;
 	schedule ();
+	printf("do_schedule end\n");
 }
 
 static void
 schedule (void) {
+
+	//printf("schedule start\n");
 	struct thread *curr = running_thread ();
 	struct thread *next = next_thread_to_run ();
 
@@ -603,6 +673,7 @@ schedule (void) {
 		 * of current running. */
 		thread_launch (next);
 	}
+	//printf("schedule end\n");
 }
 
 /* Returns a tid to use for a new thread. */
