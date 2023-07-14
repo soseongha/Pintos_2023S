@@ -5,59 +5,27 @@ iPXE (http://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+0138F4C0+012CF4C0 CA00
 Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
 
 
-Booting from Hard Disk..<0>
-Kernel command line: -q run priority-preempt
+Booting from Hard Disk..Kernel command line: -q run priority-preempt
 0 ~ 9fc00 1
 100000 ~ 13e0000 1
 Pintos booting with: 
 	base_mem: 0x0 ~ 0x9fc00 (Usable: 639 kB)
 	ext_mem: 0x100000 ~ 0x13e0000 (Usable: 19,328 kB)
-<1>
-thread_unblock start
-thread_unblock end
-thread_unblock start
-thread_unblock end
-<2>
-Calibrating timer...  do_schedule start
-do_schedule end
-do_schedule start
-do_schedule end
-do_schedule start
-do_schedule end
-do_schedule start
-do_schedule end
-do_schedule start
-do_schedule end
-157,081,600 loops/s.
+Calibrating timer...  157,081,600 loops/s.
 Boot complete.
 Executing 'priority-preempt':
 (priority-preempt) begin
-thread_unblock start
-do_schedule start
 (priority-preempt) Thread high-priority iteration 0
-do_schedule start
-do_schedule end
 (priority-preempt) Thread high-priority iteration 1
-do_schedule start
-do_schedule end
 (priority-preempt) Thread high-priority iteration 2
-do_schedule start
-do_schedule end
 (priority-preempt) Thread high-priority iteration 3
-do_schedule start
-do_schedule end
 (priority-preempt) Thread high-priority iteration 4
-do_schedule start
-do_schedule end
 (priority-preempt) Thread high-priority done!
-do_schedule start
-do_schedule end
-thread_unblock end
 (priority-preempt) The high-priority thread should have already completed.
 (priority-preempt) end
 Execution of 'priority-preempt' complete.
-Timer: 26 ticks
-Thread: 0 idle ticks, 26 kernel ticks, 0 user ticks
-Console: 1338 characters output
+Timer: 23 ticks
+Thread: 0 idle ticks, 23 kernel ticks, 0 user ticks
+Console: 818 characters output
 Keyboard: 0 keys pressed
 Powering off...

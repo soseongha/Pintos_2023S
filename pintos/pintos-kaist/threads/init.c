@@ -70,7 +70,7 @@ main (void) {
 	uint64_t mem_end;
 	char **argv;
 	
-	printf("<0>\n");
+	//printf("<0>\n");
 	/* Clear BSS and get machine's RAM size. */
 	bss_init ();
 
@@ -80,32 +80,38 @@ main (void) {
 
 	/* Initialize ourselves as a thread so we can use locks,
 	   then enable console locking. */
+	//printf("<1>\n");
 	thread_init ();
+	//printf("<2>\n");
 	console_init ();
+	//printf("<2.1>\n");
 
 	/* Initialize memory system. */
 	mem_end = palloc_init ();
 	malloc_init ();
+	//printf("<2.5>\n");
 	paging_init (mem_end);
-
+	//printf("<3>\n");
+	//for(;;){}
 #ifdef USERPROG
 	tss_init ();
 	gdt_init ();
 #endif
-
+	//printf("<4>\n");
 	/* Initialize interrupt handlers. */
 	intr_init ();
 	timer_init ();
 	kbd_init ();
 	input_init ();
+	//printf("<5>\n");
 #ifdef USERPROG
 	exception_init ();
 	syscall_init ();
 #endif
-	printf("<1>\n");
+	//printf("<6>\n");
 	/* Start thread scheduler and enable interrupts. */
 	thread_start ();
-	printf("<2>\n");
+	//printf("<7>\n");
 	serial_init_queue ();
 	timer_calibrate ();
 
@@ -151,7 +157,6 @@ paging_init (uint64_t mem_end) {
 	uint64_t *pml4, *pte;
 	int perm;
 	pml4 = base_pml4 = palloc_get_page (PAL_ASSERT | PAL_ZERO);
-
 	extern char start, _end_kernel_text;
 	// Maps physical address [0 ~ mem_end] to
 	//   [LOADER_KERN_BASE ~ LOADER_KERN_BASE + mem_end].
@@ -168,6 +173,7 @@ paging_init (uint64_t mem_end) {
 
 	// reload cr3
 	pml4_activate(0);
+
 }
 
 /* Breaks the kernel command line into words and returns them as

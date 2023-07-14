@@ -935,3 +935,592 @@ git status
 git commit -m "priority scheduling create and set"
 git push origin main
 exit
+ls
+vi pintos/pintos-kaist/threads/init.c
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+ls
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+ls
+history
+make tests/threads/priority-change.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/th
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+cat tests/threads/priority-change.output
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+ccd
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+cat tests/threads/priority-change.output
+make tests/threads/priority-change.result
+cat tests/threads/priority-change.output
+make tests/threads/priority-change.result
+cat tests/threads/priority-change.output
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-change.result
+make tests/threads/priority-preempt.result
+make tests/threads/priority-fifo.result
+cat tests/threads/priority-fifo.output
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make tests/threads/priority-sema.result
+cd build/
+make tests/threads/priority-sema.result
+make tests/threads/priority-condvar.result
+cd
+git add .
+git status
+git commit -m "priority scheduling implemented almost"
+git push origin main
+exit
+ls
+cd pintos/pintos-kaist/t
+cd pintos/pintos-kaist/threads/
+cd build/
+make tests/threads/priority-condvar.result
+make tests/threads/alarm-priority.result
+exit
+git pull
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/th
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/init.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/th
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+ls
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/th
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+ls
+make celan
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+cd pintos/pintos-kaist/threads/init.c 
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/build/
+cat tests/threads/priority-donate-one.output
+
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+ls -al
+rm .synch.c.swp 
+ls -al
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/alarm-priority.result
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+make tests/threads/priority-donate-one.result
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/init.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd b
+cd build/
+make tests/threads/priority-donate-one.result
+cat tests/threads/priority-donate-one.output
+cd
+vi pintos/pintos-kaist/threads/init.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-one.result
+make tests/threads/priority-donate-lower.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-lower.result
+make tests/threads/priority-preempt.result
+make tests/threads/priority-sema.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+ls
+cd build/
+make tests/threads/priority-fifo.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd ..
+ls
+cd sosongha3/
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-fifo.result
+cat tests/threads/priority-fifo.output
+cd
+
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-fifo.result
+cd
+cd pintos/pintos-kaist/threads/
+cd build/
+cd
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/build/
+make tests/threads/priority-donate-lower.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd 
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-lower.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/build/
+make tests/threads/priority-donate-lower.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-lower.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-lower.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-lower.result
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-lower.result
+cat tests/threads/priority-donate-lower.output
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-lower.result
+cat tests/threads/priority-donate-lower.output
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/build/
+pintos --gdb -- run priority-donate-lower
+cd pintos/pintos-kaist/threads/build/
+pintos --gdb -- run priority-donate-lower
+cd pintos/pintos-kaist/threads/build/
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-lower.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-lower.result
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make tests/threads/priority-donate-lower.result
+make tests/threads/priority-donate-one.result
+make tests/threads/priority-donate-nest.result
+make tests/threads/priority-donate-chain.result
+make tests/threads/priority-donate-multiple.result
+make tests/threads/priority-donate-multiple2.result
+make tests/threads/priority-donate-sema.result
+exit

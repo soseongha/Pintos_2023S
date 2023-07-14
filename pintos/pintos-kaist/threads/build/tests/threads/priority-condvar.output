@@ -5,137 +5,50 @@ iPXE (http://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+0138F4C0+012CF4C0 CA00
 Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
 
 
-Booting from Hard Disk..<0>
-Kernel command line: -q run priority-condvar
+Booting from Hard Disk..Kernel command line: -q run priority-condvar
 0 ~ 9fc00 1
 100000 ~ 13e0000 1
 Pintos booting with: 
 	base_mem: 0x0 ~ 0x9fc00 (Usable: 639 kB)
 	ext_mem: 0x100000 ~ 0x13e0000 (Usable: 19,328 kB)
-<1>
-thread_unblock start
-thread_unblock end
-thread_unblock start
-thread_unblock end
-<2>
-Calibrating timer...  do_schedule start
-do_schedule end
-do_schedule start
-do_schedule end
-do_schedule start
-do_schedule end
-do_schedule start
-do_schedule end
-do_schedule start
-do_schedule end
-157,081,600 loops/s.
+Calibrating timer...  157,081,600 loops/s.
 Boot complete.
 Executing 'priority-condvar':
 (priority-condvar) begin
-thread_unblock start
-do_schedule start
 (priority-condvar) Thread priority 23 starting.
-do_schedule end
-thread_unblock end
-thread_unblock start
-do_schedule start
 (priority-condvar) Thread priority 22 starting.
-do_schedule end
-thread_unblock end
-thread_unblock start
-do_schedule start
 (priority-condvar) Thread priority 21 starting.
-do_schedule end
-thread_unblock end
-thread_unblock start
-do_schedule start
 (priority-condvar) Thread priority 30 starting.
-do_schedule end
-thread_unblock end
-thread_unblock start
-do_schedule start
 (priority-condvar) Thread priority 29 starting.
-do_schedule end
-thread_unblock end
-thread_unblock start
-do_schedule start
 (priority-condvar) Thread priority 28 starting.
-do_schedule end
-thread_unblock end
-thread_unblock start
-do_schedule start
 (priority-condvar) Thread priority 27 starting.
-do_schedule end
-thread_unblock end
-thread_unblock start
-do_schedule start
 (priority-condvar) Thread priority 26 starting.
-do_schedule end
-thread_unblock end
-thread_unblock start
-do_schedule start
 (priority-condvar) Thread priority 25 starting.
-do_schedule end
-thread_unblock end
-thread_unblock start
-do_schedule start
 (priority-condvar) Thread priority 24 starting.
-do_schedule end
-thread_unblock end
 (priority-condvar) Signaling...
-thread_unblock start
-do_schedule start
-do_schedule end
-thread_unblock end
+(priority-condvar) Thread priority 23 woke up.
 (priority-condvar) Signaling...
-thread_unblock start
-do_schedule start
-do_schedule end
-thread_unblock end
+(priority-condvar) Thread priority 22 woke up.
 (priority-condvar) Signaling...
-thread_unblock start
-do_schedule start
-do_schedule end
-thread_unblock end
+(priority-condvar) Thread priority 21 woke up.
 (priority-condvar) Signaling...
-thread_unblock start
-do_schedule start
-do_schedule end
-thread_unblock end
+(priority-condvar) Thread priority 30 woke up.
 (priority-condvar) Signaling...
-thread_unblock start
-do_schedule start
-do_schedule end
-thread_unblock end
+(priority-condvar) Thread priority 29 woke up.
 (priority-condvar) Signaling...
-thread_unblock start
-do_schedule start
-do_schedule end
-thread_unblock end
+(priority-condvar) Thread priority 28 woke up.
 (priority-condvar) Signaling...
-thread_unblock start
-do_schedule start
-do_schedule end
-thread_unblock end
+(priority-condvar) Thread priority 27 woke up.
 (priority-condvar) Signaling...
-thread_unblock start
-do_schedule start
-do_schedule end
-thread_unblock end
+(priority-condvar) Thread priority 26 woke up.
 (priority-condvar) Signaling...
-thread_unblock start
-do_schedule start
-do_schedule end
-thread_unblock end
+(priority-condvar) Thread priority 25 woke up.
 (priority-condvar) Signaling...
-thread_unblock start
-do_schedule start
-do_schedule end
-thread_unblock end
+(priority-condvar) Thread priority 24 woke up.
 (priority-condvar) end
 Execution of 'priority-condvar' complete.
-Timer: 34 ticks
-Thread: 0 idle ticks, 34 kernel ticks, 0 user ticks
-Console: 2975 characters output
+Timer: 27 ticks
+Thread: 0 idle ticks, 27 kernel ticks, 0 user ticks
+Console: 1707 characters output
 Keyboard: 0 keys pressed
 Powering off...

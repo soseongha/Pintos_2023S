@@ -65,6 +65,8 @@ static void init_thread (struct thread *, const char *name, int priority);
 static void do_schedule(int status);
 static void schedule (void);
 static tid_t allocate_tid (void);
+static void print_ready_list(void);
+
 
 /* Returns true if T appears to point to a valid thread. */
 #define is_thread(t) ((t) != NULL && (t)->magic == THREAD_MAGIC)
@@ -247,17 +249,19 @@ thread_unblock (struct thread *t) {
 
 	ASSERT (is_thread (t));
 	
-	printf("thread_unblock start\n");
+	//printf("%s: thread_unblock start\n", thread_current()->name);
 
 	old_level = intr_disable ();
 	ASSERT (t->status == THREAD_BLOCKED);
 	list_push_back (&ready_list, &t->elem);
 	t->status = THREAD_READY;
-	
+
 	//when new thread priority is bigger than current, schedule
 	int prio = -1;
 	struct thread *max_thread = NULL;
 	struct list_elem *e;
+
+	ASSERT( !list_empty(&ready_list) );
 
 	if( !list_empty(&ready_list)){
 	
@@ -266,7 +270,7 @@ thread_unblock (struct thread *t) {
 				list_prev(e)){
 			
 			struct thread *th = list_entry(e, struct thread, elem);
-			if(th->priority > prio){
+			if(th->priority >= prio){
 	
 				prio = th->priority;
 				max_thread = th;
@@ -275,13 +279,28 @@ thread_unblock (struct thread *t) {
 	
 
 		if(prio > running_thread()->priority){
+			//printf("%s: thread_yield!\n", thread_current()->name);
+			//print_ready_list();
 			thread_yield();
 		}	
 	}
-	printf("thread_unblock end\n");
+	//printf("%s: thread_unblock end\n", thread_current()->name);
 	intr_set_level (old_level);
 }
 
+static void print_ready_list(void){
+
+	struct list_elem *e;
+	printf("\n**print_ready_list**\n");
+	for(e = list_begin(&ready_list); e != list_end(&ready_list); e =
+			list_next(e)){
+		struct thread *th = list_entry(e, struct thread, elem);
+		printf("%s ", th->name);
+	}
+	printf("\n");
+	printf("**print end**\n");
+
+}
 /* Returns the name of the running thread. */
 const char *
 thread_name (void) {
@@ -351,9 +370,15 @@ thread_set_priority (int new_priority) {
 	
 	enum intr_level old_level;
 	old_level = intr_disable();
-
-	thread_current ()->priority = new_priority;
 	
+	//priority set
+	thread_current ()->priority = new_priority;
+	thread_current()->orig_priority = new_priority;
+	
+	//priority donation refresh
+	priority_donate();
+
+	//make maximum thread to scehdule
 	int prio = -1;
 	struct thread *max_thread = NULL;
 	struct list_elem *e;
@@ -388,6 +413,8 @@ thread_set_priority (int new_priority) {
 /* Returns the current thread's priority. */
 int
 thread_get_priority (void) {
+	
+	
 	return thread_current ()->priority;
 }
 
@@ -479,6 +506,9 @@ init_thread (struct thread *t, const char *name, int priority) {
 	strlcpy (t->name, name, sizeof t->name);
 	t->tf.rsp = (uint64_t) t + PGSIZE - sizeof (void *);
 	t->priority = priority;
+	t->orig_priority = priority;
+	list_init(&t->donators);
+	t->wait_this_lock = NULL;
 	t->magic = THREAD_MAGIC;
 }
 
@@ -505,7 +535,7 @@ next_thread_to_run (void) {
 				list_prev(e)){
 			
 			struct thread *th = list_entry(e, struct thread, elem);
-			if(th->priority > prio){
+			if(th->priority >= prio){
 
 				prio = th->priority;
 				max_thread = th;
@@ -619,10 +649,14 @@ thread_launch (struct thread *th) {
  * This function modify current thread's status to status and then
  * finds another thread to run and switches to it.
  * It's not safe to call printf() in the schedule(). */
+
+struct thread *test_next;
+
+
 static void
 do_schedule(int status) {
 
-	printf("do_schedule start\n");
+	//printf("do_schedule start\n");
 	ASSERT (intr_get_level () == INTR_OFF);
 	ASSERT (thread_current()->status == THREAD_RUNNING);
 	while (!list_empty (&destruction_req)) {
@@ -631,8 +665,15 @@ do_schedule(int status) {
 		palloc_free_page(victim);
 	}
 	thread_current ()->status = status;
+	
+	//print_ready_list();
+
 	schedule ();
-	printf("do_schedule end\n");
+	//printf("do_schedule end\n");
+	//print_ready_list();
+	//if(test_next){
+	//	printf("next thread is %s\n", test_next->name);
+	//}
 }
 
 static void
@@ -641,6 +682,8 @@ schedule (void) {
 	//printf("schedule start\n");
 	struct thread *curr = running_thread ();
 	struct thread *next = next_thread_to_run ();
+	
+	test_next = next;
 
 	ASSERT (intr_get_level () == INTR_OFF);
 	ASSERT (curr->status != THREAD_RUNNING);

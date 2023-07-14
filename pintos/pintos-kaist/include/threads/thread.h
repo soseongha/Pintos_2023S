@@ -94,6 +94,11 @@ struct thread {
 
 	/*Added new in PA1*/
 	uint64_t age;
+	int orig_priority;
+	struct list donators;
+	struct list_elem donators_elem;
+	struct lock *wait_this_lock;
+	
 
 	/* Shared between thread.c and synch.c. */
 	struct list_elem elem;              /* List element. */
