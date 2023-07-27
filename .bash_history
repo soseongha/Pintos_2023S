@@ -1,102 +1,3 @@
-w
-exit
-passwd
-ls
-ls ./..
-cd ./../beowulf/
-ls
-ls -al
-cd ./..
-ls
-cd sosongha3/
-ls
-ls -al
-ls
-cwd
-pwd
-ls -al
-./..
-ls
-cd ./../
-ls
-cd beowulf/
-ls
-cd share
-ls
-ls -al
-cd ../../..
-ls
-cd 
-ls
-pwd
-ls
-git clone https://github.com/casys-kaist/pintos-kaist
-ls
-cd pintos-kaist/
-ls
-cd ..
-pwd
-git clone https://github.com/soseongha/2023S_Pintos.git
-git init
-ls
-ls -al
-git remote add origin https://github.com/soseongha/2023S_Pintos.git
-ls
-git pull origin main
-git pull
-ls
-rm pintos-kaist/
-rm -rd pintos-kaist/
-ls
-ls -al
-git pull origin main
-git branch
-git init
-git remote add origin https://github.com/soseongha/2023S_Pintos.git
-git pull origin main
-git config pull.rebase false
-git pull origin main
-git config --global credential.helper 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
-git pull origin main
-git config --global credential.helper store
-git pull origin main
-git config --global user.name "sosongha3"
-git config --global user.email "sosongha3@ajou.ac.kr"
-git pull origin main
-ls
-ls -al
-git brach
-git branch
-git clone https://github.com/casys-kaist/pintos-kaist
-ls -al
-git push
-git push --set-upstream origin master
-git push
-ls
-git add .
-git rm --cached pintos-kaist
-cd ..
-ls
-git beowulf/
-cd beowulf/
-ls
-ls -al
-find pintos
-find . -name pintos
-find . -name *pintos*
-ls 
-cd
-ls
-git branch
-git status
-git add .
-git commit -m "pintos-kaist added"
-git push origin main
-git push
-ls
-cd pintos-kaist/
-ls
-cd ..
 ls
 git status
 git branch
@@ -1524,3 +1425,576 @@ make tests/threads/priority-donate-multiple.result
 make tests/threads/priority-donate-multiple2.result
 make tests/threads/priority-donate-sema.result
 exit
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make test
+make check
+make -q check
+make check -q
+
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make check
+cd
+vi pintos/pintos-kaist/threads/init.c 
+cd pintos/pintos-kaist/threads/
+make clean
+make
+cd build/
+make check
+cd tests/threads/
+ls
+cat *.result
+cd
+ls
+ls -al
+vi README.md 
+git add .
+git status
+git commit -m "priority donation implemented"
+git push
+exit
+cd pintos/pintos-kaist/threads/build/
+gdb kernel.o
+l
+ls
+git pull
+cd pintos/pintos-kaist/
+ls
+cd userprog/
+ls
+cd pintos/pintos-kaist/
+ls
+cd userprog/
+make
+cd build/
+ls
+make check
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+pintos --fs-disk=10 -p tests/userprog/args-none:args-none -- -q -f run 'args-none'
+make tests/userprog/args-none.result
+cd ..
+make clean
+make
+cd bq
+cd build/
+make tests/userprog/args-none.result
+cd tests/userprog/
+ls
+cat args-none.output
+ls
+cat args-none.result
+cd ..
+cd .
+cd ..
+readelf
+find . -iname "*lds*"
+cd
+find . -iname "*lds*"
+cd pintos/pintos-kaist/lib/user/
+readelf
+ls
+readelf user.lds
+readelf -a user.lds
+cat user.lds 
+cd
+cd pintos/pintos-kaist/userprog/build/userprog/
+ls
+readelf -l process.o
+readelf -l tss.o
+readelf -l exception.o
+readelf -l gdt.o
+readelf -l syscall.o
+readelf -l syscall-entry.o
+readelf -l syscall-entry.d
+readelf -l process.d
+cd ..
+ls
+cd ..
+ls
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+ls
+ls -al
+rm .process.c.swp
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/
+cd userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+make tests/userprog/args-none.result
+cat tests/userprog/args-none.output
+make tests/userprog/args-single.result
+cat tests/userprog/args-single.output
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'arg-single onearg'
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- run 'arg-single onearg'
+cd pintos/pintos-kaist/userprog/build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single --gdb -- run 'arg-single onearg'
+cd pintos/pintos-kaist/userprog/build/
+ls
+ls -al
+gdb kernel.p
+gdb kernel.o
+cd pintos/pintos-kaist/userprog/
+ls
+cd build/userprog/
+ls
+readelf -l process.o
+readelf -l tss.o
+cd ..
+find *.out
+find -r *.out
+readelf -h tss.o
+readelf -h process.o
+readelf -l process.o
+readelf -l process.out
+ls -al
+cd userprog/
+ls -al
+cd ..
+cd tests/userprog/
+ls -al
+readelf -l args.o
+readelf -l args-single
+cd
+find . -iname "*lds*"
+cd pintos/pintos-kaist/lib/user/
+
+cd
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/tests/userprog/
+ls -al
+readelf -l args-single
+info ld
+info -p ld
+man ld
+cd
+find . -iname "*lds*"
+vi pintos/pintos-kaist/lib/user/user.lds
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/tests/userprog/
+readelf -l args-single
+cd ../..
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'arg-single onearg'
+cd pintos/pintos-kaist/userprog/build/
+ls
+cd tests/userprog/
+ls -al
+readelf -l args-none
+cd ../..
+ls
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'arg-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'arg-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c
+cd pintos/pintos-kaist/userprog/
+cd build/tests/userprog/
+ls
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'arg-single onearg'
+cd ../..
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'arg-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'arg-single onearg'
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c
+find . -iname "*lds*"
+cd pintos/pintos-kaist/lib/user/user.lds 
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+ls -al
+cd build/
+ls
+cd tests/userprog/
+ls
+ls -al
+
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+cd tests/userprog/
+ls -al
+readelf -l args-none
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+cd tests/userprog/
+readelf -l args-none
+cd ../..
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/tests/userprog/
+ls
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd ../..
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd tests/userprog/
+readelf -l args-none
+readelf -l args-single
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+cd tests/userprog/
+readelf -l args-single
+cd ../..
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+cd tests/userprog/
+readelf -l args-single
+cd ../..
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/tests/userprog/
+readelf -l args-single
+cd ../..
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+vi pintos/pintos-kaist/lib/user/user.lds 
+quit
+exit
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+ls
+ls -al
+cd tests/userprog/
+ls -al
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+ls
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd tests/userprog/
+ls
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd tests/userprog/
+ls
+readelf -l args-single
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd tests/userprog/
+readelf -l args-single
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd tests/userprog/
+readelf -l args-single
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd tests/userprog/
+readelf -l args-single
+readelf -l args-none
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd tests/userprog/
+readelf -l args-single
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/build/tests/userprog/
+readelf -l args-single
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd tests/userprog/
+readelf -l args-single
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+exit
+cd pintos/pintos-kaist/userprog/
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+cd pintos/pintos-kaist/userprog/build/tests/userprog/
+ls
+readelf -l args-single
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clan
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single'
+pintos --fs-disk=10 -p tests/userprog/args-none:args-none -- -q -f run 'args-none'
+cd tests/userprog/
+readelf -l args-none
+cd
+find . -iname "*lds*"
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/tests/userprog/
+readelf -l args-none
+cd ../..
+pintos --fs-disk=10 -p tests/userprog/args-none:args-none -- -q -f run 'args-none'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-none:args-none -- -q -f run 'args-none'
+cd
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-none:args-none -- -q -f run 'args-none'
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd  build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/use
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'

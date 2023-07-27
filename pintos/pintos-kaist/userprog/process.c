@@ -22,6 +22,8 @@
 #include "vm/vm.h"
 #endif
 
+#define PAGE_SIZE 4096
+
 static void process_cleanup (void);
 static bool load (const char *file_name, struct intr_frame *if_);
 static void initd (void *f_name);
@@ -162,7 +164,7 @@ error:
  * Returns -1 on fail. */
 int
 process_exec (void *f_name) {
-	char *file_name = f_name;
+	char *file_name;
 	bool success;
 
 	/* We cannot use the intr_frame in the thread structure.
@@ -176,13 +178,104 @@ process_exec (void *f_name) {
 	/* We first kill the current context */
 	process_cleanup ();
 
+	
+	//parsing
+	if(sizeof(f_name) > PAGE_SIZE) return -1;
+	const char *delim = " ";
+	char *ret;
+	char *next;
+	char *args[128]; //argument list
+	int arg_num = 0; //argument number
+
+	ret =  strtok_r(f_name, delim, &next);
+	while(ret){
+		
+		args[arg_num] = ret;
+		printf("args[%d]: %s\n", arg_num, ret);
+		arg_num++;
+		ret = strtok_r(NULL, delim, &next);
+		
+	}
+	file_name = args[0];
+
+	
+
 	/* And then load the binary */
 	success = load (file_name, &_if);
+	if (!success){
+		printf("load is not success\n");
+		return -1;
+	}
+
+	
+	printf("<0>\n");
+
+	//initialize stack properly
+	uintptr_t origin_sp = _if.rsp;
+	
+	printf("<1>: args add, origin stack pointer: %x\n", origin_sp);
+	//hex_dump(0, origin_sp, 50, true);
+
+	//1. push words
+	for(int i = arg_num - 1; i >= 0; i--){
+	
+		_if.rsp = _if.rsp - (sizeof(char) * (strlen(args[i]) + 1));
+		memcpy(_if.rsp, args[i], (sizeof(char) * (strlen(args[i]) + 1)));
+		printf("stack pointer: %x, i: %d, arg: %s\n", _if.rsp, i, args[i]);
+	}
+	
+	printf("<2>: align add\n");
+
+	//2. push word-align
+	uint64_t remainder = _if.rsp % 8;
+	_if.rsp = _if.rsp - remainder;
+	memset(_if.rsp, 0, remainder);
+	printf("stack pointer: %x\n", _if.rsp);
+
+	printf("<3>: null pointer add\n");
+	//hex_dump(0, origin_sp, 50, true);
+
+	//3. push null pointer
+	_if.rsp = _if.rsp - sizeof(char*);
+	memset(_if.rsp, 0, sizeof(char*));
+	
+	printf("stack pointer: %x\n", _if.rsp);
+	printf("<4>: word pointer add\n");
+
+	//4. push word pointers
+	uintptr_t target_sp = origin_sp;
+	for(int i = arg_num - 1; i >= 0; i--){
+
+		_if.rsp = _if.rsp - sizeof(char*);
+		memcpy(_if.rsp, &target_sp, sizeof(char*));
+		target_sp = target_sp - (sizeof(char) * (strlen(args[i]) + 1));
+		printf("stack pointer: %x, i: %d, target_pointer: %x\n", _if.rsp, i,
+				target_sp);
+	}
+
+	printf("<5>: return address add\n");
+
+	//5. push return adderss
+	_if.rsp = _if.rsp - 8;
+	memset(_if.rsp, 0, 8);
+
+	printf("stack pointer: %x\n", _if.rsp);
+	printf("<6>: replace RDI and RSI\n");
+
+	//6. replace RDI and RSI
+	_if.R.rdi = arg_num;
+	_if.R.rsi = _if.rsp + 8;
+
+	printf("RDI: %x, RSI: %x\n", _if.R.rdi, _if.R.rsi);
+	printf("<7>\n");
+	
 
 	/* If load failed, quit. */
 	palloc_free_page (file_name);
-	if (!success)
-		return -1;
+	
+	printf("<8>\n");
+
+	//hex_dump(0, origin_sp, 50, true);
 
 	/* Start switched process. */
 	do_iret (&_if);
@@ -204,6 +297,7 @@ process_wait (tid_t child_tid UNUSED) {
 	/* XXX: Hint) The pintos exit if process_wait (initd), we recommend you
 	 * XXX:       to add infinite loop here before
 	 * XXX:       implementing the process_wait. */
+	for(;;){}
 	return -1;
 }
 
@@ -328,6 +422,8 @@ load (const char *file_name, struct intr_frame *if_) {
 	off_t file_ofs;
 	bool success = false;
 	int i;
+	
+	printf("load start\n");
 
 	/* Allocate and activate page directory. */
 	t->pml4 = pml4_create ();
@@ -422,6 +518,7 @@ load (const char *file_name, struct intr_frame *if_) {
 done:
 	/* We arrive here whether the load is successful or not. */
 	file_close (file);
+	printf("load end\n");
 	return success;
 }
 
@@ -501,6 +598,7 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 
 	file_seek (file, ofs);
 	while (read_bytes > 0 || zero_bytes > 0) {
+		printf("load_segment while start\n");
 		/* Do calculate how to fill this page.
 		 * We will read PAGE_READ_BYTES bytes from FILE
 		 * and zero the final PAGE_ZERO_BYTES bytes. */
@@ -509,12 +607,15 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 
 		/* Get a page of memory. */
 		uint8_t *kpage = palloc_get_page (PAL_USER);
-		if (kpage == NULL)
+		if (kpage == NULL){
+			printf("get a page of memory fail\n");
 			return false;
+		}
 
 		/* Load this page. */
 		if (file_read (file, kpage, page_read_bytes) != (int) page_read_bytes) {
 			palloc_free_page (kpage);
+			printf("load this page fail");
 			return false;
 		}
 		memset (kpage + page_read_bytes, 0, page_zero_bytes);
@@ -530,6 +631,7 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 		read_bytes -= page_read_bytes;
 		zero_bytes -= page_zero_bytes;
 		upage += PGSIZE;
+		printf("load_segment while end\n");
 	}
 	return true;
 }

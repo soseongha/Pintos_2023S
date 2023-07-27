@@ -7,19 +7,29 @@ SECTIONS
   /* Read-only sections, merged into text segment: */
   __executable_start = 0x0400000 + SIZEOF_HEADERS;
   . = 0x0400000 + SIZEOF_HEADERS;
-  .text : AT(0x400000 + SIZEOF_HEADERS) {
+
+  . = ALIGN(4096);
+
+ .text : AT(0x400000 + SIZEOF_HEADERS) {
     *(.text)
     *(.note.gnu.build-id)
   } = 0x90
 
+  /*. = ALIGN(4096);*/
+
   .rodata : { *(.rodata) }
+
+  /*. = ALIGN(4096);*/
+	
 
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  */
   . = DATA_SEGMENT_ALIGN (CONSTANT (MAXPAGESIZE), CONSTANT (COMMONPAGESIZE));
 
   .data : { *(.data) }
+  /*. = ALIGN(4096);*/
   .bss : { *(.bss) }
+  /*. = ALIGN(4096);*/
 
   . = DATA_SEGMENT_RELRO_END (0, .);
 
