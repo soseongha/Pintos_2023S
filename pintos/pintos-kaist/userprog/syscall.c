@@ -11,6 +11,12 @@
 void syscall_entry (void);
 void syscall_handler (struct intr_frame *);
 
+void halt (void);
+void exit (int status);
+//pid_t fork (const char *thread_name);
+int exec (const char *file);
+
+//int wait (pid_t pid);
 /* System call.
  *
  * Previously system call services was handled by the interrupt handler
@@ -42,5 +48,76 @@ void
 syscall_handler (struct intr_frame *f UNUSED) {
 	// TODO: Your implementation goes here.
 	printf ("system call!\n");
-	thread_exit ();
+
+	uint64_t syscall_nr = f->R.rax;
+	printf("syscall_nr: %d\n", syscall_nr);
+
+	switch(syscall_nr){	
+		case SYS_HALT:
+			halt();
+			break;
+
+		case SYS_EXIT:
+			exit(f->R.rdi);
+			break;
+
+		case SYS_FORK:
+			//fork();
+			break;
+
+		case SYS_EXEC:
+			if( exec(f->R.rdi) == -1){
+				exit(-1);
+			}else{
+				printf("[Caution] Invalid execution.\n");
+			}
+			break;
+
+		case SYS_WAIT:
+			//wait();
+			break;
+		
+		case SYS_WRITE:
+			printf("write msg in test\n");
+			break;
+
+		default:
+			break;
+	}
+	
+	//thread_exit ();
 }
+
+void
+halt (void) {
+	printf("halt\n");
+	power_off();
+}
+
+void
+exit (int status) {
+	printf("exit\n");
+	struct thread *curr = thread_current();
+	curr->status = status;
+	thread_exit();
+
+}
+
+//pid_t
+//fork (const char *thread_name){
+	//return (pid_t) syscall1 (SYS_FORK, thread_name);
+//}
+
+int
+exec (const char *cmd_line) {
+
+	//Use palloc_get_page() to copy cmd_line... why..?
+
+	return process_exec(cmd_line);
+	
+}
+
+//int
+//wait (pid_t pid) {
+	//return syscall1 (SYS_WAIT, pid);
+//}

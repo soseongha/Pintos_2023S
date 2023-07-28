@@ -164,7 +164,7 @@ error:
  * Returns -1 on fail. */
 int
 process_exec (void *f_name) {
-	char *file_name;
+	char *file_name = f_name;
 	bool success;
 
 	/* We cannot use the intr_frame in the thread structure.
@@ -178,104 +178,17 @@ process_exec (void *f_name) {
 	/* We first kill the current context */
 	process_cleanup ();
 
-	
-	//parsing
-	if(sizeof(f_name) > PAGE_SIZE) return -1;
-	const char *delim = " ";
-	char *ret;
-	char *next;
-	char *args[128]; //argument list
-	int arg_num = 0; //argument number
-
-	ret =  strtok_r(f_name, delim, &next);
-	while(ret){
-		
-		args[arg_num] = ret;
-		printf("args[%d]: %s\n", arg_num, ret);
-		arg_num++;
-		ret = strtok_r(NULL, delim, &next);
-		
-	}
-	file_name = args[0];
-
-	
-
 	/* And then load the binary */
 	success = load (file_name, &_if);
+
+	/* If load failed, quit. */
+	palloc_free_page (file_name);
 	if (!success){
 		printf("load is not success\n");
 		return -1;
 	}
 
-	
-	printf("<0>\n");
-
-	//initialize stack properly
-	uintptr_t origin_sp = _if.rsp;
-	
-	printf("<1>: args add, origin stack pointer: %x\n", origin_sp);
-	//hex_dump(0, origin_sp, 50, true);
-
-	//1. push words
-	for(int i = arg_num - 1; i >= 0; i--){
-	
-		_if.rsp = _if.rsp - (sizeof(char) * (strlen(args[i]) + 1));
-		memcpy(_if.rsp, args[i], (sizeof(char) * (strlen(args[i]) + 1)));
-		printf("stack pointer: %x, i: %d, arg: %s\n", _if.rsp, i, args[i]);
-	}
-	
-	printf("<2>: align add\n");
-
-	//2. push word-align
-	uint64_t remainder = _if.rsp % 8;
-	_if.rsp = _if.rsp - remainder;
-	memset(_if.rsp, 0, remainder);
-	printf("stack pointer: %x\n", _if.rsp);
-
-	printf("<3>: null pointer add\n");
-	//hex_dump(0, origin_sp, 50, true);
-
-	//3. push null pointer
-	_if.rsp = _if.rsp - sizeof(char*);
-	memset(_if.rsp, 0, sizeof(char*));
-	
-	printf("stack pointer: %x\n", _if.rsp);
-	printf("<4>: word pointer add\n");
-
-	//4. push word pointers
-	uintptr_t target_sp = origin_sp;
-	for(int i = arg_num - 1; i >= 0; i--){
-
-		_if.rsp = _if.rsp - sizeof(char*);
-		memcpy(_if.rsp, &target_sp, sizeof(char*));
-		target_sp = target_sp - (sizeof(char) * (strlen(args[i]) + 1));
-		printf("stack pointer: %x, i: %d, target_pointer: %x\n", _if.rsp, i,
-				target_sp);
-	}
-
-	printf("<5>: return address add\n");
-
-	//5. push return adderss
-	_if.rsp = _if.rsp - 8;
-	memset(_if.rsp, 0, 8);
-
-	printf("stack pointer: %x\n", _if.rsp);
-	printf("<6>: replace RDI and RSI\n");
-
-	//6. replace RDI and RSI
-	_if.R.rdi = arg_num;
-	_if.R.rsi = _if.rsp + 8;
-
-	printf("RDI: %x, RSI: %x\n", _if.R.rdi, _if.R.rsi);
-	printf("<7>\n");
-	
-
-	/* If load failed, quit. */
-	palloc_free_page (file_name);
-	
-	printf("<8>\n");
-
-	//hex_dump(0, origin_sp, 50, true);
+	//hex_dump(_if.rsp, _if.rsp, KERN_BASE - _if.rsp, true);
 
 	/* Start switched process. */
 	do_iret (&_if);
@@ -310,6 +223,7 @@ process_exit (void) {
 	 * TODO: project2/process_termination.html).
 	 * TODO: We recommend you to implement process resource cleanup here. */
 
+	printf("%s: exit(%d)\n", curr->name, curr->status);
 	process_cleanup ();
 }
 
@@ -425,6 +339,27 @@ load (const char *file_name, struct intr_frame *if_) {
 	
 	printf("load start\n");
 
+	
+	//parsing
+	if(sizeof(file_name) > PAGE_SIZE) return false;
+	const char *delim = " ";
+	char *ret;
+	char *next;
+	char *args[128]; //argument list
+	int arg_num = 0; //argument number
+
+	ret =  strtok_r(file_name, delim, &next);
+	while(ret){
+		
+		args[arg_num] = ret;
+		printf("args[%d]: %s\n", arg_num, ret);
+		arg_num++;
+		ret = strtok_r(NULL, delim, &next);
+		
+	}
+	file_name = args[0];
+
+
 	/* Allocate and activate page directory. */
 	t->pml4 = pml4_create ();
 	if (t->pml4 == NULL)
@@ -512,6 +447,66 @@ load (const char *file_name, struct intr_frame *if_) {
 
 	/* TODO: Your code goes here.
 	 * TODO: Implement argument passing (see project2/argument_passing.html). */
+	
+	printf("<0>\n");
+
+	//initialize stack properly
+	uintptr_t origin_sp = if_->rsp;
+	
+	printf("<1>: args add, origin stack pointer: %x\n", origin_sp);
+	//hex_dump(0, origin_sp, 50, true);
+
+	//1. push words
+	for(int i = arg_num - 1; i >= 0; i--){
+	
+		if_->rsp = if_->rsp - (sizeof(char) * (strlen(args[i]) + 1));
+		memcpy(if_->rsp, args[i], (sizeof(char) * (strlen(args[i]) + 1)));
+		printf("stack pointer: %x, i: %d, arg: %s\n", if_->rsp, i, args[i]);
+	}
+	
+	printf("<2>: align add\n");
+
+	//2. push word-align
+	uint64_t remainder = if_->rsp % 8;
+	if_->rsp = if_->rsp - remainder;
+	memset(if_->rsp, 0, remainder);
+	printf("stack pointer: %x\n", if_->rsp);
+
+	printf("<3>: null pointer add\n");
+	//hex_dump(0, origin_sp, 50, true);
+
+	//3. push null pointer
+	if_->rsp = if_->rsp - sizeof(char*);
+	memset(if_->rsp, 0, sizeof(char*));
+	
+	printf("stack pointer: %x\n", if_->rsp);
+	printf("<4>: word pointer add\n");
+
+	//4. push word pointers
+	uintptr_t target_sp = origin_sp;
+	for(int i = arg_num - 1; i >= 0; i--){
+
+		if_->rsp = if_->rsp - sizeof(char*);
+		target_sp = target_sp - (sizeof(char) * (strlen(args[i]) + 1));
+		memcpy(if_->rsp, &target_sp, sizeof(char*));
+		printf("stack pointer: %x, i: %d, target_pointer: %x\n", if_->rsp, i,
+				target_sp);
+	}
+
+	printf("<5>: return address add\n");
+
+	//5. push return adderss
+	if_->rsp = if_->rsp - 8;
+	memset(if_->rsp, 0, 8);
+
+	printf("stack pointer: %x\n", if_->rsp);
+	printf("<6>: replace RDI and RSI\n");
+
+	//6. replace RDI and RSI
+	if_->R.rdi = arg_num;
+	if_->R.rsi = if_->rsp + 8;
+
+	printf("RDI: %x, RSI: %x\n", if_->R.rdi, if_->R.rsi);
 
 	success = true;
 
