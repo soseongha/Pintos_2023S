@@ -99,6 +99,8 @@ struct thread {
 	struct list_elem donators_elem;
 	struct lock *wait_this_lock;
 	
+	/*Added new in PA2*/
+	uint64_t exit_status;
 
 	/* Shared between thread.c and synch.c. */
 	struct list_elem elem;              /* List element. */

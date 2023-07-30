@@ -1,10 +1,3 @@
-ls -al
-source ./activate
-ls
-cd
-ls
-ls -al
-vi .bashrc
 ls
 cd pintos/
 ls
@@ -1996,5 +1989,12 @@ vi pintos/pintos-kaist/userprog/syscall.c
 git add .
 git status
 git commit -m "system call halt, exit, exec added"
+git push origin main
+exit
+vi pintos/pintos-kaist/userprog/syscall.c
+vi pintos/pintos-kaist/userprog/process.c 
+git add .
+git status
+git commit -m "syscall fork added"
 git push origin main
 exit

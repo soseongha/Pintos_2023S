@@ -108,7 +108,7 @@ void
 exit (int status) {
 	printf("exit\n");
 	struct thread *curr = thread_current();
-	curr->status = status;
+	curr->exit_status = status;
 	thread_exit();
 
 }
@@ -122,12 +122,14 @@ fork (const char *thread_name, struct intr_frame *f){
 
 int
 exec (const char *cmd_line) {
-
+	printf("exit\n");
 	return process_exec(cmd_line);
 	
 }
 
 int 
 wait (tid_t tid) {
+	printf("wait\n");
+	return process_wait(tid);
 	
 }
