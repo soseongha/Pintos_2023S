@@ -1,11 +1,3 @@
-mkdir pintos
-ls
-cd pintos/
-git clone https://github.com/casys-kaist/pintos-kaist
-ls
-source ./activate
-ls -al
-cd pintos-kaist/
 ls -al
 source ./activate
 ls
@@ -1998,3 +1990,11 @@ make clean
 make
 cd build/
 pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run 'args-single onearg'
+vi pintos/pintos-kaist/userprog/syscall.c
+vi pintos/pintos-kaist/userprog/process.c 
+vi pintos/pintos-kaist/userprog/syscall.c
+git add .
+git status
+git commit -m "system call halt, exit, exec added"
+git push origin main
+exit

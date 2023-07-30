@@ -13,10 +13,10 @@ void syscall_handler (struct intr_frame *);
 
 void halt (void);
 void exit (int status);
-//pid_t fork (const char *thread_name);
+tid_t fork (const char *thread_name);
 int exec (const char *file);
+int wait (tid_t tid);
 
-//int wait (pid_t pid);
 /* System call.
  *
  * Previously system call services was handled by the interrupt handler
@@ -62,7 +62,17 @@ syscall_handler (struct intr_frame *f UNUSED) {
 			break;
 
 		case SYS_FORK:
-			//fork();
+			tid_t tid = fork(f->R.rdi, f);
+			if( tid == TID_ERROR ){
+				
+				f->R.rax = TID_ERROR;
+
+			}else{
+
+				if(thread_current()->tid == tid) f->R.rax = 0;
+				else f->R.rax = tid;
+					
+			}
 			break;
 
 		case SYS_EXEC:
@@ -74,7 +84,7 @@ syscall_handler (struct intr_frame *f UNUSED) {
 			break;
 
 		case SYS_WAIT:
-			//wait();
+			f->R.rax = wait(f->R.rdi);
 			break;
 		
 		case SYS_WRITE:
@@ -103,21 +113,21 @@ exit (int status) {
 
 }
 
-//pid_t
-//fork (const char *thread_name){
-	//return (pid_t) syscall1 (SYS_FORK, thread_name);
-//}
+tid_t
+fork (const char *thread_name, struct intr_frame *f){
+	printf("fork\n");
+	return process_fork(thread_name, f);
+	
+}
 
 int
 exec (const char *cmd_line) {
-
-	//Use palloc_get_page() to copy cmd_line... why..?
 
 	return process_exec(cmd_line);
 	
 }
 
-//int
-//wait (pid_t pid) {
-	//return syscall1 (SYS_WAIT, pid);
-//}
+int 
+wait (tid_t tid) {
+	
+}

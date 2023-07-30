@@ -67,6 +67,8 @@ static void schedule (void);
 static tid_t allocate_tid (void);
 static void print_ready_list(void);
 
+//newly added in PA2
+struct thread *get_thread_of_tid(tid_t tid);
 
 /* Returns true if T appears to point to a valid thread. */
 #define is_thread(t) ((t) != NULL && (t)->magic == THREAD_MAGIC)
@@ -731,3 +733,26 @@ allocate_tid (void) {
 
 	return tid;
 }
+
+struct thread *get_thread_of_tid(tid_t tid){
+
+	//check current_thread	
+	if( tid == thread_current()->tid ){
+		return thread_current();
+	}//check ready_list
+	else if( !list_empty(&ready_list) ){
+
+		struct list_elem *e;
+		for( e = list_begin(&ready_list); e != list_end(&ready_list); e =
+				list_next(e)){
+			struct thread *th = list_entry(e, struct thread, elem);
+			if(tid == th->tid){
+				return th;
+			}
+		}
+	}//not found
+	else{
+		return NULL;
+	}
+}
+

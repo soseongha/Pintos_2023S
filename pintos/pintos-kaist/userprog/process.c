@@ -77,9 +77,23 @@ initd (void *f_name) {
  * TID_ERROR if the thread cannot be created. */
 tid_t
 process_fork (const char *name, struct intr_frame *if_ UNUSED) {
-	/* Clone current thread to new thread.*/
-	return thread_create (name,
+	
+	//save parent_if
+	memcpy(thread_current()->parent_if, if_, sizeof(intr_frame));
+
+	//Clone current thread to new thread
+	tid_t child_tid = thread_create (name,
 			PRI_DEFAULT, __do_fork, thread_current ());
+	if(child_tid == TID_ERROR) return TID_ERROR;
+
+	//after create, child is either current thread or in ready queue.
+	//With this fact, find child thread.
+	struct thread *child = get_thread_of_tid(child_tid);
+	if(child == NULL) return TID_ERROR;
+
+	//And, check synchronization!
+	
+	return child_tid;
 }
 
 #ifndef VM
@@ -94,37 +108,45 @@ duplicate_pte (uint64_t *pte, void *va, void *aux) {
 	bool writable;
 
 	/* 1. TODO: If the parent_page is kernel page, then return immediately. */
+	if( is_kernel_vaddr(va) ) return false;
 
 	/* 2. Resolve VA from the parent's page map level 4. */
 	parent_page = pml4_get_page (parent->pml4, va);
 
 	/* 3. TODO: Allocate new PAL_USER page for the child and set result to
 	 *    TODO: NEWPAGE. */
+	newpage = palloc_get_page(PAL_USER);	
 
 	/* 4. TODO: Duplicate parent's page to the new page and
 	 *    TODO: check whether parent's page is writable or not (set WRITABLE
 	 *    TODO: according to the result). */
+	memcpy(newpage, parent_page, PGSIZE);
+	if(is_writable(pte)){
+		writable = true;
+	}else{
+		writable = false;
+	}
 
 	/* 5. Add new page to child's page table at address VA with WRITABLE
 	 *    permission. */
 	if (!pml4_set_page (current->pml4, va, newpage, writable)) {
 		/* 6. TODO: if fail to insert page, do error handling. */
+		palloc_free_page(newpage);
+		return false;
+		
 	}
 	return true;
 }
 #endif
 
-/* A thread function that copies parent's execution context.
- * Hint) parent->tf does not hold the userland context of the process.
- *       That is, you are required to pass second argument of process_fork to
- *       this function. */
+/* A thread function that co*       this function. */
 static void
 __do_fork (void *aux) {
 	struct intr_frame if_;
 	struct thread *parent = (struct thread *) aux;
 	struct thread *current = thread_current ();
 	/* TODO: somehow pass the parent_if. (i.e. process_fork()'s if_) */
-	struct intr_frame *parent_if;
+	struct intr_frame *parent_if = parent->parent_if;
 	bool succ = true;
 
 	/* 1. Read the cpu context to local stack. */
@@ -150,6 +172,8 @@ __do_fork (void *aux) {
 	 * TODO:       in include/filesys/file.h. Note that parent should not return
 	 * TODO:       from the fork() until this function successfully duplicates
 	 * TODO:       the resources of parent.*/
+
+	//This part is about file handling, so I didn't implement yet.
 
 	process_init ();
 
@@ -211,6 +235,20 @@ process_wait (tid_t child_tid UNUSED) {
 	 * XXX:       to add infinite loop here before
 	 * XXX:       implementing the process_wait. */
 	for(;;){}
+	
+	//check if it is really child of parent
+	if(get_child_of_tid(child_tid) == NULL) return -1;
+
+	//check if already this parent waits equivalent child
+
+	//try to sema_down(sema value is down one when fork)
+	//sema_up parent value when child exit(while loop until pid value isn't valid)
+	//when exit, save child's exit status and fact that child was terminated ny
+	//kernel, sonewhere.
+
+
+	//when wait ended, return child's exit status
+
 	return -1;
 }
 
