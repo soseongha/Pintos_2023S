@@ -1,531 +1,3 @@
-ls
-cd pintos/
-ls
-cd pintos-kaist/
-ls
-cd threads/
-ls
-make
-ls
-cd build/
-ls
-pintos
-ls
-ls ..
-cd pintos-kaist/
-ls
-grep thread_create
-grep thread_create .
-grep -r  thread_create .
-ls
-cd threads/
-ls
-vi thread.c
-cd ..
-ls
-cd include/
-ls
-cd threads
-ls
-cd ..
-cd threads/
-ls
-make
-ls
-cd build/
-ls
-pintos -h
-pintos -- run alarm-multiple > logfile
-ls
-rm logfile
-ls
-make check
-pintos
-cd ..
-pintos
-make clean
-ls
-make
-cd ..
-ls
-cd in
-cd include/
-ls
-cd threads/
-ls
-cat loader.h 
-cat loader.S
-ls
-cat init.c
-cat init.h
-cat thread.h
-ls
-cd pintos/
-ls
-cd pintos-kaist/
-ls
-cd threads/
-la
-ls
-cd build/
-ls
-pintos -h
-cd ..
-ls
-cd ..
-ls
-cd devices/
-ls
-vi timer.c
-cd
-ls
-ctags -R
-cat tags
-ls -al
-find . \( -name '*.c' -o -name '*.h' -o -name '*.s' -o -name '*.S' \) -print > file_list
-cscope -i file_list
-cs add ./cscope.out
-vim ~/.vimrc
-ls
-cd pintos/pintos-kaist/threads/
-ls
-vi init.c
-cd
-vi ./pintos/pintos-kaist/threads/init.c
-vi ./pintos/pintos-kaist/threads/thread.h
-vi ./pintos/pintos-kaist/threads/thread.c
-vi ./pintos/pintos-kaist/threads/init.c
-vi ./pintos/pintos-kaist/i
-vi ./pintos/pintos-kaist/threads/init.c
-vi ./pintos/pintos-kaist/threads/thread.c
-ls ./pintos/pintos-kaist/
-ls ./pintos/pintos-kaist/lib/kernel/
-vi ./pintos/pintos-kaist/lib/kernel/list.c
-ls
-vi pintos/pintos-kaist/threads/thread.c
-cd pintos/pintos-kaist/devices/
-ls
-vi timer.c 
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-ls
-make clean
-make
-vi pintos/pintos-kaist/devices/timer.c
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-ls
-make clean
-make
-cd
-vi pintos/pintos-kaist/devices/timer.c
-vi pintos/pintos-kaist/threads/thread.c
-vi pintos/pintos-kaist/devices/timer.c
-vi pintos/pintos-kaist/threads/thread.c
-vi pintos/pintos-kaist/devices/timer.cA
-cd pintos/pintos-kaist/threads/
-ls
-make clean
-make
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-
-make
-cd
-vi pintos/pintos-kaist/threads/thread.c
-cd pintos/pintos-kaist/threads/
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-ls
-cd build/
-pintos -- -q run alarm-multiple
-ls
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-ls
-cd build/
-pintos -h
-pintos --gdb -q run alarm-multiple
-pintos -- -q --gdb run alarm-multiple
-pintos -- -q run alarm-multiple
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-cd build/
-pintos -- -q run alarm-multiple
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-cd build/
-cd ..
-make clean
-make
-cd build/
-pintos -- -q run alarm-multiple
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-pintos -- -q run alarm-multiple
-cd
-cd pintos/pintos-kaist/threads/
-cd
-vi pintos/pintos-kaist/devices/timer.c
-vi pintos/pintos-kaist/lib/kernel/list.c
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-pintos -- -q run alarm-multiple
-ccd
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-pintos -- -q run alarm-multiple
-cd
-vi pintos/pintos-kaist/devices/timer.c
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-ls
-pintos -- -q run alarm-multiple
-ls
-cd
-git branch
-git status
-git add .
-git status
-git add pintos/pintos-kaist/
-git status
-git add pintos/pintos-kaist/.
-git status
-git add -A
-git status
-git commit -m "alarm clock solved"
-git push origin main
-git push origin master
-git status
-cd pintos/pintos-kaist/
-ls
-git add .
-git status
-git commit -m "alarm clock solved 2"
-git push origin master
-cd
-git push origin master
-git status
-git remote -v
-cd pintos/pintos-kaist/
-git remote -v
-git remote set-url origin https://github.com/soseongha/2023S_Pintos.git 
-git remote -v
-git status
-git push origin master
-ls
-cd
-git remote set-url origin https://github.com/soseongha/Pintos_2023S.git
-git remote -v
-git status
-cd pintos/pintos-kaist/
-git remote -v
-git remote set-url origin https://github.com/soseongha/Pintos_2023S.git
-git remote -v
-ls
-ls -al
-git remote remove
-rm .git
-rm -d .git
-rm -rd .git
-ls
-ls -al
-git remote add test https://github.com/soseongha/Pintos_2023S.git
-git remote -v
-git remote remove origin
-git remote remove test
-ls -al
-git remote
-git remote -v
-rm -rdf .git
-ls -al
-cd
-ls
-ls -al
-remote -v
-git remote -v
-git status
-rm -rdf .git
-ls -al
-git init
-ls -al
-git remote -v
-git status
-git add .
-git status
-git commit -m "alarm-clock sloved"
-git remote add origin https://github.com/soseongha/Pintos_2023S.git
-git remote -v
-git push origin main
-git push -u origin main
-git branch -M main
-git status
-git push -u origin main
-git push -u origin main --force
-ls -al
-exit
-
-vi pintos/pintos-kaist/devices/timer.c
-ls pintos/pintos-kaist/userprog/
-ls
-vi pintos/pintos-kaist/devices/timer.c
-ls
-git status
-cd pintos/pintos-kaist/threads/build/
-make check
-cd
-ls
-cd pintos/pintos-kaist/
-ls
-cd tests/
-ls
-cd threads/
-ls
-cd
-cd pintos/pintos-kaist/threads/build/
-make tests/thread/alarm-multiple.result
-cd ..
-make tests/thread/alarm-multiple.result
-cd
-cd pintos/pintos-kaist/
-make tests/thread/alarm-multiple.result
-ls
-make tests/thread/alarm-multiple
-make tests/thread/alarm-multiple.ck
-cd threads/build/
-ls
-cd ..
-make clean
-make
-cd build/
-ls
-ls tests/
-ls tests/threads/
-make tests/threads/alarm-multiple.result
-ls tests/threads/
-cat tests/threads/alarm-multiple.output
-cat tests/threads/alarm-multiple.result
-cat tests/threads/alarm-negative.result
-make tests/threads/alarm-negative.result
-cat tests/threads/alarm-negative.output
-ls
-pintos -- run alarm-negative > logfile
-cd pintos/pintos-kaist/threads/build/
-pintos -- -q run alarm-negative
-cd pintos/pintos-kaist/threads/build/
-gdb kernel.o
-cd ..
-cd
-vi pintos/pintos-kaist/threads/thread.c 
-ls pintos/pintos-kaist/threads/
-vi pintos/pintos-kaist/threads/init.c 
-ls pintos/pintos-kaist/threads/build/tests/threads/
-vi pintos/pintos-kaist/threads/build/tests/threads/alarm-negative.
-vi pintos/pintos-kaist/tests/threads/alarm-negative.c
-vi pintos/pintos-kaist/tests/threads/alarm-priority.c
-vi pintos/pintos-kaist/tests/threads/alarm-simultaneous.c
-pintos -- run alarm-priority > logfile
-ls
-rm logfile 
-cd pintos/pintos-kaist/threads/build/
-pintos -- run alarm-priority > logfile
-cd pintos/pintos-kaist/devices/
-vi timer.c 
-cd ..
-ls
-cd threads/
-make clean
-make
-cd build/
-ls
-make tests/threads/alarm-negative.result
-cd ..
-ls
-cd
-vi pintos/pintos-kaist/devices/timer.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/alarm-negative.result
-cd
-vi pintos/pintos-kaist/devices/timer.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-ls
-make tests/threads/alarm-negative.result
-make tests/threads/alarm-priority.result
-cd
-vi pintos/pintos-kaist/devices/timer.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/alarm-priority.result
-cd
-vi pintos/pintos-kaist/devices/timer.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/alarm-priority.result
-ls
-cd tests/threads/
-ls
-cat alarm-priority.output
-cd ../..
-ls
-make tests/threads/alarm-simultaneous.result
-cd 
-vi pintos/pintos-kaist/devices/timer.c 
-cd 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-l
-cd build/
-ls
-make tests/threads/alarm-simultaneous.result
-cat tests/threads/alarm-simultaneous.output
-cd
-vi pintos/pintos-kaist/devices/timer.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-ls
-make tests/threads/alarm-simultaneous.result
-cat tests/threads/alarm-simultaneous.output
-cd
-vi pintos/pintos-kaist/devices/timer.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-ls
-make tests/threads/alarm-simultaneous.result
-cat tests/threads/alarm-simultaneous.output
-cd
-vi pintos/pintos-kaist/devices/timer.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-ls
-make tests/threads/alarm-simultaneous.result
-cd
-vi pintos/pintos-kaist/devices/timer.c 
-cd pintos/pintos-kaist/th
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-ls
-make tests/threads/alarm-simultaneous.result
-cd
-vi pintos/pintos-kaist/devices/timer.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd b
-cd build/
-make tests/threads/alarm-simultaneous.result
-make check
-cd
-vi pintos/pintos-kaist/devices/timer.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make check
-cd
-git add .
-git status
-git commit -m "alarm-timer debugged"
-git push origin main
-cd pintos/pintos-kaist/threads/
-cd build/
-ls
-make tests/threads/priority-change
-make tests/threads/priority-change.result
-cd ..
-make clean
-make
-cd build/
-make tests/threads/priority-change.result
-cd ..
-ls
-vi thread.c
-vi init.c
-cd
-vi pintos/pintos-kaist/threads/init.c
-git add .
-git status
-git commit -m "priority scheduling create and set"
-git push origin main
-exit
-ls
-vi pintos/pintos-kaist/threads/init.c
-vi pintos/pintos-kaist/threads/thread.c 
-vi pintos/pintos-kaist/threads/synch.c 
-vi pintos/pintos-kaist/threads/thread.c 
-vi pintos/pintos-kaist/threads/synch.c 
-vi pintos/pintos-kaist/threads/thread.c 
-vi pintos/pintos-kaist/threads/synch.c 
-cd pintos/pintos-kaist/threads/
-ls
-make clean
-make
-cd
-vi pintos/pintos-kaist/threads/thread.c 
 cd pintos/pintos-kaist/threads/
 make clean
 make
@@ -1997,4 +1469,532 @@ git add .
 git status
 git commit -m "syscall fork added"
 git push origin main
+exit
+vi pintos/pintos-kaist/userprog/syscall.c
+git add .
+git status
+git commit -m "struct thread exit_status added"
+git push origin main
+exit
+vi pintos/pintos-kaist/userprog/syscall.c
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+ls -al
+rm .process.c.swp 
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+vi pintos/pintos-kaist/threads/thread.c 
+cs pintos/pintos-kaist/userprog/
+cd pintos/pintos-kaist/userprog/
+make clean
+mawke
+make
+cd
+vi pintos/pintos-kaist/include/threads/thread.h 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cdd pintos/pintos-kaist/userprog/
+make clean
+make
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/syscall
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+ls
+cd tests/userprog/
+ls
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd 
+vi pintos/pintos-kaist/threads/thread.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+cd tests/userprog/
+ls
+cd ../..
+ls
+history
+history 1945
+pintos --fs-disk=10 -p tests/userprog/exit:exit -- -q -f run exit
+
+cd build/
+history
+cd
+vi pintos/pintos-kaist/userprog/syscall
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+history
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clena
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd 
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+history
+vi pintos/pintos-kaist/threads/thread.c 
+vi pintos/pintos-kaist/threads/synch.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/threads/synch.c 
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd 
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd b
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+history
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+readelf -l build/tests/userprog/args-none 
+cd
+history
+vi pintos/pintos-kaist/lib/user/user.lds 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+readelf -l build/tests/userprog/args-none 
+cd
+cd pintos/pintos-kaist/userprog/build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+vi pintos/pintos-kaist/userprog/exception.c 
+vi pintos/pintos-kaist/userprog/process.c 
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -f -q run fork-once
+cd pintos/pintos-kaist/userprog/build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run "args-single onearg"
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run "args-single onearg"
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+0x80042182340x8004218234 0x800421d118 0x800421d297 0x8004208e64 0x8004209281 0x800421d64d 0x800421d491 0x800421d30c 0x40101e 0x4010e6 0x401b7a
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+backtrace kernel.o [200~0x8004218234 0x800421d118 0x800421d297 0x8004208e64 0x8004209281 0x800421d64d 0x800421d491 0x800421d30c 0x4010
+backtrace kernel.o 0x8004218234 0x800421d118 0x800421d297 0x8004208e64 0x8004209281 0x800421d64d 0x800421d491 0x800421d30c 0x40101e 0x4010e6 0x401b7a
+backtrace 0x8004218234 0x800421d118 0x800421d297 0x8004208e64 0x8004209281 0x800421d64d 0x800421d491 0x800421d30c 0x40101e 0x4010e6 0x401b7a
+cd 
+vi pintos/pintos-kaist/userprog/syscall.c
+find -iname "*intr-stubs.o*"
+vi pintos/pintos-kaist/userprog/build/threads/intr-stubs.o
+vi pintos/pintos-kaist/userprog/process.c 
+exit
+cd pintos/pintos-kaist/userprog/
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+backtrace 0x8004218234 0x800421d118 0x800421d297 0x8004208e64 0x8004209281 0x800421d64d 0x800421d491 0x800421d30c 0x40101e 0x4010e6 0x401b7a
+cd
+vi pintos/pintos-kaist/threads/interrupt.c 
+vi pintos/pintos-kaist/userprog/exception.c 
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+exit
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/syscall.c
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/syscall.c
+cd pintos/pintos-kaist/userprog/
+make cleam
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/syscall.c
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd process.c 
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/fork-once:fork-once -- -q -f run fork-once
+cd ../..
+pintos --fs-disk=10 -p tests/userprog/fork-recursive:fork-recursive -- -q -f run fork-recursive
+cd userprog/build/
+pintos --fs-disk=10 -p tests/userprog/fork-recursive:fork-recursive -- -q -f run fork-recursive
+pintos --fs-disk=10 -p tests/userprog/fork-multiple:fork-multiple -- -q -f run fork-multiple
+pintos --fs-disk=10 -p tests/userprog/fork-boundary:fork-boundary -- -q -f run fork-boundary
+pintos --fs-disk=10 -p tests/userprog/wait-bad-pid:wait-bad-pid -- -q -f run wait-bad-pid
+pintos --fs-disk=10 -p tests/userprog/wait-bad-killed:wait-killed -- -q -f run wait-killed
+pintos --fs-disk=10 -p tests/userprog/wait-killed:wait-killed -- -q -f run wait-killed
+history
+backtrace kernel.o 0x800421811e 0x8004207256 0x800420a76f 0x800421b440 0x800421b60d 0x800421b5f1 0x800421651e 0x8004215c6f 0x800421b4a0 0x8004215624 0x8004208f11 0x800421cda4 0x800421cf58 0x80042
+cd
+pintos --fs-disk=10 -p tests/userprog/wait-bad-pid:wait-bad-pid -- -q -f run wait-bad-pidcd
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+cd build/
+pintos --fs-disk=10 -p tests/userprog/wait-bad-pid:wait-simple -- -q -f run wait-simple
+pintos --fs-disk=10 -p tests/userprog/wait-simple:wait-simple -- -q -f run wait-simple
+backtrace kernel.o 0x800421811e 0x8004207256 0x800420a76f 0x800421b440 0x800421b60d 0x800421b5f1 0x800421651e 0x8004215c6f 0x800421b4a0 0x8004215624 0x8004208f11 0x800421cda4 0x800421cf58 0x80042
+backtrace kernel.o 0x800421811e 0x8004207256 0x800420a76f 0x800421b440 0x800421b60d 0x800421b5f1 0x800421651e 0x8004215c6f 0x800421b4a0 0x8004215624 0x8004208f11 0x800421cda4 0x800421cf58 0x8000 0x8004215624 0x8004208f11 0x800421cda4 0x800421cf58 0x800
+history
+exit
+cd
+exit
+cd
+pintos --fs-disk=10 -p tests/userprog/wait-simple:wait-simple -- -q -f run wait-simple
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+history
+pintos --fs-disk=10 -p tests/userprog/wait-simple:wait-simple -- -q -f run wait-simple
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+backtrace kernel.o 0x800421811e 0x8004207256 0x800420a76f 0x800421b440 0x800421b60d 0x800421b5f1 0x800421651e 0x8004215c6f 0x800421b4a0 0x8004215624 0x8004208f11 0x800421ce38 0x800421cfec 0x80042
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/wait-simple:wait-simple -- -q -f run wait-simple
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+make clean
+make
+cd
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd  build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/syscall.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run "args-single onearg"
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run "args-single onearg"
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run "args-single onearg"
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/args-single:args-single -- -q -f run "args-single onearg"
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+vi pintos/pintos-kaist/userprog/process.c 
+cd pintos/pintos-kaist/userprog/
+make clean
+make
+cd build/
+pintos --fs-disk=10 -p tests/userprog/exec-once:exec-once -- -q -f run exec-once
+cd
+cd pintos/pintos-kaist/userprog/
+cd build/
+ls
+ls -al
+cd tests/
+ls
+cd userprog/
+ls
+cd ..
+ls -al
+cd filesys/
+ls
+cd ..
+cd userprog/
+ls
+cd ..
+cd lib
+ls
+cd user/
+ls
+cd ..
+cd devices/
+ls
+cd ..
 exit

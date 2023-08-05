@@ -8,14 +8,20 @@
 #include "threads/flags.h"
 #include "intrinsic.h"
 
+#include "threads/palloc.h"
+#include "filesys/filesys.h"
+#include "filesys/file.h"
+
+
 void syscall_entry (void);
 void syscall_handler (struct intr_frame *);
 
 void halt (void);
 void exit (int status);
-tid_t fork (const char *thread_name);
-int exec (const char *file);
+tid_t fork (const char *thread_name, struct intr_frame *f);
+int exec (const char *cmd_line);
 int wait (tid_t tid);
+int write (int fd, const void *buffer, unsigned size);
 
 /* System call.
  *
@@ -47,21 +53,24 @@ syscall_init (void) {
 void
 syscall_handler (struct intr_frame *f UNUSED) {
 	// TODO: Your implementation goes here.
-	printf ("system call!\n");
+
 
 	uint64_t syscall_nr = f->R.rax;
-	printf("syscall_nr: %d\n", syscall_nr);
+	
 
 	switch(syscall_nr){	
 		case SYS_HALT:
+		{
 			halt();
 			break;
-
+		}
 		case SYS_EXIT:
+		{
 			exit(f->R.rdi);
 			break;
-
+		}
 		case SYS_FORK:
+		{	
 			tid_t tid = fork(f->R.rdi, f);
 			if( tid == TID_ERROR ){
 				
@@ -74,25 +83,31 @@ syscall_handler (struct intr_frame *f UNUSED) {
 					
 			}
 			break;
-
+		}
 		case SYS_EXEC:
-			if( exec(f->R.rdi) == -1){
+		{
+			if( f->R.rax = exec((const char *)f->R.rdi) == -1){
 				exit(-1);
 			}else{
 				printf("[Caution] Invalid execution.\n");
 			}
 			break;
-
+		}
 		case SYS_WAIT:
+		{
 			f->R.rax = wait(f->R.rdi);
 			break;
-		
+		}
 		case SYS_WRITE:
-			printf("write msg in test\n");
+		{
+			int size = write(f->R.rdi, f->R.rsi, f->R.rdx);
+			f->R.rax = size;
 			break;
-
+		}
 		default:
+		{
 			break;
+		}
 	}
 	
 	//thread_exit ();
@@ -100,13 +115,13 @@ syscall_handler (struct intr_frame *f UNUSED) {
 
 void
 halt (void) {
-	printf("halt\n");
+	//printf("halt\n");
 	power_off();
 }
 
 void
 exit (int status) {
-	printf("exit\n");
+	
 	struct thread *curr = thread_current();
 	curr->exit_status = status;
 	thread_exit();
@@ -115,21 +130,43 @@ exit (int status) {
 
 tid_t
 fork (const char *thread_name, struct intr_frame *f){
-	printf("fork\n");
+	
 	return process_fork(thread_name, f);
 	
 }
 
 int
 exec (const char *cmd_line) {
-	printf("exit\n");
-	return process_exec(cmd_line);
 	
+	int file_size = strlen(cmd_line) + 1;
+	char *fn_copy = palloc_get_page(PAL_ZERO);
+	if(!fn_copy){
+		
+		return -1;
+	}
+	strlcpy(fn_copy, cmd_line, file_size);
+	if(process_exec(fn_copy) == -1){
+		
+		return -1;
+	}
+
+	NOT_REACHED();
+	return 0;
 }
 
 int 
 wait (tid_t tid) {
-	printf("wait\n");
+	
 	return process_wait(tid);
 	
+}
+
+int 
+write (int fd, const void *buffer, unsigned size){
+
+	if(fd == 1){
+		putbuf(buffer, size);
+	}
+	return size; 
+
 }

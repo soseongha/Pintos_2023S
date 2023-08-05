@@ -5,6 +5,7 @@
 #include <list.h>
 #include <stdint.h>
 #include "threads/interrupt.h"
+#include "threads/synch.h"
 #ifdef VM
 #include "vm/vm.h"
 #endif
@@ -101,6 +102,12 @@ struct thread {
 	
 	/*Added new in PA2*/
 	uint64_t exit_status;
+	struct semaphore sema_fork;
+	struct semaphore sema_wait;
+	struct semaphore sema_free;
+	struct list childs;
+	struct list_elem child_elem;
+
 
 	/* Shared between thread.c and synch.c. */
 	struct list_elem elem;              /* List element. */

@@ -68,7 +68,7 @@ static tid_t allocate_tid (void);
 static void print_ready_list(void);
 
 //newly added in PA2
-struct thread *get_thread_of_tid(tid_t tid);
+/*struct thread *get_child_of_tid(tid_t tid);*/
 
 /* Returns true if T appears to point to a valid thread. */
 #define is_thread(t) ((t) != NULL && (t)->magic == THREAD_MAGIC)
@@ -192,6 +192,12 @@ thread_create (const char *name, int priority,
 
 	ASSERT (function != NULL);
 
+	//printf("thread_create start\n");
+	//name parsing
+	char *real_name, *save_ptr;
+	real_name = strtok_r(name, " ", &save_ptr);
+	if(real_name == NULL) return TID_ERROR;
+
 	/* Allocate thread. */
 	t = palloc_get_page (PAL_ZERO);
 	if (t == NULL)
@@ -203,8 +209,11 @@ thread_create (const char *name, int priority,
 	}
 
 	/* Initialize thread. */
-	init_thread (t, name, priority);
+	init_thread (t, real_name, priority);
 	tid = t->tid = allocate_tid ();
+
+	//newly added in PA2, childs setting
+	list_push_back(&thread_current()->childs, &t->child_elem);
 
 	/* Call the kernel_thread if it scheduled.
 	 * Note) rdi is 1st argument, and rsi is 2nd argument. */
@@ -220,6 +229,7 @@ thread_create (const char *name, int priority,
 	/* Add to run queue. */
 	thread_unblock (t);
 	
+	//printf("thread_create end\n");
 	return tid;
 }
 
@@ -342,6 +352,10 @@ thread_exit (void) {
 #ifdef USERPROG
 	process_exit ();
 #endif
+
+	//newly added in PA2, pop child from parent's child lis
+	//struct list_elem *child_elem = &thread_current()->child_elem;
+	//list_remove(child_elem);
 
 	/* Just set our status to dying and schedule another process.
 	   We will be destroyed during the call to schedule_tail(). */
@@ -508,9 +522,18 @@ init_thread (struct thread *t, const char *name, int priority) {
 	strlcpy (t->name, name, sizeof t->name);
 	t->tf.rsp = (uint64_t) t + PGSIZE - sizeof (void *);
 	t->priority = priority;
+	
 	t->orig_priority = priority;
 	list_init(&t->donators);
 	t->wait_this_lock = NULL;
+	
+	//newly added in PA2 
+	//sema init
+	sema_init(&t->sema_fork, 0);
+	sema_init(&t->sema_wait, 0);
+	sema_init(&t->sema_free, 0);
+	list_init(&t->childs);
+
 	t->magic = THREAD_MAGIC;
 }
 
@@ -733,19 +756,18 @@ allocate_tid (void) {
 
 	return tid;
 }
+/*
+struct thread *get_child_of_tid(tid_t tid){
 
-struct thread *get_thread_of_tid(tid_t tid){
-
-	//check current_thread	
-	if( tid == thread_current()->tid ){
-		return thread_current();
-	}//check ready_list
-	else if( !list_empty(&ready_list) ){
+	struct thread *curr = thread_current();
+	if( !list_empty(&curr->childs) ){
 
 		struct list_elem *e;
-		for( e = list_begin(&ready_list); e != list_end(&ready_list); e =
+		for( e = list_begin(&curr->childs); e != list_end(&curr->childs); e =
 				list_next(e)){
-			struct thread *th = list_entry(e, struct thread, elem);
+			struct thread *th = list_entry(e, struct thread, child_elem);
+			printf("[get_child_of_tid]: name: %s, tid: %d\n", th->name,
+					th->tid);
 			if(tid == th->tid){
 				return th;
 			}
@@ -754,5 +776,6 @@ struct thread *get_thread_of_tid(tid_t tid){
 	else{
 		return NULL;
 	}
+	return NULL;
 }
-
+*/
