@@ -84,7 +84,17 @@ struct page_operations {
 /* Representation of current process's memory space.
  * We don't want to force you to obey any specific design for this struct.
  * All designs up to you for this. */
+struct segment {
+	struct file *file; //when this segment save
+	off_t offset; //starting point of file
+	uint32_t start; //starting point of segment
+	uint32_t length; //length of variable information(not include align info)
+	struct list_elem seg_elem; //to manage segment into list element
+	bool writable; 
+}
 struct supplemental_page_table {
+	struct list segments;
+	
 };
 
 #include "threads/thread.h"

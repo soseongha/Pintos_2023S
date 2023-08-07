@@ -61,29 +61,31 @@ err:
 }
 
 /* Find VA from spt and return page. On error, return NULL. */
-struct page *
-spt_find_page (struct supplemental_page_table *spt UNUSED, void *va UNUSED) {
+struct segment *
+spt_find_segment (struct supplemental_page_table *spt UNUSED, void *va UNUSED) {
 	struct page *page = NULL;
 	/* TODO: Fill this function. */
-
-	return page;
+	
+	return segment;
 }
 
 /* Insert PAGE into spt with validation. */
 bool
-spt_insert_page (struct supplemental_page_table *spt UNUSED,
-		struct page *page UNUSED) {
+spt_insert_segment (struct supplemental_page_table *spt UNUSED,
+		struct segment *segment UNUSED) {
 	int succ = false;
 	/* TODO: Fill this function. */
-
+	list_push_back(&spt->segments, &segment->seg_elem);
 	return succ;
 }
 
+/*This will not be used probably*/
 void
-spt_remove_page (struct supplemental_page_table *spt, struct page *page) {
+spt_remove_segment (struct supplemental_page_table *spt, struct segment *segment) {
 	vm_dealloc_page (page);
 	return true;
 }
+
 
 /* Get the struct frame, that will be evicted. */
 static struct frame *
@@ -174,6 +176,8 @@ vm_do_claim_page (struct page *page) {
 /* Initialize new supplemental page table */
 void
 supplemental_page_table_init (struct supplemental_page_table *spt UNUSED) {
+
+	list_init(&spt->segments);
 }
 
 /* Copy supplemental page table from src to dst */
