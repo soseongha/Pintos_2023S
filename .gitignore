@@ -1,4 +1,5 @@
 ## Git ignore file ##
 
 *.bash_history
+
 *.viminfo

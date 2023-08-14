@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include "threads/palloc.h"
 
+#include <list.h>
+
 enum vm_type {
 	/* page not initialized */
 	VM_UNINIT = 0,
@@ -95,7 +97,8 @@ struct segment {
 	struct list_elem seg_elem; //to manage segment into list element
 	bool writable;
 	struct list pages; //pages in this segment
-}
+};
+
 struct supplemental_page_table {
 	struct list segments;
 	

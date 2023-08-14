@@ -5,7 +5,8 @@
 #include "vm/inspect.h"
 
 #include "threads/palloc.h"
-
+#include "threads/vaddr.h"
+#include "userprog/process.h"
 #define PAGE_SIZE 4096
 
 struct list frame_table;
@@ -89,7 +90,7 @@ spt_find_page (struct supplemental_page_table *spt UNUSED, void *va UNUSED) {
 	for(e = list_begin(&spt->segments); e != list_end(&spt->segments); e =
 			list_next(e)){
 	
-		struct segment *seg = list_entry(e, struct segement, seg_elem);
+		struct segment *seg = list_entry(e, struct segment, seg_elem);
 		
 		//if segment matches
 		if(seg_off <= ta && ta < seg_off + seg->length){
@@ -139,7 +140,7 @@ spt_insert_page (struct supplemental_page_table *spt UNUSED,
 	for(e = list_begin(&spt->segments); e != list_end(&spt->segments); e =
 			list_next(e)){
 	
-		struct segment *seg = list_entry(e, struct segement, seg_elem);
+		struct segment *seg = list_entry(e, struct segment, seg_elem);
 		
 		//if segment matches
 		if(seg_off <= ta && ta < seg_off + seg->length){
@@ -160,7 +161,7 @@ spt_insert_page (struct supplemental_page_table *spt UNUSED,
 
 /*This will not be used probably*/
 void
-spt_remove_segment (struct supplemental_page_table *spt, struct segment *segment) {
+spt_remove_page (struct supplemental_page_table *spt, struct page *page) {
 	vm_dealloc_page (page);
 	return true;
 }
@@ -256,6 +257,16 @@ vm_claim_page (void *va UNUSED) {
 	if(page == NULL) return false;
 	
 	return vm_do_claim_page (page);
+}
+
+static bool
+install_page (void *upage, void *kpage, bool writable) {
+	struct thread *t = thread_current ();
+
+	/* Verify that there's not already a page at that virtual
+	 * address, then map our page there. */
+	return (pml4_get_page (t->pml4, upage) == NULL
+			&& pml4_set_page (t->pml4, upage, kpage, writable));
 }
 
 /* Claim the PAGE and set up the mmu. */
