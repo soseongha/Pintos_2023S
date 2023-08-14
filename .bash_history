@@ -1,36 +1,3 @@
-cd
-vi pintos/pintos-kaist/threads/init.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/priority-donate-one.result
-cd
-vi pintos/pintos-kaist/threads/init.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/priority-donate-one.result
-cd
-vi pintos/pintos-kaist/threads/init.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/priority-donate-one.result
-cd
-vi pintos/pintos-kaist/threads/init.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/priority-donate-one.result
-cd
-vi pintos/pintos-kaist/threads/init.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
 cd build/
 make tests/threads/priority-donate-one.result
 cat tests/threads/priority-donate-one.output
@@ -1998,3 +1965,36 @@ git status
 git commit -m "[PA2] Update: syscall wait added & test_name duplication solve"
 git push origin main
 exit
+cd
+ls
+cd pintos/pintos-kaist/
+ls
+cd vm/
+ls
+vi Makefile 
+vi anon.c 
+vi file.c 
+vi inspect.c 
+vi uninit.c 
+vi vm.c 
+make
+cd build/
+ls
+make check
+cd ../
+make clean
+make
+cd build/
+make check
+cd ..
+cd
+vi pintos/pintos-kaist/vm/vm.c 
+cd pintos/pintos-kaist/vm/
+make clean
+cd
+git add .
+git status
+git commit -m "[PA3] Feat: construct SPT"
+git push origin main
+exit
+vi pintos/pintos-kaist/vm/vm.c 

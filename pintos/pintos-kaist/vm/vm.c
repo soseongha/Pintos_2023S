@@ -4,6 +4,12 @@
 #include "vm/vm.h"
 #include "vm/inspect.h"
 
+#include "threads/palloc.h"
+
+#define PAGE_SIZE 4096
+
+struct list frame_table;
+
 /* Initializes the virtual memory subsystem by invoking each subsystem's
  * intialize codes. */
 void
@@ -60,22 +66,95 @@ err:
 	return false;
 }
 
+
 /* Find VA from spt and return page. On error, return NULL. */
-struct segment *
-spt_find_segment (struct supplemental_page_table *spt UNUSED, void *va UNUSED) {
+struct page *
+spt_find_page (struct supplemental_page_table *spt UNUSED, void *va UNUSED) {
+	
 	struct page *page = NULL;
+
 	/* TODO: Fill this function. */
 	
-	return segment;
+	//list empty checking
+	if(list_empty(&spt->segments)) return NULL;
+	
+	//va scope checking
+	ASSERT (is_user_vaddr(va));
+
+	struct list_elem *e;
+	uint32_t ta = va - 0x400000;
+	uint32_t seg_off = 0;
+
+	//search segments
+	for(e = list_begin(&spt->segments); e != list_end(&spt->segments); e =
+			list_next(e)){
+	
+		struct segment *seg = list_entry(e, struct segement, seg_elem);
+		
+		//if segment matches
+		if(seg_off <= ta && ta < seg_off + seg->length){
+		
+			
+			//search page in this segment
+			if(list_empty(&seg->pages)) return NULL;
+			struct list_elem *e2;
+			for(e2 = list_begin(&seg->pages); e2 != list_end(&seg->pages); e2 =
+					list_next(e2)){
+				
+				struct page *pg = list_entry(e2, struct page, page_elem);
+				if( pg->va <= va && va < pg->va + PAGE_SIZE){
+					page = pg;
+					return page;
+				}
+			}
+			return page;
+		}
+		
+		seg_off = seg_off + seg->length;
+		
+	}
+
+	return page;
 }
 
 /* Insert PAGE into spt with validation. */
 bool
-spt_insert_segment (struct supplemental_page_table *spt UNUSED,
-		struct segment *segment UNUSED) {
+spt_insert_page (struct supplemental_page_table *spt UNUSED,
+		struct page *page UNUSED) {
 	int succ = false;
 	/* TODO: Fill this function. */
-	list_push_back(&spt->segments, &segment->seg_elem);
+	
+	//list empty checking
+	if(list_empty(&spt->segments)) return NULL;
+	
+	//va scope checking
+	ASSERT (is_user_vaddr(page->va));
+
+	uint32_t va = page->va;
+	struct list_elem *e;
+	uint32_t ta = va - 0x400000;
+	uint32_t seg_off = 0;
+
+	//search segments
+	for(e = list_begin(&spt->segments); e != list_end(&spt->segments); e =
+			list_next(e)){
+	
+		struct segment *seg = list_entry(e, struct segement, seg_elem);
+		
+		//if segment matches
+		if(seg_off <= ta && ta < seg_off + seg->length){
+		
+			
+			//insert page into this segment
+			list_push_back(&seg->pages, &page->page_elem);
+			succ = true;
+			return succ;
+		}
+		
+		seg_off = seg_off + seg->length;
+		
+	}
+
 	return succ;
 }
 
@@ -113,10 +192,27 @@ vm_evict_frame (void) {
 static struct frame *
 vm_get_frame (void) {
 	struct frame *frame = NULL;
+	
 	/* TODO: Fill this function. */
+	frame = (struct frame*) malloc(sizeof(struct frame));
 
 	ASSERT (frame != NULL);
 	ASSERT (frame->page == NULL);
+
+	//palloc
+	frame->kva =  palloc_get_page(PAL_USER);
+	
+	//if user pool is fully
+	if(frame->kva == NULL){
+		PANIC("vm_get_frame: todo");
+	}
+
+	//setting members
+	frame->page = NULL;
+
+	//add this frame into frame_table
+	list_push_back(&frame_table, &frame->frame_elem);
+
 	return frame;
 }
 
@@ -154,8 +250,11 @@ vm_dealloc_page (struct page *page) {
 bool
 vm_claim_page (void *va UNUSED) {
 	struct page *page = NULL;
+	
 	/* TODO: Fill this function */
-
+	page = spt_find_page(&thread_current()->spt, va);
+	if(page == NULL) return false;
+	
 	return vm_do_claim_page (page);
 }
 
@@ -169,6 +268,9 @@ vm_do_claim_page (struct page *page) {
 	page->frame = frame;
 
 	/* TODO: Insert page table entry to map page's VA to frame's PA. */
+	
+	//make a mapping of pml4 from page to frame
+	if(!install_page(page->va, frame->kva, page->writable)) return false;
 
 	return swap_in (page, frame->kva);
 }
@@ -178,6 +280,7 @@ void
 supplemental_page_table_init (struct supplemental_page_table *spt UNUSED) {
 
 	list_init(&spt->segments);
+	return;
 }
 
 /* Copy supplemental page table from src to dst */

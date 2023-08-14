@@ -46,6 +46,8 @@ struct page {
 	struct frame *frame;   /* Back reference for frame */
 
 	/* Your implementation */
+	struct list_elem page_elem;
+	bool writable;
 
 	/* Per-type data are binded into the union.
 	 * Each function automatically detects the current union */
@@ -63,6 +65,7 @@ struct page {
 struct frame {
 	void *kva;
 	struct page *page;
+	struct list_elem frame_elem;
 };
 
 /* The function table for page operations.
@@ -90,7 +93,8 @@ struct segment {
 	uint32_t start; //starting point of segment
 	uint32_t length; //length of variable information(not include align info)
 	struct list_elem seg_elem; //to manage segment into list element
-	bool writable; 
+	bool writable;
+	struct list pages; //pages in this segment
 }
 struct supplemental_page_table {
 	struct list segments;
