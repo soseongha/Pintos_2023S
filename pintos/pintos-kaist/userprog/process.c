@@ -21,7 +21,6 @@
 #ifdef VM
 #include "vm/vm.h"
 #endif
-
 #define PAGE_SIZE 4096
 
 static void process_cleanup (void);
@@ -245,6 +244,7 @@ process_exec (void *f_name) {
 
 	/* And then load the binary */
 	success = load (file_name, &_if);
+
 
 	/* If load failed, quit. */
 	palloc_free_page (file_name);
@@ -562,7 +562,10 @@ load (const char *file_name, struct intr_frame *if_) {
 done:
 	/* We arrive here whether the load is successful or not. */
 	//file_close (file);
-	
+	printf("[load] success value is %d\n", success);
+	if(success) printf("success!\n");
+	else printf("fail\n");
+
 	return success;
 }
 
@@ -777,6 +780,8 @@ lazy_load_segment (struct page *page, void *aux) {
  *
  * Return true if successful, false if a memory allocation error
  * or disk read error occurs. */
+
+
 static bool
 load_segment (struct file *file, off_t ofs, uint8_t *upage,
 		uint32_t read_bytes, uint32_t zero_bytes, bool writable) {
@@ -784,27 +789,22 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 	ASSERT (pg_ofs (upage) == 0);
 	ASSERT (ofs % PGSIZE == 0);
 
+	printf("[load_segment] start\n");
+
 	/* TODO: Set up aux to pass information to the lazy_load_segment. */
 	void *aux = NULL;
-
-	//setting aux to struct segment
-	struct segment *seg = malloc(sizeof(struct segment));
-	seg->file = file;
-	seg->offset = ofs;
-	seg->upage = upage;
-	seg->read_bytes = read_bytes;
-	seg->zero_bytes = zero_bytes;
-	seg->writable = writable;
 	
-	list_push_back(&thread_current()->spt.segments, &seg->seg_elem);
-	list_init(&seg->pages);
+	//setting aux to struct segment 
+	struct segment *seg = NULL;
+	init_segment(seg, file, ofs, upage, read_bytes, zero_bytes, writable);
+
 
 	while (read_bytes > 0 || zero_bytes > 0) {
 		/* Do calculate how to fill this page.
 		 * We will read PAGE_READ_BYTES bytes from FILE
 		 * and zero the final PAGE_ZERO_BYTES bytes. */
-		//size_t page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
-		//size_t page_zero_bytes = PGSIZE - page_read_bytes;
+		size_t page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
+		size_t page_zero_bytes = PGSIZE - page_read_bytes;
 
 		//aux is seg!
 		if (!vm_alloc_page_with_initializer (VM_ANON, upage,
@@ -812,10 +812,11 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 			return false;
 
 		/* Advance. */
-		//read_bytes -= page_read_bytes;
-		//zero_bytes -= page_zero_bytes;
+		read_bytes -= page_read_bytes;
+		zero_bytes -= page_zero_bytes;
 		upage += PGSIZE;
 	}
+	printf("[load_segment] end\n");
 	return true;
 }
 
@@ -829,6 +830,21 @@ setup_stack (struct intr_frame *if_) {
 	 * TODO: If success, set the rsp accordingly.
 	 * TODO: You should mark the page is stack. */
 	/* TODO: Your code goes here */
+	
+
+
+	uint8_t *kpage;
+	bool success = false;
+
+	kpage = palloc_get_page (PAL_USER | PAL_ZERO);
+	if (kpage != NULL) {
+		success = install_page (((uint8_t *) USER_STACK) - PGSIZE, kpage, true);
+		if (success)
+			if_->rsp = USER_STACK;
+		else
+			palloc_free_page (kpage);
+	}
+	return success;
 
 	return success;
 }

@@ -52,7 +52,7 @@ bool
 vm_alloc_page_with_initializer (enum vm_type type, void *upage, bool writable,
 		vm_initializer *init, void *aux) {
 
-	ASSERT (VM_TYPE(type) != VM_UNINIT)
+	ASSERT (VM_TYPE(type) != VM_UNINIT);
 
 	struct supplemental_page_table *spt = &thread_current ()->spt;
 
@@ -65,7 +65,7 @@ vm_alloc_page_with_initializer (enum vm_type type, void *upage, bool writable,
 		/* TODO: Insert the page into the spt. */
 
 		//create a page
-		struct page *page = (struct page*)malloc(sizeof(struct page));
+		struct page *page = malloc(sizeof(struct page));
 
 		//make page to uninit page using uninit_new
 		if(VM_TYPE(type) == VM_ANON){
@@ -317,4 +317,22 @@ void
 supplemental_page_table_kill (struct supplemental_page_table *spt UNUSED) {
 	/* TODO: Destroy all the supplemental_page_table hold by thread and
 	 * TODO: writeback all the modified contents to the storage. */
+}
+
+bool init_segment(struct segment *seg, struct file *file, off_t ofs, uint8_t
+		*upage, uint32_t read_bytes, uint32_t zero_bytes, bool writable){
+
+		
+	seg = malloc(sizeof(struct segment));
+
+	seg->file = file;
+	seg->offset = ofs;
+	seg->upage = upage;
+	seg->read_bytes = read_bytes;
+	seg->zero_bytes = zero_bytes;
+	seg->writable = writable;
+	
+	list_push_back(&thread_current()->spt.segments, &seg->seg_elem);
+	list_init(&seg->pages);
+
 }
