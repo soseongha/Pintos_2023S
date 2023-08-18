@@ -113,7 +113,7 @@ spt_find_page (struct supplemental_page_table *spt UNUSED, void *va UNUSED) {
 		struct segment *seg = list_entry(e, struct segment, seg_elem);
 
 		//if segment matches
-		if(*seg->upage <= va && va < *seg->upage + seg->read_bytes + seg->zero_bytes){
+		if(seg->upage <= va && va < seg->upage + seg->read_bytes + seg->zero_bytes){
 		
 			//search page in this segment
 			if(list_empty(&seg->pages)) return NULL;
@@ -157,7 +157,7 @@ spt_insert_page (struct supplemental_page_table *spt UNUSED,
 		struct segment *seg = list_entry(e, struct segment, seg_elem);
 		
 		//if segment matches
-		if(*seg->upage <= va && va < *seg->upage + seg->read_bytes +
+		if(seg->upage <= va && va < seg->upage + seg->read_bytes +
 				seg->zero_bytes){
 		
 			
