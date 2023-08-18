@@ -18,15 +18,73 @@ $
 
 # 명령 행 히스토리 (새것부터 오래된 것 순):
 :wq
-|2,0,1692032989,,"wq"
+|2,0,1692366144,,"wq"
+:w
+|2,0,1692366074,,"w"
+:cs find 1 vm_alloc_page_with_initializer
+|2,0,1692365741,,"cs find 1 vm_alloc_page_with_initializer"
+:cs find 1 page
+|2,0,1692365730,,"cs find 1 page"
+:cs find 1 load
+|2,0,1692365552,,"cs find 1 load"
+:cs find 1 load_segment
+|2,0,1692365466,,"cs find 1 load_segment"
+:cs find 3 supplemental_page_table_init
+|2,0,1692365008,,"cs find 3 supplemental_page_table_init"
+:cs find 1 init_thread
+|2,0,1692364988,,"cs find 1 init_thread"
+:cs find 1 thread_init
+|2,0,1692364979,,"cs find 1 thread_init"
+:cs find 1 spt
+|2,0,1692364718,,"cs find 1 spt"
+:cs find thread_init
+|2,0,1692364539,,"cs find thread_init"
+:cs find 1 main
+|2,0,1692357362,,"cs find 1 main"
+:q
+|2,0,1692349538,,"q"
+:cs find 1 vm_init
+|2,0,1692349412,,"cs find 1 vm_init"
+:cs find 1 vm_claim_page
+|2,0,1692349174,,"cs find 1 vm_claim_page"
+:cs find 1 uninit_new
+|2,0,1692348597,,"cs find 1 uninit_new"
+:cs find 1 init
+|2,0,1692348535,,"cs find 1 init"
+:cs find 1 vm_anon_init
+|2,0,1692348302,,"cs find 1 vm_anon_init"
+:cs infd 1 uninit_new
+|2,0,1692348095,,"cs infd 1 uninit_new"
+:cs find 1 anon_page
+|2,0,1692347766,,"cs find 1 anon_page"
+:cs find 1 anon_new
+|2,0,1692347746,,"cs find 1 anon_new"
+:cs find 0 malloc
+|2,0,1692347359,,"cs find 0 malloc"
+:cs find 0 palloc_page
+|2,0,1692347127,,"cs find 0 palloc_page"
+:cs find 0 palloc
+|2,0,1692347122,,"cs find 0 palloc"
+:cs find 1 palloc
+|2,0,1692347114,,"cs find 1 palloc"
+:cs find 3 page
+|2,0,1692347072,,"cs find 3 page"
+:cs find 1 vm_try_handle_fault
+|2,0,1692346926,,"cs find 1 vm_try_handle_fault"
+:cs find 1 VM_TYPE
+|2,0,1692346911,,"cs find 1 VM_TYPE"
+:cs find 1 uninit_page
+|2,0,1692345709,,"cs find 1 uninit_page"
+:cs find 1 page_fault
+|2,0,1692345390,,"cs find 1 page_fault"
+:cs find 1 uninit_initialize
+|2,0,1692345019,,"cs find 1 uninit_initialize"
+:!
+|2,0,1692344365,,"!"
 :cs find 1 supplemental_page_table_init
 |2,0,1692032873,,"cs find 1 supplemental_page_table_init"
-:w
-|2,0,1692032860,,"w"
 :cs find 1 install_page
 |2,0,1692032720,,"cs find 1 install_page"
-:q
-|2,0,1692032448,,"q"
 :cs find 1 block
 |2,0,1692032443,,"cs find 1 block"
 :cs find 3 list_entry
@@ -59,64 +117,6 @@ $
 |2,0,1691430527,,"cs find 0 list_push_back"
 :cs find 1 spt_insert_page
 |2,0,1691430228,,"cs find 1 spt_insert_page"
-:cs find 2 spt_insert_page
-|2,0,1691430224,,"cs find 2 spt_insert_page"
-:cs find 3 spt_insert_page
-|2,0,1691430219,,"cs find 3 spt_insert_page"
-:cs find 0 writable
-|2,0,1691430190,,"cs find 0 writable"
-:cs find 1 writable
-|2,0,1691430167,,"cs find 1 writable"
-:cs find 3 spt_remove_page
-|2,0,1691430109,,"cs find 3 spt_remove_page"
-:cs find 3 spt_fine_page
-|2,0,1691430099,,"cs find 3 spt_fine_page"
-:cs find 1 list_init
-|2,0,1691429930,,"cs find 1 list_init"
-:cs find 3 spt_remove_page\
-|2,0,1691429863,,"cs find 3 spt_remove_page\\"
-:cs find 3 list_init
-|2,0,1691429838,,"cs find 3 list_init"
-:cs find 3 supplemental_page_table_init
-|2,0,1691429552,,"cs find 3 supplemental_page_table_init"
-:cs find 1 off_t
-|2,0,1691428636,,"cs find 1 off_t"
-:cs find 1 load_segment
-|2,0,1691428604,,"cs find 1 load_segment"
-:cs find 1 segment
-|2,0,1691428478,,"cs find 1 segment"
-:cs find 1 file
-|2,0,1691427377,,"cs find 1 file"
-:cs find 1 file_seek
-|2,0,1691427343,,"cs find 1 file_seek"
-:cs find 3 load_segment
-|2,0,1691426413,,"cs find 3 load_segment"
-:cs find 1 load
-|2,0,1691426382,,"cs find 1 load"
-:cs find 0 USERPROG
-|2,0,1691248532,,"cs find 0 USERPROG"
-:cs find 1 USERPROG
-|2,0,1691248491,,"cs find 1 USERPROG"
-:cs find 1 SUERPROG
-|2,0,1691248479,,"cs find 1 SUERPROG"
-:cs find 1 thread_create
-|2,0,1691247995,,"cs find 1 thread_create"
-:cs find 1 thread_init
-|2,0,1691247538,,"cs find 1 thread_init"
-:cs find 1 syscall_handler
-|2,0,1691246763,,"cs find 1 syscall_handler"
-:cs find 1 dir_lookup
-|2,0,1691245538,,"cs find 1 dir_lookup"
-:cs find dir_lookup
-|2,0,1691245535,,"cs find dir_lookup"
-:cs find 1 filesys_open
-|2,0,1691245528,,"cs find 1 filesys_open"
-:cs find file_open
-|2,0,1691245512,,"cs find file_open"
-:cs find 1 process_exec
-|2,0,1691244229,,"cs find 1 process_exec"
-:cs find 1 lookup
-|2,0,1691237064,,"cs find 1 lookup"
 
 # 찾을 문자열 히스토리 (새것부터 오래된 것 순):
 ?//
@@ -138,39 +138,58 @@ $
 
 # 레지스터:
 "0	CHAR	0
-	static bool
-	install_page (void *upage, void *kpage, bool writable) {
-		struct thread *t = thread_current ();
-	
-		/* Verify that there's not already a page at that virtual
-		 * address, then map our page there. */
-		return (pml4_get_page (t->pml4, upage) == NULL
-				&& pml4_set_page (t->pml4, upage, kpage, writable));
-	}
-|3,0,0,0,9,0,1692032868,"static bool","install_page (void *upage, void *kpage, bool writable) {","	struct thread *t = thread_current ();","","	/* Verify that there's not already a page at that virtual","	 * address, then map our page there. */","	return (pml4_get_page (t->pml4, upage) == NULL","			&& pml4_set_page (t->pml4, upage, kpage, writable));","}"
-""1	CHAR	0
-	static bool
-	install_page (void *upage, void *kpage, bool writable) {
-		struct thread *t = thread_current ();
-	
-		/* Verify that there's not already a page at that virtual
-		 * address, then map our page there. */
-		return (pml4_get_page (t->pml4, upage) == NULL
-				&& pml4_set_page (t->pml4, upage, kpage, writable));
-	}
-|3,1,1,0,9,0,1692032905,"static bool","install_page (void *upage, void *kpage, bool writable) {","	struct thread *t = thread_current ();","","	/* Verify that there's not already a page at that virtual","	 * address, then map our page there. */","	return (pml4_get_page (t->pml4, upage) == NULL","			&& pml4_set_page (t->pml4, upage, kpage, writable));","}"
+	*seg->upage <= va && va < *seg->upage + seg->read_bytes + seg->zero_bytes
+|3,0,0,0,1,0,1692366029,"*seg->upage <= va && va < *seg->upage + seg->read_bytes + seg->zero_bytes"
+"1	CHAR	0
+	//mewly added in PA3
+	#ifdef VM
+		list_init(&t->spt.segments);
+	#endif
+|3,0,1,0,4,0,1692365001,"//mewly added in PA3","#ifdef VM","	list_init(&t->spt.segments);","#endif"
 "2	CHAR	0
+	
+			/* TODO: Set up aux to pass information to the lazy_load_segment. */
+			void *aux = NULL;
+	
+			//setting aux to struct segment
+			struct segment *seg = malloc(sizeof(struct segment));
+			seg->file = file;
+			seg->offset = ofs;
+			seg->length = read_bytes + zero_bytes;
+			seg->writable = writable;
+	
+	
+|3,0,2,0,12,0,1692363966,"","		/* TODO: Set up aux to pass information to the lazy_load_segment. */","		void *aux = NULL;","","		//setting aux to struct segment","		struct segment *seg = malloc(sizeof(struct segment));","		seg->file = file;","		seg->offset = ofs;","		seg->length = read_bytes + zero_bytes;","		seg->writable = writable;","",""
+"3	CHAR	0
+	uninit_new (struct page *page, void *va, vm_initializer *init,
+			enum vm_type type, void *aux,
+			bool (*initializer)(struct page *, enum vm_type, void *)) 
+	
+	
+|3,0,3,0,5,0,1692348341,"uninit_new (struct page *page, void *va, vm_initializer *init,","		enum vm_type type, void *aux,","		bool (*initializer)(struct page *, enum vm_type, void *)) ","",""
+"4	CHAR	0
+	static bool
+	install_page (void *upage, void *kpage, bool writable) {
+		struct thread *t = thread_current ();
+	
+		/* Verify that there's not already a page at that virtual
+		 * address, then map our page there. */
+		return (pml4_get_page (t->pml4, upage) == NULL
+				&& pml4_set_page (t->pml4, upage, kpage, writable));
+	}
+|3,0,4,0,9,0,1692032905,"static bool","install_page (void *upage, void *kpage, bool writable) {","	struct thread *t = thread_current ();","","	/* Verify that there's not already a page at that virtual","	 * address, then map our page there. */","	return (pml4_get_page (t->pml4, upage) == NULL","			&& pml4_set_page (t->pml4, upage, kpage, writable));","}"
+"5	CHAR	0
 	
 		ASSERT (frame != NULL);
 		ASSERT (frame->page == NULL);
 	
-|3,0,2,0,4,0,1692029181,"","	ASSERT (frame != NULL);","	ASSERT (frame->page == NULL);",""
-"3	CHAR	0
+|3,0,5,0,4,0,1692029181,"","	ASSERT (frame != NULL);","	ASSERT (frame->page == NULL);",""
+"6	CHAR	0
 		bool succ = _find_va_to_segment(va, seg);
 			if(succ) return page;
 	
-|3,0,3,0,3,0,1692022861,"	bool succ = _find_va_to_segment(va, seg);","		if(succ) return page;",""
-"4	CHAR	0
+|3,0,6,0,3,0,1692022861,"	bool succ = _find_va_to_segment(va, seg);","		if(succ) return page;",""
+"7	CHAR	0
 	printf("file_name: %s\n", file_name);
 	
 		fn =  strtok_r(file_name, delim, &next);
@@ -187,8 +206,8 @@ $
 		printf("[load] tokenized\n");
 		printf("fn: %s\n", fn);
 	
-|3,0,4,0,16,0,1691244330,"printf(\"file_name: %s\\n\", file_name);","","	fn =  strtok_r(file_name, delim, &next);","	args[arg_num] = fn;","	printf(\"strtok one success\\n\");","	while(ret != NULL){","	","		arg_num++;","		ret = strtok_r(NULL, delim, &next);","		args[arg_num] = ret;","		","	}","","	printf(\"[load] tokenized\\n\");","	printf(\"fn: %s\\n\", fn);",""
-"5	CHAR	0
+|3,0,7,0,16,0,1691244330,"printf(\"file_name: %s\\n\", file_name);","","	fn =  strtok_r(file_name, delim, &next);","	args[arg_num] = fn;","	printf(\"strtok one success\\n\");","	while(ret != NULL){","	","		arg_num++;","		ret = strtok_r(NULL, delim, &next);","		args[arg_num] = ret;","		","	}","","	printf(\"[load] tokenized\\n\");","	printf(\"fn: %s\\n\", fn);",""
+"8	CHAR	0
 	//parsing
 		if(sizeof(file_name) > PAGE_SIZE) return false;
 		const char *delim = " ";
@@ -200,429 +219,397 @@ $
 	
 		printf("[load] parsing prepare\n");
 	
-|3,0,5,0,11,0,1691244312,"//parsing","	if(sizeof(file_name) > PAGE_SIZE) return false;","	const char *delim = \" \";","	char *ret;","	char *next;","	char *fn;","	char *args[128]; //argument list","	int arg_num = 0; //argument number","","	printf(\"[load] parsing prepare\\n\");",""
-"6	CHAR	0
-	if(inode == NULL) printf("inode NULL\n");
-		if(file == NULL) printf("file NULL\n");
-	
-|3,0,6,0,3,0,1691236825,"if(inode == NULL) printf(\"inode NULL\\n\");","	if(file == NULL) printf(\"file NULL\\n\");",""
-"7	CHAR	0
-	if(inode == NULL) printf("inode NULL\n");
-		if(file == NULL) printf("file NULL\n");
-	
-|3,0,7,0,3,0,1691162086,"if(inode == NULL) printf(\"inode NULL\\n\");","	if(file == NULL) printf(\"file NULL\\n\");",""
-"8	CHAR	0
-		printf("file_name: %s\n", file_name);
-	
-		ret =  strtok_r(file_name, delim, &next);
-		printf("strtok one success\n");
-		while(ret){
-			
-			args[arg_num] = ret;
-			printf("args[%d]: %s\n", arg_num, ret);
-			arg_num++;
-			ret = strtok_r(NULL, delim, &next);
-			
-		}
-	
-		printf("[load] tokenized\n");
-		fn = args[0];
-		printf("fn: %s\n", fn);
-	
-	
-		printf("[load] parsing end\n");
-	
-|3,0,8,0,20,0,1691161531,"	printf(\"file_name: %s\\n\", file_name);","","	ret =  strtok_r(file_name, delim, &next);","	printf(\"strtok one success\\n\");","	while(ret){","		","		args[arg_num] = ret;","		printf(\"args[%d]: %s\\n\", arg_num, ret);","		arg_num++;","		ret = strtok_r(NULL, delim, &next);","		","	}","","	printf(\"[load] tokenized\\n\");","	fn = args[0];","	printf(\"fn: %s\\n\", fn);","","","	printf(\"[load] parsing end\\n\");",""
+|3,0,8,0,11,0,1691244312,"//parsing","	if(sizeof(file_name) > PAGE_SIZE) return false;","	const char *delim = \" \";","	char *ret;","	char *next;","	char *fn;","	char *args[128]; //argument list","	int arg_num = 0; //argument number","","	printf(\"[load] parsing prepare\\n\");",""
 "9	CHAR	0
-		//And, check synchronization!
-		
-|3,0,9,0,2,0,1690813681,"	//And, check synchronization!","	"
-"-	CHAR	0
-	s
-|3,0,36,0,1,0,1691154308,"s"
+	if(inode == NULL) printf("inode NULL\n");
+		if(file == NULL) printf("file NULL\n");
+	
+|3,0,9,0,3,0,1691236825,"if(inode == NULL) printf(\"inode NULL\\n\");","	if(file == NULL) printf(\"file NULL\\n\");",""
+""-	CHAR	0
+	seg_off <= ta && ta < seg_off + seg->read_bytes + seg->zero_bytes)
+|3,1,36,0,1,0,1692366043,"seg_off <= ta && ta < seg_off + seg->read_bytes + seg->zero_bytes)"
 
 # 파일 마크:
-'0  5  0  ~/.gitignore
-|4,48,5,0,1692032989,"~/.gitignore"
-'1  271  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,49,271,0,1692032934,"~/pintos/pintos-kaist/vm/vm.c"
-'2  143  47  ~/pintos/pintos-kaist/vm/vm.c
-|4,50,143,47,1692032484,"~/pintos/pintos-kaist/vm/vm.c"
-'3  142  47  ~/pintos/pintos-kaist/vm/vm.c
-|4,51,142,47,1692032484,"~/pintos/pintos-kaist/vm/vm.c"
-'4  56  0  ~/pintos/pintos-kaist/threads/malloc.c
-|4,52,56,0,1692032448,"~/pintos/pintos-kaist/threads/malloc.c"
-'5  113  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,53,113,0,1692032173,"~/pintos/pintos-kaist/vm/vm.c"
-'6  113  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,54,113,0,1692032173,"~/pintos/pintos-kaist/vm/vm.c"
-'7  113  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,55,113,0,1692032173,"~/pintos/pintos-kaist/vm/vm.c"
-'8  113  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,56,113,0,1692032173,"~/pintos/pintos-kaist/vm/vm.c"
-'9  112  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,57,112,0,1692032173,"~/pintos/pintos-kaist/vm/vm.c"
+'0  64  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,48,64,0,1692366144,"~/pintos/pintos-kaist/vm/vm.c"
+'1  778  31  ~/pintos/pintos-kaist/userprog/process.c
+|4,49,778,31,1692349538,"~/pintos/pintos-kaist/userprog/process.c"
+'2  765  31  ~/pintos/pintos-kaist/userprog/process.c
+|4,50,765,31,1692349538,"~/pintos/pintos-kaist/userprog/process.c"
+'3  33  30  ~/pintos/pintos-kaist/vm/vm.c
+|4,51,33,30,1692344368,"~/pintos/pintos-kaist/vm/vm.c"
+'4  32  30  ~/pintos/pintos-kaist/vm/vm.c
+|4,52,32,30,1692344368,"~/pintos/pintos-kaist/vm/vm.c"
+'5  33  30  ~/pintos/pintos-kaist/vm/vm.c
+|4,53,33,30,1692344368,"~/pintos/pintos-kaist/vm/vm.c"
+'6  32  30  ~/pintos/pintos-kaist/vm/vm.c
+|4,54,32,30,1692344368,"~/pintos/pintos-kaist/vm/vm.c"
+'7  5  0  ~/.gitignore
+|4,55,5,0,1692032989,"~/.gitignore"
+'8  283  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,56,283,0,1692032934,"~/pintos/pintos-kaist/vm/vm.c"
+'9  283  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,57,283,0,1692032934,"~/pintos/pintos-kaist/vm/vm.c"
 
 # 점프목록 (새것이 먼저):
+-'  64  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,64,0,1692366144,"~/pintos/pintos-kaist/vm/vm.c"
+-'  161  8  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,161,8,1692366013,"~/pintos/pintos-kaist/vm/vm.c"
+-'  43  1  ~/pintos/pintos-kaist/include/vm/vm.h
+|4,39,43,1,1692365741,"~/pintos/pintos-kaist/include/vm/vm.h"
+-'  46  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,46,0,1692365732,"~/pintos/pintos-kaist/vm/vm.c"
+-'  746  1  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,746,1,1692365709,"~/pintos/pintos-kaist/userprog/process.c"
+-'  95  62  ~/pintos/pintos-kaist/include/vm/vm.h
+|4,39,95,62,1692365552,"~/pintos/pintos-kaist/include/vm/vm.h"
+-'  715  1  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,715,1,1692365493,"~/pintos/pintos-kaist/userprog/process.c"
+-'  758  19  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,758,19,1692365449,"~/pintos/pintos-kaist/userprog/process.c"
+-'  58  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,58,0,1692365048,"~/pintos/pintos-kaist/vm/vm.c"
+-'  536  0  ~/pintos/pintos-kaist/threads/thread.c
+|4,39,536,0,1692365015,"~/pintos/pintos-kaist/threads/thread.c"
+-'  96  3  ~/pintos/pintos-kaist/threads/thread.c
+|4,39,96,3,1692364988,"~/pintos/pintos-kaist/threads/thread.c"
+-'  64  0  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,64,0,1692364979,"~/pintos/pintos-kaist/userprog/process.c"
+-'  285  10  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,285,10,1692364953,"~/pintos/pintos-kaist/vm/vm.c"
+-'  133  4  ~/pintos/pintos-kaist/include/threads/thread.h
+|4,39,133,4,1692364741,"~/pintos/pintos-kaist/include/threads/thread.h"
+-'  535  51  ~/pintos/pintos-kaist/threads/thread.c
+|4,39,535,51,1692364718,"~/pintos/pintos-kaist/threads/thread.c"
+-'  119  0  ~/pintos/pintos-kaist/include/threads/thread.h
+|4,39,119,0,1692364652,"~/pintos/pintos-kaist/include/threads/thread.h"
+-'  103  1  ~/pintos/pintos-kaist/include/threads/thread.h
+|4,39,103,1,1692364543,"~/pintos/pintos-kaist/include/threads/thread.h"
+-'  44  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,44,0,1692364521,"~/pintos/pintos-kaist/vm/vm.c"
+-'  97  20  ~/pintos/pintos-kaist/include/vm/vm.h
+|4,39,97,20,1692364510,"~/pintos/pintos-kaist/include/vm/vm.h"
+-'  775  1  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,775,1,1692364441,"~/pintos/pintos-kaist/userprog/process.c"
+-'  764  0  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,764,0,1692364174,"~/pintos/pintos-kaist/userprog/process.c"
+-'  766  1  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,766,1,1692364174,"~/pintos/pintos-kaist/userprog/process.c"
+-'  136  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,136,0,1692363555,"~/pintos/pintos-kaist/vm/vm.c"
+-'  772  0  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,772,0,1692362898,"~/pintos/pintos-kaist/userprog/process.c"
+-'  777  15  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,777,15,1692361909,"~/pintos/pintos-kaist/userprog/process.c"
+-'  131  0  ~/pintos/pintos-kaist/threads/init.c
+|4,39,131,0,1692357401,"~/pintos/pintos-kaist/threads/init.c"
+-'  1  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,1,0,1692357368,"~/pintos/pintos-kaist/vm/vm.c"
+-'  778  31  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,778,31,1692349538,"~/pintos/pintos-kaist/userprog/process.c"
+-'  765  31  ~/pintos/pintos-kaist/userprog/process.c
+|4,39,765,31,1692349538,"~/pintos/pintos-kaist/userprog/process.c"
+-'  26  24  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,26,24,1692349456,"~/pintos/pintos-kaist/vm/vm.c"
+-'  26  24  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,26,24,1692349456,"~/pintos/pintos-kaist/vm/vm.c"
+-'  266  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,266,0,1692349412,"~/pintos/pintos-kaist/vm/vm.c"
+-'  276  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,276,0,1692349412,"~/pintos/pintos-kaist/vm/vm.c"
+-'  33  21  ~/pintos/pintos-kaist/vm/uninit.c
+|4,39,33,21,1692349174,"~/pintos/pintos-kaist/vm/uninit.c"
+-'  33  21  ~/pintos/pintos-kaist/vm/uninit.c
+|4,39,33,21,1692349174,"~/pintos/pintos-kaist/vm/uninit.c"
+-'  14  1  ~/pintos/pintos-kaist/include/vm/uninit.h
+|4,39,14,1,1692348597,"~/pintos/pintos-kaist/include/vm/uninit.h"
+-'  14  1  ~/pintos/pintos-kaist/include/vm/uninit.h
+|4,39,14,1,1692348597,"~/pintos/pintos-kaist/include/vm/uninit.h"
+-'  47  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,47,0,1692348537,"~/pintos/pintos-kaist/vm/vm.c"
+-'  47  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,47,0,1692348537,"~/pintos/pintos-kaist/vm/vm.c"
+-'  22  0  ~/pintos/pintos-kaist/vm/anon.c
+|4,39,22,0,1692348321,"~/pintos/pintos-kaist/vm/anon.c"
+-'  22  0  ~/pintos/pintos-kaist/vm/anon.c
+|4,39,22,0,1692348321,"~/pintos/pintos-kaist/vm/anon.c"
+-'  73  53  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,73,53,1692348302,"~/pintos/pintos-kaist/vm/vm.c"
+-'  73  53  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,73,53,1692348302,"~/pintos/pintos-kaist/vm/vm.c"
+-'  28  0  ~/pintos/pintos-kaist/vm/uninit.c
+|4,39,28,0,1692348251,"~/pintos/pintos-kaist/vm/uninit.c"
+-'  28  0  ~/pintos/pintos-kaist/vm/uninit.c
+|4,39,28,0,1692348251,"~/pintos/pintos-kaist/vm/uninit.c"
+-'  27  0  ~/pintos/pintos-kaist/vm/uninit.c
+|4,39,27,0,1692347967,"~/pintos/pintos-kaist/vm/uninit.c"
+-'  27  0  ~/pintos/pintos-kaist/vm/uninit.c
+|4,39,27,0,1692347967,"~/pintos/pintos-kaist/vm/uninit.c"
+-'  77  15  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,77,15,1692347956,"~/pintos/pintos-kaist/vm/vm.c"
+-'  77  15  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,77,15,1692347956,"~/pintos/pintos-kaist/vm/vm.c"
+-'  36  49  ~/pintos/pintos-kaist/vm/anon.c
+|4,39,36,49,1692347926,"~/pintos/pintos-kaist/vm/anon.c"
+-'  36  49  ~/pintos/pintos-kaist/vm/anon.c
+|4,39,36,49,1692347926,"~/pintos/pintos-kaist/vm/anon.c"
+-'  7  0  ~/pintos/pintos-kaist/include/vm/anon.h
+|4,39,7,0,1692347807,"~/pintos/pintos-kaist/include/vm/anon.h"
+-'  7  0  ~/pintos/pintos-kaist/include/vm/anon.h
+|4,39,7,0,1692347807,"~/pintos/pintos-kaist/include/vm/anon.h"
+-'  8  0  ~/pintos/pintos-kaist/include/threads/malloc.h
+|4,39,8,0,1692347393,"~/pintos/pintos-kaist/include/threads/malloc.h"
+-'  8  0  ~/pintos/pintos-kaist/include/threads/malloc.h
+|4,39,8,0,1692347393,"~/pintos/pintos-kaist/include/threads/malloc.h"
+-'  31  44  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,31,44,1692347377,"~/pintos/pintos-kaist/vm/vm.c"
+-'  31  44  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,31,44,1692347377,"~/pintos/pintos-kaist/vm/vm.c"
+-'  98  0  ~/pintos/pintos-kaist/include/vm/vm.h
+|4,39,98,0,1692347016,"~/pintos/pintos-kaist/include/vm/vm.h"
+-'  97  0  ~/pintos/pintos-kaist/include/vm/vm.h
+|4,39,97,0,1692347016,"~/pintos/pintos-kaist/include/vm/vm.h"
+-'  49  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,49,0,1692346972,"~/pintos/pintos-kaist/vm/vm.c"
+-'  49  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,49,0,1692346972,"~/pintos/pintos-kaist/vm/vm.c"
+-'  37  0  ~/pintos/pintos-kaist/include/vm/vm.h
+|4,39,37,0,1692346926,"~/pintos/pintos-kaist/include/vm/vm.h"
+-'  37  0  ~/pintos/pintos-kaist/include/vm/vm.h
+|4,39,37,0,1692346926,"~/pintos/pintos-kaist/include/vm/vm.h"
+-'  69  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,69,0,1692346911,"~/pintos/pintos-kaist/vm/vm.c"
+-'  69  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,69,0,1692346911,"~/pintos/pintos-kaist/vm/vm.c"
+-'  97  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,97,0,1692346702,"~/pintos/pintos-kaist/vm/vm.c"
+-'  97  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,97,0,1692346702,"~/pintos/pintos-kaist/vm/vm.c"
+-'  62  36  ~/pintos/pintos-kaist/vm/uninit.c
+|4,39,62,36,1692346546,"~/pintos/pintos-kaist/vm/uninit.c"
+-'  62  36  ~/pintos/pintos-kaist/vm/uninit.c
+|4,39,62,36,1692346546,"~/pintos/pintos-kaist/vm/uninit.c"
+-'  12  0  ~/pintos/pintos-kaist/include/vm/uninit.h
+|4,39,12,0,1692345754,"~/pintos/pintos-kaist/include/vm/uninit.h"
+-'  12  0  ~/pintos/pintos-kaist/include/vm/uninit.h
+|4,39,12,0,1692345754,"~/pintos/pintos-kaist/include/vm/uninit.h"
+-'  88  3  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,88,3,1692345648,"~/pintos/pintos-kaist/vm/vm.c"
+-'  88  3  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,88,3,1692345648,"~/pintos/pintos-kaist/vm/vm.c"
+-'  134  0  ~/pintos/pintos-kaist/userprog/exception.c
+|4,39,134,0,1692345408,"~/pintos/pintos-kaist/userprog/exception.c"
+-'  134  0  ~/pintos/pintos-kaist/userprog/exception.c
+|4,39,134,0,1692345408,"~/pintos/pintos-kaist/userprog/exception.c"
+-'  219  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,219,0,1692345390,"~/pintos/pintos-kaist/vm/vm.c"
+-'  229  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,229,0,1692345390,"~/pintos/pintos-kaist/vm/vm.c"
+-'  142  0  ~/pintos/pintos-kaist/userprog/exception.c
+|4,39,142,0,1692345363,"~/pintos/pintos-kaist/userprog/exception.c"
+-'  142  0  ~/pintos/pintos-kaist/userprog/exception.c
+|4,39,142,0,1692345363,"~/pintos/pintos-kaist/userprog/exception.c"
+-'  65  47  ~/pintos/pintos-kaist/vm/uninit.c
+|4,39,65,47,1692345341,"~/pintos/pintos-kaist/vm/uninit.c"
+-'  65  47  ~/pintos/pintos-kaist/vm/uninit.c
+|4,39,65,47,1692345341,"~/pintos/pintos-kaist/vm/uninit.c"
+-'  60  11  ~/pintos/pintos-kaist/include/vm/vm.h
+|4,39,60,11,1692344834,"~/pintos/pintos-kaist/include/vm/vm.h"
+-'  60  11  ~/pintos/pintos-kaist/include/vm/vm.h
+|4,39,60,11,1692344834,"~/pintos/pintos-kaist/include/vm/vm.h"
+-'  13  5  ~/pintos/pintos-kaist/include/vm/anon.h
+|4,39,13,5,1692344458,"~/pintos/pintos-kaist/include/vm/anon.h"
+-'  13  5  ~/pintos/pintos-kaist/include/vm/anon.h
+|4,39,13,5,1692344458,"~/pintos/pintos-kaist/include/vm/anon.h"
+-'  1  0  ~/pintos/pintos-kaist/vm/anon.c
+|4,39,1,0,1692344386,"~/pintos/pintos-kaist/vm/anon.c"
+-'  1  0  ~/pintos/pintos-kaist/vm/anon.c
+|4,39,1,0,1692344386,"~/pintos/pintos-kaist/vm/anon.c"
+-'  33  30  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,33,30,1692344368,"~/pintos/pintos-kaist/vm/vm.c"
+-'  32  30  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,32,30,1692344368,"~/pintos/pintos-kaist/vm/vm.c"
+-'  33  30  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,33,30,1692344368,"~/pintos/pintos-kaist/vm/vm.c"
+-'  32  30  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,32,30,1692344368,"~/pintos/pintos-kaist/vm/vm.c"
+-'  1  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,1,0,1692343540,"~/pintos/pintos-kaist/vm/vm.c"
+-'  1  0  ~/pintos/pintos-kaist/vm/vm.c
+|4,39,1,0,1692343540,"~/pintos/pintos-kaist/vm/vm.c"
 -'  5  0  ~/.gitignore
 |4,39,5,0,1692032989,"~/.gitignore"
--'  1  0  ~/.gitignore
-|4,39,1,0,1692032982,"~/.gitignore"
--'  271  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,271,0,1692032934,"~/pintos/pintos-kaist/vm/vm.c"
--'  271  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,271,0,1692032934,"~/pintos/pintos-kaist/vm/vm.c"
--'  709  0  ~/pintos/pintos-kaist/userprog/process.c
-|4,39,709,0,1692032873,"~/pintos/pintos-kaist/userprog/process.c"
--'  709  0  ~/pintos/pintos-kaist/userprog/process.c
-|4,39,709,0,1692032873,"~/pintos/pintos-kaist/userprog/process.c"
--'  9  28  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,9,28,1692032720,"~/pintos/pintos-kaist/vm/vm.c"
--'  9  28  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,9,28,1692032720,"~/pintos/pintos-kaist/vm/vm.c"
--'  1  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,1,0,1692032566,"~/pintos/pintos-kaist/vm/vm.c"
--'  1  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,1,0,1692032566,"~/pintos/pintos-kaist/vm/vm.c"
--'  143  47  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,143,47,1692032484,"~/pintos/pintos-kaist/vm/vm.c"
--'  142  47  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,142,47,1692032484,"~/pintos/pintos-kaist/vm/vm.c"
--'  143  47  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,143,47,1692032484,"~/pintos/pintos-kaist/vm/vm.c"
--'  142  47  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,142,47,1692032484,"~/pintos/pintos-kaist/vm/vm.c"
--'  1  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,1,0,1692032449,"~/pintos/pintos-kaist/vm/vm.c"
--'  1  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,1,0,1692032449,"~/pintos/pintos-kaist/vm/vm.c"
--'  56  0  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,56,0,1692032448,"~/pintos/pintos-kaist/threads/malloc.c"
--'  56  0  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,56,0,1692032448,"~/pintos/pintos-kaist/threads/malloc.c"
--'  56  0  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,56,0,1692032448,"~/pintos/pintos-kaist/threads/malloc.c"
--'  56  0  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,56,0,1692032448,"~/pintos/pintos-kaist/threads/malloc.c"
--'  56  0  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,56,0,1692032448,"~/pintos/pintos-kaist/threads/malloc.c"
--'  56  0  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,56,0,1692032448,"~/pintos/pintos-kaist/threads/malloc.c"
--'  56  0  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,56,0,1692032448,"~/pintos/pintos-kaist/threads/malloc.c"
--'  56  0  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,56,0,1692032448,"~/pintos/pintos-kaist/threads/malloc.c"
--'  139  1  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,139,1,1692032443,"~/pintos/pintos-kaist/threads/malloc.c"
--'  139  1  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,139,1,1692032443,"~/pintos/pintos-kaist/threads/malloc.c"
--'  139  1  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,139,1,1692032443,"~/pintos/pintos-kaist/threads/malloc.c"
--'  139  1  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,139,1,1692032443,"~/pintos/pintos-kaist/threads/malloc.c"
--'  139  1  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,139,1,1692032443,"~/pintos/pintos-kaist/threads/malloc.c"
--'  139  1  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,139,1,1692032443,"~/pintos/pintos-kaist/threads/malloc.c"
--'  139  1  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,139,1,1692032443,"~/pintos/pintos-kaist/threads/malloc.c"
--'  139  1  ~/pintos/pintos-kaist/threads/malloc.c
-|4,39,139,1,1692032443,"~/pintos/pintos-kaist/threads/malloc.c"
--'  119  43  ~/pintos/pintos-kaist/include/lib/kernel/list.h
-|4,39,119,43,1692032418,"~/pintos/pintos-kaist/include/lib/kernel/list.h"
--'  119  43  ~/pintos/pintos-kaist/include/lib/kernel/list.h
-|4,39,119,43,1692032418,"~/pintos/pintos-kaist/include/lib/kernel/list.h"
--'  119  43  ~/pintos/pintos-kaist/include/lib/kernel/list.h
-|4,39,119,43,1692032418,"~/pintos/pintos-kaist/include/lib/kernel/list.h"
--'  119  43  ~/pintos/pintos-kaist/include/lib/kernel/list.h
-|4,39,119,43,1692032418,"~/pintos/pintos-kaist/include/lib/kernel/list.h"
--'  119  43  ~/pintos/pintos-kaist/include/lib/kernel/list.h
-|4,39,119,43,1692032418,"~/pintos/pintos-kaist/include/lib/kernel/list.h"
--'  119  43  ~/pintos/pintos-kaist/include/lib/kernel/list.h
-|4,39,119,43,1692032418,"~/pintos/pintos-kaist/include/lib/kernel/list.h"
--'  119  43  ~/pintos/pintos-kaist/include/lib/kernel/list.h
-|4,39,119,43,1692032418,"~/pintos/pintos-kaist/include/lib/kernel/list.h"
--'  119  43  ~/pintos/pintos-kaist/include/lib/kernel/list.h
-|4,39,119,43,1692032418,"~/pintos/pintos-kaist/include/lib/kernel/list.h"
--'  113  1  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,113,1,1692032300,"~/pintos/pintos-kaist/vm/vm.c"
--'  112  1  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,112,1,1692032300,"~/pintos/pintos-kaist/vm/vm.c"
--'  112  1  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,112,1,1692032300,"~/pintos/pintos-kaist/vm/vm.c"
--'  113  1  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,113,1,1692032300,"~/pintos/pintos-kaist/vm/vm.c"
--'  112  1  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,112,1,1692032300,"~/pintos/pintos-kaist/vm/vm.c"
--'  112  1  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,112,1,1692032300,"~/pintos/pintos-kaist/vm/vm.c"
--'  1  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,1,0,1692032216,"~/pintos/pintos-kaist/vm/vm.c"
--'  1  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,1,0,1692032216,"~/pintos/pintos-kaist/vm/vm.c"
--'  112  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,112,0,1692032173,"~/pintos/pintos-kaist/vm/vm.c"
--'  112  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,112,0,1692032173,"~/pintos/pintos-kaist/vm/vm.c"
--'  1  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,1,0,1692032084,"~/pintos/pintos-kaist/vm/vm.c"
--'  1  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,1,0,1692032084,"~/pintos/pintos-kaist/vm/vm.c"
--'  164  15  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,164,15,1692031978,"~/pintos/pintos-kaist/vm/vm.c"
--'  163  15  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,163,15,1692031978,"~/pintos/pintos-kaist/vm/vm.c"
--'  163  15  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,163,15,1692031978,"~/pintos/pintos-kaist/vm/vm.c"
--'  163  15  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,163,15,1692031978,"~/pintos/pintos-kaist/vm/vm.c"
--'  163  15  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,163,15,1692031978,"~/pintos/pintos-kaist/vm/vm.c"
--'  164  15  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,164,15,1692031978,"~/pintos/pintos-kaist/vm/vm.c"
--'  163  15  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,163,15,1692031978,"~/pintos/pintos-kaist/vm/vm.c"
--'  163  15  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,163,15,1692031978,"~/pintos/pintos-kaist/vm/vm.c"
--'  163  15  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,163,15,1692031978,"~/pintos/pintos-kaist/vm/vm.c"
--'  163  15  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,163,15,1692031978,"~/pintos/pintos-kaist/vm/vm.c"
--'  1  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,1,0,1692031934,"~/pintos/pintos-kaist/vm/vm.c"
--'  1  0  ~/pintos/pintos-kaist/vm/vm.c
-|4,39,1,0,1692031934,"~/pintos/pintos-kaist/vm/vm.c"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
--'  7  0  ~/pintos/pintos-kaist/include/vm/vm.h
-|4,39,7,0,1692031794,"~/pintos/pintos-kaist/include/vm/vm.h"
+-'  5  0  ~/.gitignore
+|4,39,5,0,1692032989,"~/.gitignore"
+-'  5  0  ~/.gitignore
+|4,39,5,0,1692032989,"~/.gitignore"
+-'  5  0  ~/.gitignore
+|4,39,5,0,1692032989,"~/.gitignore"
+-'  5  0  ~/.gitignore
+|4,39,5,0,1692032989,"~/.gitignore"
+-'  5  0  ~/.gitignore
+|4,39,5,0,1692032989,"~/.gitignore"
+-'  5  0  ~/.gitignore
+|4,39,5,0,1692032989,"~/.gitignore"
 
 # 파일내의 마크 히스토리 (새것부터 오래된 순):
 
-> ~/.gitignore
-	*	1692032988	0
-	"	5	0
-	^	5	0
-	.	4	0
-	+	3	14
-	+	4	0
-
 > ~/pintos/pintos-kaist/vm/vm.c
-	*	1692032928	0
-	"	271	0
-	^	271	0
-	.	270	1
-	+	100	3
-	+	99	31
-	+	100	43
-	+	101	22
-	+	102	70
-	+	103	20
-	+	110	0
-	+	105	63
-	+	106	7
-	+	87	13
-	+	96	30
-	+	114	15
-	+	101	48
-	+	106	60
-	+	106	83
-	+	102	0
-	+	106	65
-	+	110	4
-	+	111	14
-	+	105	18
-	+	106	49
-	+	109	0
-	+	118	11
-	+	10	22
-	+	123	14
-	+	124	18
-	+	126	33
-	+	127	0
-	+	132	30
-	+	134	23
-	+	150	3
-	+	136	15
-	+	150	48
-	+	151	3
-	+	149	33
-	+	151	14
-	+	159	12
-	+	152	14
-	+	12	24
-	+	217	0
-	+	197	32
-	+	196	1
-	+	204	15
-	+	7	26
-	+	5	23
-	+	204	5
-	+	197	86
-	+	199	0
-	+	204	13
-	+	199	0
-	+	218	0
-	+	200	0
-	+	205	0
-	+	197	32
-	+	198	0
-	+	203	8
-	+	210	0
-	+	206	24
-	+	208	16
-	+	209	0
-	+	208	22
-	+	214	34
-	+	215	50
-	+	216	0
-	+	213	0
-	+	212	19
-	+	281	108
-	+	281	122
-	+	281	110
-	+	282	48
-	+	283	87
-	+	281	69
-	+	283	38
-	+	283	207
-	+	285	0
-	+	283	129
-	+	283	130
-	+	284	69
-	+	282	0
-	+	256	13
-	+	227	3
-	+	256	37
-	+	256	38
-	+	256	34
-	+	256	70
-	+	258	0
-	+	254	1
-	+	258	0
-	+	256	50
-	+	257	30
-	+	164	15
-	+	93	47
-	+	143	47
+	*	1692366122	0
+	"	64	0
+	^	151	21
+	.	152	0
+	+	222	0
+	+	218	24
+	+	220	16
+	+	221	0
+	+	220	22
+	+	226	34
+	+	227	50
+	+	228	0
+	+	225	0
+	+	224	19
+	+	293	108
+	+	293	122
+	+	293	110
+	+	294	48
+	+	295	87
+	+	293	69
+	+	295	38
+	+	295	207
+	+	297	0
+	+	295	129
+	+	295	130
+	+	296	69
+	+	294	0
+	+	268	13
+	+	239	3
+	+	268	37
+	+	268	38
+	+	268	34
+	+	268	70
+	+	270	0
+	+	266	1
+	+	270	0
+	+	268	50
+	+	269	30
+	+	176	15
+	+	113	47
+	+	157	47
 	+	8	26
 	+	9	29
 	+	10	0
-	+	261	1
-	+	263	0
-	+	261	0
-	+	270	1
+	+	273	1
+	+	275	0
+	+	273	0
+	+	282	1
+	+	82	27
+	+	67	17
+	+	68	64
+	+	68	27
+	+	68	64
+	+	69	0
+	+	71	13
+	+	71	32
+	+	74	4
+	+	71	5
+	+	73	11
+	+	74	37
+	+	78	0
+	+	76	14
+	+	73	12
+	+	76	3
+	+	74	0
+	+	73	6
+	+	77	6
+	+	73	13
+	+	77	8
+	+	74	0
+	+	73	59
+	+	76	0
+	+	75	0
+	+	77	66
+	+	79	73
+	+	79	72
+	+	81	1
+	+	79	47
+	+	70	45
+	+	70	44
+	+	80	0
+	+	83	28
+	+	84	29
+	+	86	13
+	+	26	24
+	+	114	0
+	+	107	72
+	+	108	0
+	+	114	0
+	+	116	69
+	+	131	59
+	+	161	8
+	+	168	27
+	+	108	0
+	+	116	31
+	+	118	0
+	+	131	3
+	+	132	0
+	+	160	63
+	+	161	18
+	+	160	5
+	+	168	3
+	+	169	0
+	+	152	0
+
+> ~/pintos/pintos-kaist/include/vm/vm.h
+	*	1692365738	0
+	"	43	1
+	^	95	63
+	.	95	62
+	+	104	0
+	+	92	16
+	+	101	0
+	+	94	0
+	+	93	7
+	+	94	13
+	+	96	21
+	+	96	16
+	+	94	54
+	+	94	36
+	+	94	82
+	+	94	38
+	+	104	22
+	+	105	0
+	+	98	57
+	+	96	72
+	+	98	18
+	+	93	43
+	+	98	65
+	+	99	15
+	+	100	1
+	+	53	0
+	+	48	14
+	+	51	22
+	+	68	9
+	+	70	28
+	+	51	28
+	+	52	14
+	+	101	2
+	+	6	17
+	+	7	0
+	+	96	21
+	+	97	20
+	+	96	22
+	+	94	38
+	+	98	0
+	+	94	39
+	+	95	62
 
 > ~/pintos/pintos-kaist/userprog/process.c
-	*	1692032869	0
-	"	709	0
-	^	620	7
-	.	620	6
-	+	565	1
-	+	424	32
-	+	424	0
-	+	429	78
-	+	430	0
-	+	522	40
-	+	423	35
-	+	423	34
-	+	423	46
-	+	423	34
-	+	423	66
-	+	424	29
-	+	424	31
-	+	424	2
-	+	424	0
-	+	424	32
-	+	424	0
-	+	424	38
-	+	424	0
-	+	234	0
-	+	234	20
-	+	247	30
-	+	250	2
-	+	423	46
-	+	423	43
-	+	424	14
-	+	424	23
-	+	442	23
-	+	424	2
-	+	245	0
-	+	425	0
-	+	430	0
-	+	431	9
-	+	432	42
-	+	432	20
-	+	432	18
-	+	432	14
+	*	1692365701	0
+	"	746	1
+	^	758	20
+	.	758	19
 	+	432	2
 	+	432	31
 	+	432	1
@@ -686,102 +673,48 @@ $
 	+	620	0
 	+	709	6
 	+	620	6
-
-> ~/pintos/pintos-kaist/threads/malloc.c
-	*	1692032447	0
-	"	56	0
-
-> ~/pintos/pintos-kaist/include/lib/kernel/list.h
-	*	1692032379	0
-	"	119	43
-
-> ~/pintos/pintos-kaist/include/vm/vm.h
-	*	1692031794	0
-	"	7	0
-	^	7	0
-	.	7	0
-	+	103	0
-	+	92	16
-	+	100	0
-	+	94	0
-	+	93	7
-	+	94	13
-	+	96	21
-	+	96	16
-	+	95	15
-	+	94	36
-	+	95	43
-	+	94	38
-	+	103	22
-	+	104	0
-	+	97	57
-	+	96	72
-	+	97	18
-	+	93	43
-	+	97	65
-	+	98	15
-	+	99	1
-	+	53	0
-	+	48	14
-	+	51	22
-	+	68	9
-	+	70	28
-	+	51	28
-	+	52	14
-	+	100	2
-	+	6	17
-	+	7	0
-
-> ~/pintos/pintos-kaist/include/threads/thread.h
-	*	1692030056	0
-	"	88	1
-	^	107	28
-	.	107	27
-	+	96	21
-	+	111	0
-	+	97	13
-	+	96	17
-	+	98	0
-	+	98	19
-	+	99	22
-	+	102	0
-	+	101	23
-	+	102	0
-	+	100	31
-	+	126	26
-	+	103	21
-	+	104	22
-	+	105	28
-	+	110	0
-	+	109	22
-	+	7	30
-	+	8	24
-	+	109	27
-	+	107	27
-
-> ~/pintos/pintos-kaist/lib/kernel/list.c
-	*	1691429938	0
-	"	58	0
-	^	45	7
-	.	45	6
-	+	421	1
-	+	45	6
-	+	37	54
-	+	38	6
-	+	45	6
+	+	772	19
+	+	772	0
+	+	772	2
+	+	772	55
+	+	772	15
+	+	772	26
+	+	772	17
+	+	772	0
+	+	772	20
+	+	772	38
+	+	772	0
+	+	750	0
+	+	751	0
+	+	752	1
+	+	754	0
+	+	755	0
+	+	756	0
+	+	757	0
+	+	759	0
+	+	761	0
+	+	766	0
+	+	773	0
+	+	764	0
+	+	763	57
+	+	774	50
+	+	774	49
+	+	765	0
+	+	764	23
+	+	759	15
+	+	760	29
+	+	770	3
+	+	771	3
+	+	778	3
+	+	779	3
+	+	763	46
+	+	758	19
 
 > ~/pintos/pintos-kaist/threads/thread.c
-	*	1691429863	0
-	"	91	8
-	^	199	13
-	.	199	12
-	+	762	25
-	+	777	33
-	+	777	48
-	+	777	82
-	+	777	105
-	+	777	136
-	+	777	204
+	*	1692365010	0
+	"	536	0
+	^	535	23
+	.	536	0
 	+	777	224
 	+	777	281
 	+	777	307
@@ -821,7 +754,7 @@ $
 	+	531	0
 	+	532	13
 	+	529	21
-	+	536	0
+	+	535	24
 	+	529	1
 	+	525	1
 	+	535	22
@@ -875,6 +808,147 @@ $
 	+	212	21
 	+	214	0
 	+	199	12
+	+	535	43
+	+	535	24
+	+	535	32
+	+	535	51
+	+	535	28
+	+	536	0
+
+> ~/pintos/pintos-kaist/include/threads/thread.h
+	*	1692364737	0
+	"	133	4
+	^	107	28
+	.	107	27
+	+	96	21
+	+	111	0
+	+	97	13
+	+	96	17
+	+	98	0
+	+	98	19
+	+	99	22
+	+	102	0
+	+	101	23
+	+	102	0
+	+	100	31
+	+	126	26
+	+	103	21
+	+	104	22
+	+	105	28
+	+	110	0
+	+	109	22
+	+	7	30
+	+	8	24
+	+	109	27
+	+	107	27
+
+> ~/pintos/pintos-kaist/threads/init.c
+	*	1692357391	0
+	"	131	0
+	^	127	0
+	.	114	2
+	+	110	6
+	+	111	16
+	+	114	16
+	+	73	16
+	+	83	16
+	+	85	16
+	+	111	10
+	+	114	10
+	+	94	16
+	+	100	16
+	+	106	16
+	+	111	10
+	+	114	10
+	+	92	0
+	+	91	16
+	+	92	18
+	+	87	18
+	+	160	1
+	+	161	0
+	+	160	0
+	+	175	18
+	+	176	0
+	+	93	24
+	+	93	23
+	+	94	17
+	+	95	2
+	+	94	2
+	+	100	2
+	+	106	2
+	+	111	2
+	+	114	2
+	+	94	1
+	+	100	1
+	+	111	1
+	+	106	1
+	+	114	1
+	+	73	2
+	+	83	2
+	+	85	2
+	+	87	2
+	+	92	2
+	+	94	2
+	+	100	2
+	+	106	2
+	+	111	2
+	+	114	2
+
+> ~/pintos/pintos-kaist/vm/uninit.c
+	*	1692349161	0
+	"	33	21
+
+> ~/pintos/pintos-kaist/include/vm/uninit.h
+	*	1692348537	0
+	"	14	1
+
+> ~/pintos/pintos-kaist/vm/anon.c
+	*	1692348302	0
+	"	22	0
+
+> ~/pintos/pintos-kaist/include/vm/anon.h
+	*	1692347766	0
+	"	7	0
+
+> ~/pintos/pintos-kaist/include/threads/malloc.h
+	*	1692347381	0
+	"	8	0
+
+> ~/pintos/pintos-kaist/userprog/exception.c
+	*	1692345403	0
+	"	134	0
+	^	89	23
+	.	80	0
+	+	80	0
+	+	79	21
+	+	80	0
+
+> ~/.gitignore
+	*	1692032988	0
+	"	5	0
+	^	5	0
+	.	4	0
+	+	3	14
+	+	4	0
+
+> ~/pintos/pintos-kaist/threads/malloc.c
+	*	1692032447	0
+	"	56	0
+
+> ~/pintos/pintos-kaist/include/lib/kernel/list.h
+	*	1692032379	0
+	"	119	43
+
+> ~/pintos/pintos-kaist/lib/kernel/list.c
+	*	1691429938	0
+	"	58	0
+	^	45	7
+	.	45	6
+	+	421	1
+	+	45	6
+	+	37	54
+	+	38	6
+	+	45	6
 
 > ~/pintos/pintos-kaist/filesys/file.c
 	*	1691427385	0
@@ -885,10 +959,6 @@ $
 	+	20	0
 	+	19	1
 
-> ~/pintos/pintos-kaist/vm/uninit.c
-	*	1691425602	0
-	"	1	0
-
 > ~/pintos/pintos-kaist/vm/inspect.c
 	*	1691425592	0
 	"	1	0
@@ -896,10 +966,6 @@ $
 > ~/pintos/pintos-kaist/vm/file.c
 	*	1691425578	0
 	"	25	0
-
-> ~/pintos/pintos-kaist/vm/anon.c
-	*	1691425553	0
-	"	16	0
 
 > ~/pintos/pintos-kaist/vm/Makefile
 	*	1691425505	0
@@ -1359,15 +1425,6 @@ $
 	*	1691157056	0
 	"	208	0
 
-> ~/pintos/pintos-kaist/userprog/exception.c
-	*	1691150833	0
-	"	89	22
-	^	89	23
-	.	80	0
-	+	80	0
-	+	79	21
-	+	80	0
-
 > ~/pintos/pintos-kaist/lib/user/syscall.c
 	*	1691149875	0
 	"	78	0
@@ -1552,58 +1609,6 @@ $
 > ~/pintos/pintos-kaist/include/threads/interrupt.h
 	*	1690546545	0
 	"	61	12
-
-> ~/pintos/pintos-kaist/threads/init.c
-	*	1690541268	0
-	"	339	58
-	^	127	0
-	.	114	2
-	+	110	6
-	+	111	16
-	+	114	16
-	+	73	16
-	+	83	16
-	+	85	16
-	+	111	10
-	+	114	10
-	+	94	16
-	+	100	16
-	+	106	16
-	+	111	10
-	+	114	10
-	+	92	0
-	+	91	16
-	+	92	18
-	+	87	18
-	+	160	1
-	+	161	0
-	+	160	0
-	+	175	18
-	+	176	0
-	+	93	24
-	+	93	23
-	+	94	17
-	+	95	2
-	+	94	2
-	+	100	2
-	+	106	2
-	+	111	2
-	+	114	2
-	+	94	1
-	+	100	1
-	+	111	1
-	+	106	1
-	+	114	1
-	+	73	2
-	+	83	2
-	+	85	2
-	+	87	2
-	+	92	2
-	+	94	2
-	+	100	2
-	+	106	2
-	+	111	2
-	+	114	2
 
 > ~/pintos/pintos-kaist/include/userprog/syscall.h
 	*	1690539843	0

@@ -23,6 +23,7 @@ vm_init (void) {
 	register_inspect_intr ();
 	/* DO NOT MODIFY UPPER LINES. */
 	/* TODO: Your code goes here. */
+	list_init(&frame_table);
 }
 
 /* Get the type of the page. This function is useful if you want to know the
@@ -62,6 +63,27 @@ vm_alloc_page_with_initializer (enum vm_type type, void *upage, bool writable,
 		 * TODO: should modify the field after calling the uninit_new. */
 
 		/* TODO: Insert the page into the spt. */
+
+		//create a page
+		struct page *page = (struct page*)malloc(sizeof(struct page));
+
+		//make page to uninit page using uninit_new
+		if(VM_TYPE(type) == VM_ANON){
+					
+			uninit_new(page, upage, init, type, aux, anon_initializer);
+
+		}else if(VM_TYPE(type) == VM_FILE){
+			
+			uninit_new(page, upage, init, type, aux, file_backed_initializer);
+		}
+
+		//modify the filed of page
+		page->writable = writable;
+
+		//insert page into the spt
+		spt_insert_page(spt, page);
+		
+		return true;
 	}
 err:
 	return false;
@@ -83,19 +105,16 @@ spt_find_page (struct supplemental_page_table *spt UNUSED, void *va UNUSED) {
 	ASSERT (is_user_vaddr(va));
 
 	struct list_elem *e;
-	uint32_t ta = va - 0x400000;
-	uint32_t seg_off = 0;
 
 	//search segments
 	for(e = list_begin(&spt->segments); e != list_end(&spt->segments); e =
 			list_next(e)){
 	
 		struct segment *seg = list_entry(e, struct segment, seg_elem);
-		
+
 		//if segment matches
-		if(seg_off <= ta && ta < seg_off + seg->length){
+		if(*seg->upage <= va && va < *seg->upage + seg->read_bytes + seg->zero_bytes){
 		
-			
 			//search page in this segment
 			if(list_empty(&seg->pages)) return NULL;
 			struct list_elem *e2;
@@ -110,9 +129,6 @@ spt_find_page (struct supplemental_page_table *spt UNUSED, void *va UNUSED) {
 			}
 			return page;
 		}
-		
-		seg_off = seg_off + seg->length;
-		
 	}
 
 	return page;
@@ -133,8 +149,6 @@ spt_insert_page (struct supplemental_page_table *spt UNUSED,
 
 	uint32_t va = page->va;
 	struct list_elem *e;
-	uint32_t ta = va - 0x400000;
-	uint32_t seg_off = 0;
 
 	//search segments
 	for(e = list_begin(&spt->segments); e != list_end(&spt->segments); e =
@@ -143,7 +157,8 @@ spt_insert_page (struct supplemental_page_table *spt UNUSED,
 		struct segment *seg = list_entry(e, struct segment, seg_elem);
 		
 		//if segment matches
-		if(seg_off <= ta && ta < seg_off + seg->length){
+		if(*seg->upage <= va && va < *seg->upage + seg->read_bytes +
+				seg->zero_bytes){
 		
 			
 			//insert page into this segment
@@ -151,9 +166,6 @@ spt_insert_page (struct supplemental_page_table *spt UNUSED,
 			succ = true;
 			return succ;
 		}
-		
-		seg_off = seg_off + seg->length;
-		
 	}
 
 	return succ;

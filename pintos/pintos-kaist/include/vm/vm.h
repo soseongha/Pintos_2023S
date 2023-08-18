@@ -92,8 +92,9 @@ struct page_operations {
 struct segment {
 	struct file *file; //when this segment save
 	off_t offset; //starting point of file
-	uint32_t start; //starting point of segment
-	uint32_t length; //length of variable information(not include align info)
+	uint8_t *upage; //virtual address of starting point of segment
+	uint32_t read_bytes; 
+	uint32_t zero_bytes;
 	struct list_elem seg_elem; //to manage segment into list element
 	bool writable;
 	struct list pages; //pages in this segment

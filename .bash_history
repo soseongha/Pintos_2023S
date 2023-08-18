@@ -1,75 +1,3 @@
-cd build/
-make tests/threads/priority-donate-one.result
-cat tests/threads/priority-donate-one.output
-cd
-vi pintos/pintos-kaist/threads/init.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/priority-donate-one.result
-cat tests/threads/priority-donate-one.output
-cd
-vi pintos/pintos-kaist/threads/init.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/priority-donate-one.result
-cd
-vi pintos/pintos-kaist/threads/init.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/priority-donate-one.result
-cat tests/threads/priority-donate-one.output
-cd
-vi pintos/pintos-kaist/threads/init.c 
-vi pintos/pintos-kaist/threads/synch.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd b
-cd build/
-make tests/threads/priority-donate-one.result
-cat tests/threads/priority-donate-one.output
-cd
-vi pintos/pintos-kaist/threads/init.c 
-vi pintos/pintos-kaist/threads/synch.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/priority-donate-one.result
-make tests/threads/priority-donate-lower.result
-cd
-vi pintos/pintos-kaist/threads/thread.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd
-vi pintos/pintos-kaist/threads/thread.c 
-cd pintos/pintos-kaist/threads/
-make clean
-make
-cd build/
-make tests/threads/priority-donate-lower.result
-make tests/threads/priority-preempt.result
-make tests/threads/priority-sema.result
-cd
-vi pintos/pintos-kaist/threads/thread.c 
-cd pintos/pintos-kaist/threads/
-ls
-cd build/
-make tests/threads/priority-fifo.result
-cd
-vi pintos/pintos-kaist/threads/thread.c 
-cd ..
-ls
-cd sosongha3/
-cd pintos/pintos-kaist/threads/
-make clean
 make
 cd build/
 make tests/threads/priority-fifo.result
@@ -1998,3 +1926,75 @@ git commit -m "[PA3] Feat: construct SPT"
 git push origin main
 exit
 vi pintos/pintos-kaist/vm/vm.c 
+git add .
+git status
+ls -al
+cd .git
+ls -al
+cd ..
+find "*gitignore*"
+find "*ignore*"
+find -iname "*ignore*"
+vi .gitignore
+git add .
+git status
+git commit -m "[PA3] Feat: memory management added"
+git push origin main
+cd pintos/pintos-kaist/vm/
+make
+cd
+vi pintos/pintos-kaist/include/vm/vm.h 
+cd pintos/pintos-kaist/vm/
+make
+cd
+vi pintos/pintos-kaist/include/vm/vm.h 
+cd pintos/pintos-kaist/userprog/
+cd
+cd pintos/pintos-kaist/vm/
+make
+cd
+vi pintos/pintos-kaist/include/vm/vm.h 
+cd pintos/pintos-kaist/vm/
+make
+cd
+vi pintos/pintos-kaist/vm/vm.c 
+cd pintos/pintos-kaist/vm/
+make
+make clean
+make
+cd
+vi pintos/pintos-kaist/vm/vm.c 
+cd pintos/pintos-kaist/vm/
+make clean
+make
+cd
+vi pintos/pintos-kaist/vm/vm.c 
+cd pintos/pintos-kaist/vm/
+make clean
+make
+cd build/
+ls
+cd tests/vm/
+ls
+cd
+cd pintos/pintos-kaist/vm/
+make clean
+cd
+git add .
+git status
+vi .gitignore
+git add .
+git status
+git commit -m "[PA3] Fix: build error fix"
+git push origin main
+exit
+cd
+cd pintos/pintos-kaist/vm/
+make
+cd build/
+make check
+cd ..
+make clean
+cd
+vi pintos/pintos-kaist/vm/vm.c 
+vi pintos/pintos-kaist/vm/anon.c 

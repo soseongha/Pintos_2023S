@@ -748,22 +748,35 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 	ASSERT (pg_ofs (upage) == 0);
 	ASSERT (ofs % PGSIZE == 0);
 
+	/* TODO: Set up aux to pass information to the lazy_load_segment. */
+	void *aux = NULL;
+
+	//setting aux to struct segment
+	struct segment *seg = malloc(sizeof(struct segment));
+	seg->file = file;
+	seg->offset = ofs;
+	seg->upage = upage;
+	seg->read_bytes = read_bytes;
+	seg->zero_bytes = zero_bytes;
+	seg->writable = writable;
+	
+	list_push_back(&thread_current()->spt.segments, &seg->seg_elem);
+	list_init(&seg->pages);
+
 	while (read_bytes > 0 || zero_bytes > 0) {
 		/* Do calculate how to fill this page.
 		 * We will read PAGE_READ_BYTES bytes from FILE
 		 * and zero the final PAGE_ZERO_BYTES bytes. */
-		size_t page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
-		size_t page_zero_bytes = PGSIZE - page_read_bytes;
+		//size_t page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
+		//size_t page_zero_bytes = PGSIZE - page_read_bytes;
 
-		/* TODO: Set up aux to pass information to the lazy_load_segment. */
-		void *aux = NULL;
 		if (!vm_alloc_page_with_initializer (VM_ANON, upage,
-					writable, lazy_load_segment, aux))
+					writable, lazy_load_segment, seg))//aux = seg
 			return false;
 
 		/* Advance. */
-		read_bytes -= page_read_bytes;
-		zero_bytes -= page_zero_bytes;
+		//read_bytes -= page_read_bytes;
+		//zero_bytes -= page_zero_bytes;
 		upage += PGSIZE;
 	}
 	return true;
