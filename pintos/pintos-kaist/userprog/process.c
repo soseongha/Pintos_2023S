@@ -727,7 +727,7 @@ lazy_load_segment (struct page *page, void *aux) {
 	/* TODO: VA is available when calling this function. */
 	struct segment *seg = (struct segment*)aux;
 	struct file *file = seg->file;
-	struct off_t *offset = seg->offset;
+	off_t offset = seg->offset;
 	uint32_t read_bytes = seg->read_bytes;
 	uint32_t zero_bytes = seg->zero_bytes;
 	uint8_t *upage = seg->upage;
