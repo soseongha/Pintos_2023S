@@ -75,6 +75,10 @@ vm_alloc_page_with_initializer (enum vm_type type, void *upage, bool writable,
 		}else if(VM_TYPE(type) == VM_FILE){
 			
 			uninit_new(page, upage, init, type, aux, file_backed_initializer);
+		
+		}else if(VM_TYPE(type) == VM_ANON | VM_MARKER_0){
+			
+			uninit_new(page, upage, init, type, aux, anon_initializer);
 		}
 
 		//modify the filed of page
@@ -89,7 +93,32 @@ err:
 	return false;
 }
 
+void spt_print_all (struct supplemental_page_table *spt){
+	
+	//list empty checking
+	if(list_empty(&spt->segments)) 
+		printf("[spt_print_all] spt is empty\n");
 
+	struct list_elem *e;
+
+	//search segments
+	for(e = list_begin(&spt->segments); e != list_end(&spt->segments); e =
+			list_next(e)){
+	
+		struct segment *seg = list_entry(e, struct segment, seg_elem);
+		
+		if(list_empty(&seg->pages)) break;
+			
+		struct list_elem *e2;
+		for(e2 = list_begin(&seg->pages); e2 != list_end(&seg->pages); e2 = list_next(e2))
+		{
+			struct page *pg = list_entry(e2, struct page, page_elem);
+			printf("[spt_print_all] *segment: %x, page: %x\n", seg->upage,
+					pg->va);
+		}
+	}
+
+}
 /* Find VA from spt and return page. On error, return NULL. */
 struct page *
 spt_find_page (struct supplemental_page_table *spt UNUSED, void *va UNUSED) {
@@ -208,6 +237,7 @@ vm_get_frame (void) {
 	
 	/* TODO: Fill this function. */
 	frame = (struct frame*) malloc(sizeof(struct frame));
+	memset(frame, 0, sizeof(struct frame));
 
 	ASSERT (frame != NULL);
 	ASSERT (frame->page == NULL);
@@ -243,12 +273,45 @@ vm_handle_wp (struct page *page UNUSED) {
 bool
 vm_try_handle_fault (struct intr_frame *f UNUSED, void *addr UNUSED,
 		bool user UNUSED, bool write UNUSED, bool not_present UNUSED) {
+	
 	struct supplemental_page_table *spt UNUSED = &thread_current ()->spt;
 	struct page *page = NULL;
 	/* TODO: Validate the fault */
 	/* TODO: Your code goes here */
+	printf("[vm_try_handle_fault] start!\n");
 
-	return vm_do_claim_page (page);
+	//if addr is in kernel address, return false
+	if(is_kernel_vaddr(addr)){
+		return false;
+	}
+	
+	void *rsp_stack = is_kernel_vaddr(f->rsp) ? thread_current()->rsp_stack :
+		f->rsp;
+
+	if(not_present){
+		if(!vm_claim_page(addr)){
+			if(rsp_stack - 8 <= addr && USER_STACK - 0x100000 <= addr && addr
+					<= USER_STACK){
+				vm_stack_growth(thread_current()->stack_bottom - PGSIZE);
+				printf("[vm_try_handle_fault] end!\n");
+				return true;
+			}
+
+			printf("[vm_try_handle_fault] end!\n");
+			return false;
+		}
+		else{
+			
+			printf("[vm_try_handle_fault] end!\n");
+			return true;
+		}
+	}
+
+	printf("[vm_try_handle_fault] end!\n");
+	return false;
+
+
+	//return vm_do_claim_page (page);
 }
 
 /* Free the page.
@@ -263,11 +326,21 @@ vm_dealloc_page (struct page *page) {
 bool
 vm_claim_page (void *va UNUSED) {
 	struct page *page = NULL;
-	
+
+	//convert long va to short va(uint8_t)
+	uint8_t *ta = va;
+
+	printf("[vm_claim_page] start!\n");
 	/* TODO: Fill this function */
-	page = spt_find_page(&thread_current()->spt, va);
-	if(page == NULL) return false;
-	
+	page = spt_find_page(&thread_current()->spt, ta);
+	if(page == NULL) {
+		printf("[vm_claim_page] spt_find_page fail\n");
+		spt_print_all(&thread_current()->spt);
+		printf("[vm_claim_page] end!\n");
+		return false;
+	}
+
+	printf("[vm_claim_page] end!\n");
 	return vm_do_claim_page (page);
 }
 
@@ -286,6 +359,7 @@ static bool
 vm_do_claim_page (struct page *page) {
 	struct frame *frame = vm_get_frame ();
 
+	printf("[vm_do_claim_page] start!\n");
 	/* Set links */
 	frame->page = page;
 	page->frame = frame;
@@ -293,8 +367,14 @@ vm_do_claim_page (struct page *page) {
 	/* TODO: Insert page table entry to map page's VA to frame's PA. */
 	
 	//make a mapping of pml4 from page to frame
-	if(!install_page(page->va, frame->kva, page->writable)) return false;
+	if(!install_page(page->va, frame->kva, page->writable)){
+		printf("[vm_do_claim_page] end!\n");
+		return false;
+	}
+	else printf("vm_do_claim_page: install_page fail\n");
 
+	//return true;
+	printf("[vm_do_claim_page] end!\n");
 	return swap_in (page, frame->kva);
 }
 

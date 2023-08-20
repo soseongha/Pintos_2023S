@@ -108,7 +108,6 @@ struct thread {
 	struct list childs;
 	struct list_elem child_elem;
 
-
 	/* Shared between thread.c and synch.c. */
 	struct list_elem elem;              /* List element. */
 
@@ -119,6 +118,8 @@ struct thread {
 #ifdef VM
 	/* Table for whole virtual memory owned by thread. */
 	struct supplemental_page_table spt;
+	void *stack_bottom;
+	void *rsp_stack;
 #endif
 
 	/* Owned by thread.c. */

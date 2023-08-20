@@ -462,12 +462,16 @@ load (const char *file_name, struct intr_frame *if_) {
 	for (i = 0; i < ehdr.e_phnum; i++) {
 		struct Phdr phdr;
 
-		if (file_ofs < 0 || file_ofs > file_length (file))
+		if (file_ofs < 0 || file_ofs > file_length (file)){
+			printf("load: file offset error\n");
 			goto done;
+		}
 		file_seek (file, file_ofs);
 
-		if (file_read (file, &phdr, sizeof phdr) != sizeof phdr)
+		if (file_read (file, &phdr, sizeof phdr) != sizeof phdr){
+			printf("load: file read error\n");
 			goto done;
+		}
 		file_ofs += sizeof phdr;
 		switch (phdr.p_type) {
 			case PT_NULL:
@@ -501,18 +505,24 @@ load (const char *file_name, struct intr_frame *if_) {
 						zero_bytes = ROUND_UP (page_offset + phdr.p_memsz, PGSIZE);
 					}
 					if (!load_segment (file, file_page, (void *) mem_page,
-								read_bytes, zero_bytes, writable))
+								read_bytes, zero_bytes, writable)){
+						printf("load: load_segment fail\n");
 						goto done;
+					}
 				}
-				else
+				else{
+					printf("load: case error\n");
 					goto done;
+				}
 				break;
 		}
 	}
 
 	/* Set up stack. */
-	if (!setup_stack (if_))
+	if (!setup_stack (if_)){
+		printf("setup_stack is false\n");
 		goto done;
+	}
 
 	/* Start address. */
 	if_->rip = ehdr.e_entry;
@@ -733,8 +743,8 @@ lazy_load_segment (struct page *page, void *aux) {
 	off_t offset = seg->offset;
 	uint32_t read_bytes = seg->read_bytes;
 	uint32_t zero_bytes = seg->zero_bytes;
-	uint8_t *upage = seg->upage;
-	uint8_t *va = page->va;
+	void *upage = seg->upage;
+	void *va = page->va;
 	
 	//file seek
 	file_seek(file, offset);
@@ -790,7 +800,7 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 	ASSERT (ofs % PGSIZE == 0);
 
 	printf("[load_segment] start\n");
-
+	printf("upage = %x\n", upage);
 	/* TODO: Set up aux to pass information to the lazy_load_segment. */
 	void *aux = NULL;
 	
@@ -825,22 +835,31 @@ static bool
 setup_stack (struct intr_frame *if_) {
 	bool success = false;
 	void *stack_bottom = (void *) (((uint8_t *) USER_STACK) - PGSIZE);
-
+	printf("stack_bottom = %x\n", stack_bottom);
 	/* TODO: Map the stack on stack_bottom and claim the page immediately.
 	 * TODO: If success, set the rsp accordingly.
 	 * TODO: You should mark the page is stack. */
 	/* TODO: Your code goes here */
 
-	if(vm_alloc_page_with_initializer(VM_ANON, stack_bottom, true, NULL,
+	//segment init
+	struct segment *seg = NULL;
+	init_segment(seg, NULL, 0, stack_bottom, PAGE_SIZE, 0, true);
+
+	//page init
+	if(vm_alloc_page_with_initializer(VM_ANON | VM_MARKER_0, stack_bottom, true, NULL,
 				NULL)){
+		printf("setup_stack: vm_alloc success\n");
 		success = vm_claim_page(stack_bottom);
 	}
 
 	if(success){
-		if_.rsp = USER_STACK;
+		if_->rsp = USER_STACK;
 		thread_current()->stack_bottom = stack_bottom;
+	}else{
+		printf("setup_stack: vm_claim_page fail\n");
 	}
 
-	return success;
+	return success;	
+	
 }
 #endif /* VM */
