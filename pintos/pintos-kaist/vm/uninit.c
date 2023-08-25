@@ -47,13 +47,18 @@ static bool
 uninit_initialize (struct page *page, void *kva) {
 	struct uninit_page *uninit = &page->uninit;
 
+	printf("[uninit_initialize] start!\n");
+
 	/* Fetch first, page_initialize may overwrite the values */
 	vm_initializer *init = uninit->init;
 	void *aux = uninit->aux;
 
 	/* TODO: You may need to fix this function. */
+	printf("[uninit_initialize] end!\n");
 	return uninit->page_initializer (page, uninit->type, kva) &&
 		(init ? init (page, aux) : true);
+	//page_initializer = anon_initialize
+	//init = lazy_load_segment
 }
 
 /* Free the resources hold by uninit_page. Although most of pages are transmuted

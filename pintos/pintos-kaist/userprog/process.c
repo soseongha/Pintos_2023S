@@ -18,6 +18,9 @@
 #include "threads/mmu.h"
 #include "threads/vaddr.h"
 #include "intrinsic.h"
+
+#include "threads/malloc.h"
+
 #ifdef VM
 #include "vm/vm.h"
 #endif
@@ -733,19 +736,42 @@ install_page (void *upage, void *kpage, bool writable) {
  * If you want to implement the function for only project 2, implement it on the
  * upper block. */
 
-static bool
+bool
 lazy_load_segment (struct page *page, void *aux) {
 	/* TODO: Load the segment from the file */
 	/* TODO: This called when the first page fault occurs on address VA. */
 	/* TODO: VA is available when calling this function. */
-	struct segment *seg = (struct segment*)aux;
+	
+	printf("[lazy_load_segment] start! aux = %p\n", aux);
+	
+	//possible
+	//struct page *pg = malloc(sizeof(struct page));
+	
+	//possible
+	//struct segment *se = malloc(sizeof(struct segment));
+
+	printf("[lazy_load_segment] spt = %p\n", thread_current()->spt);
+	printf("[lazy_load_segment] page = %p\n", page);
+	struct segment *seg = NULL;
+
+	//why this causes page fault?!?!?
+	//spt_find_page(&thread_current()->spt, page->va);
+	//printf("spt_find_page success\n");
+	//struct page *pg = spt_find_page(&thread_current()->spt, page->va);
+	//printf("page allocation success\n");
+	//spt_find_segment(&thread_current()->spt, page);
+	//printf("spt_find_segment success\n");
+	seg = (uint64_t)spt_find_segment(&thread_current()->spt, page);
+	printf("seg allocation success, seg = %p\n", seg);
+	printf("seg plus 0x8000000000 = %016p\n", seg);
 	struct file *file = seg->file;
 	off_t offset = seg->offset;
 	uint32_t read_bytes = seg->read_bytes;
 	uint32_t zero_bytes = seg->zero_bytes;
 	void *upage = seg->upage;
+	printf("segment member valid\n");
 	void *va = page->va;
-	
+
 	//file seek
 	file_seek(file, offset);
 
@@ -759,13 +785,14 @@ lazy_load_segment (struct page *page, void *aux) {
 		
 			if (file_read (file, page->frame->kva, page_read_bytes) != (int) page_read_bytes) {
 				palloc_free_page (page->frame->kva);
-				printf("lazy load this page fail");
+				printf("[lazy_load_segment] lazy load this page fail\n");
 				return false;
 			}
 			memset (page->frame->kva + page_read_bytes, 0, page_zero_bytes);
+			printf("[lazy_load_segment] success!\n");
 			return true;
 		}
-
+		
 		//Advance, especially move the file pointer
 		read_bytes -= page_read_bytes;
 		zero_bytes -= page_zero_bytes;
@@ -773,6 +800,7 @@ lazy_load_segment (struct page *page, void *aux) {
 		file_seek(file, file_tell(file) + offset);
 	}
 
+	printf("[lazy_load_segment] fail\n");
 	return false;
 }
 
@@ -807,7 +835,7 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 	//setting aux to struct segment 
 	struct segment *seg = NULL;
 	init_segment(seg, file, ofs, upage, read_bytes, zero_bytes, writable);
-
+	printf("[load_segment] seg = %x\n", seg);
 
 	while (read_bytes > 0 || zero_bytes > 0) {
 		/* Do calculate how to fill this page.

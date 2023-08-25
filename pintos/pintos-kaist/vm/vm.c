@@ -176,7 +176,7 @@ spt_insert_page (struct supplemental_page_table *spt UNUSED,
 	//va scope checking
 	ASSERT (is_user_vaddr(page->va));
 
-	uint32_t va = page->va;
+	void* va = page->va;
 	struct list_elem *e;
 
 	//search segments
@@ -278,7 +278,7 @@ vm_try_handle_fault (struct intr_frame *f UNUSED, void *addr UNUSED,
 	struct page *page = NULL;
 	/* TODO: Validate the fault */
 	/* TODO: Your code goes here */
-	printf("[vm_try_handle_fault] start!\n");
+	printf("[vm_try_handle_fault] start! addr = %x\n", addr);
 
 	//if addr is in kernel address, return false
 	if(is_kernel_vaddr(addr)){
@@ -328,13 +328,14 @@ vm_claim_page (void *va UNUSED) {
 	struct page *page = NULL;
 
 	//convert long va to short va(uint8_t)
-	uint8_t *ta = va;
+	//uint8_t *ta = va;
 
 	printf("[vm_claim_page] start!\n");
 	/* TODO: Fill this function */
-	page = spt_find_page(&thread_current()->spt, ta);
+	page = spt_find_page(&thread_current()->spt, va);
 	if(page == NULL) {
 		printf("[vm_claim_page] spt_find_page fail\n");
+		printf("[vm_claim_page] va is %x\n", va);
 		spt_print_all(&thread_current()->spt);
 		printf("[vm_claim_page] end!\n");
 		return false;
@@ -371,7 +372,7 @@ vm_do_claim_page (struct page *page) {
 		printf("[vm_do_claim_page] end!\n");
 		return false;
 	}
-	else printf("vm_do_claim_page: install_page fail\n");
+	else printf("vm_do_claim_page: install_page success\n");
 
 	//return true;
 	printf("[vm_do_claim_page] end!\n");
@@ -402,7 +403,6 @@ supplemental_page_table_kill (struct supplemental_page_table *spt UNUSED) {
 bool init_segment(struct segment *seg, struct file *file, off_t ofs, uint8_t
 		*upage, uint32_t read_bytes, uint32_t zero_bytes, bool writable){
 
-		
 	seg = malloc(sizeof(struct segment));
 
 	seg->file = file;
@@ -415,4 +415,37 @@ bool init_segment(struct segment *seg, struct file *file, off_t ofs, uint8_t
 	list_push_back(&thread_current()->spt.segments, &seg->seg_elem);
 	list_init(&seg->pages);
 
+}
+
+struct segment *
+spt_find_segment (struct supplemental_page_table *spt, struct page *page){	
+	
+	struct segment *segment = NULL;
+
+	//list empty checking
+	if(list_empty(&spt->segments)) return NULL;
+	
+	//va scope checking
+	printf("va = %p\n", page->va);
+	ASSERT (is_user_vaddr(page->va));
+
+	void *va = page->va;
+	struct list_elem *e;
+
+	//search segments
+	for(e = list_begin(&spt->segments); e != list_end(&spt->segments); e =
+			list_next(e)){
+	
+		struct segment *seg = list_entry(e, struct segment, seg_elem);
+
+		//if segment matches
+		if(seg->upage <= va && va < seg->upage + seg->read_bytes + seg->zero_bytes){
+		
+			//search page in this segment
+			segment = seg;
+		}
+	}
+
+	printf("[spt_find_segment] return value is %p\n", segment);
+	return segment;
 }

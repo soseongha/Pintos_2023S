@@ -28,6 +28,8 @@ vm_anon_init (void) {
 bool
 anon_initializer (struct page *page, enum vm_type type, void *kva) {
 
+	printf("[anon_initializer] start!\n");
+
 	//initialize union data
 	struct uninit_page *uninit = &page->uninit;
 	memset(uninit, 0, sizeof(struct uninit_page));
@@ -38,6 +40,7 @@ anon_initializer (struct page *page, enum vm_type type, void *kva) {
 	struct anon_page *anon_page = &page->anon;
 	anon_page->swap_index = -1;
 	
+	printf("[anon_initializer] end!\n");
 	return true;
 }
 
